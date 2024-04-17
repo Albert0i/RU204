@@ -1,0 +1,12 @@
+{
+  "name": "ru204",
+  "version": "1.0.0",
+  "description": "This repository contains example data and setup instructions for the Redis University course [RU204: Storing, Querying, and Indexing JSON at Speed](https://university.redis.com/courses/ru204/).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
