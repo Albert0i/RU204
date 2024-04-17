@@ -1,5 +1,11 @@
 
-### Data 101 
+### Data 101 : The way to feed and unfeed Redis
+
+"There is no cause without consequences."
+「世上沒有無緣無故的愛；也沒有無緣無故的恨。」
+
+
+### Prologue 
 
 ### I. RU101
 #### 1. Using python data loader 
@@ -148,7 +154,7 @@ package.json
 ```
 
 
-### III. RU103: Using Redis-Cli
+### III. RU203: Using Redis-Cli
 To load this data, run the following command from your terminal: 
 ```
 redis-cli < commands.redis > output.txt
@@ -233,5 +239,6 @@ return "Total "..count.." keys Deleted" ;
 redis-cli --eval delete_keys.lua , my_prefix 
 ```
 
+### Epilogue
 
-### EOF (2024/04/16)
+### EOF (2024/04/17)
