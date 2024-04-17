@@ -2,10 +2,13 @@
 ### Data 101 : The way to feed and unfeed Redis
 
 "There is no cause without consequences."
+
 「世上沒有無緣無故的愛；也沒有無緣無故的恨。」
 
 
 ### Prologue 
+
+
 
 ### I. RU101
 #### 1. Using python data loader 
