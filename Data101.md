@@ -1,5 +1,5 @@
 
-### Data 101 : The way to feed and unfeed Redis
+### Data 101 : The way to feed and misfeed a Redis database
 
 "There is no cause without consequences."
 
@@ -7,10 +7,10 @@
 
 
 ### Prologue 
+Sailing across the sea of sequels in solitude, a sense of fury and placidness surged within and without. For I was there, I have been crafting sequels for more than three decades. I have seen raging sea storms uproar several hundreds of miles, I have seen whirlpool embeddedly descended numerous fathoms down to hell. And now in my skiff, you are both smooth and soothing as in my soul... 
 
 
-
-### I. RU101
+### I. [RU101](https://github.com/redislabs-training/ru101)
 #### 1. Using python data loader 
 Go ahead and load the data as follows:
 ```
@@ -140,7 +140,7 @@ In the above settings, data store name is `dump.rdb` and located in the same fol
 Shut down your redis server, replace the *.rdb file and restart. 
 
 
-### II. RU102JS: Using python data loader 
+### II. [RU102JS](https://github.com/redislabs-training/ru102js): Using python data loader 
 To load sample site data and sample metrics, run:
 ```
 npm run load src/resources/data/sites.json flushdb
@@ -157,14 +157,14 @@ package.json
 ```
 
 
-### III. RU203: Using Redis-Cli
+### III. [RU203](https://github.com/redislabs-training/ru203): Using Redis-Cli
 To load this data, run the following command from your terminal: 
 ```
 redis-cli < commands.redis > output.txt
 ```
 
 
-### IV. RU204: Using python data loader 
+### IV. [RU204](https://github.com/redislabs-training/ru204): Using python data loader 
 First, with your shell in the ru204 folder create a Python virtual environment, activate it and install the dependencies required to run the data loader:
 ```
 python3 -m venv venv
@@ -245,3 +245,4 @@ redis-cli --eval delete_keys.lua , my_prefix
 ### Epilogue
 
 ### EOF (2024/04/17)
+
