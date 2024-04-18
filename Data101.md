@@ -29,6 +29,38 @@ $ cd redisu
 $ python utils/dumpload.py load ru101/data/ru101.json
 ```
 
+`dumpload.py` is a utility to dump and load keys from Redis. I slightly modified this utility to work for me. Usage:
+```
+python dumpload.py dump <input.json> <prefix>'
+
+python dumpload.py load <output.json>'
+```
+
+```
+set test:string testing
+rpush test:list a b c 
+sadd test:set 1 2 3
+hset test:hash field1 value1 field2 value2 field3 value3 
+```
+To dump with: 
+```
+python dumpload.py dump test.json test:*
+```
+
+```
+del test:string 
+del test:list 
+del test:set
+del test:hash 
+```
+
+To load with: 
+```
+python dumpload.py load test.json
+```
+**caveat**<br />For some unknown reasons, the Sorted Set is not working... 
+
+
 #### 2. Replacing the data store
 In case you are local server is [Redis 7.2.4](https://redis.io/docs/latest/operate/rs/release-notes/rs-7-2-4-releases/), download the `ru101.rdb` from: 
 ```
@@ -244,5 +276,5 @@ redis-cli --eval delete_keys.lua , my_prefix
 
 ### Epilogue
 
-### EOF (2024/04/17)
+### EOF (2024/04/19)
 

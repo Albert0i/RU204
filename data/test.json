@@ -1,0 +1,4 @@
+{"t": "set", "k": "test:set", "ttl": -1, "v": ["2", "3", "1"]}
+{"t": "string", "k": "test:string", "ttl": -1, "e": "embstr", "v": "testing"}
+{"t": "hash", "k": "test:hash", "ttl": -1, "v": {"field1": "value1", "field2": "value2", "field3": "value3"}}
+{"t": "list", "k": "test:list", "ttl": -1, "v": ["a", "", "c"]}
