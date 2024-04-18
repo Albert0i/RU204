@@ -31,9 +31,9 @@ $ python utils/dumpload.py load ru101/data/ru101.json
 
 `dumpload.py` is a small utility to dump and load keys from Redis in it's *propriety* format. I slightly modified this utility to work for me. Usage:
 ```
-python dumpload.py dump <input.json> <prefix>
+python dumpload.py dump <output.json> <prefix>
 
-python dumpload.py load <output.json>
+python dumpload.py load <input.json>
 ```
 
 ```
