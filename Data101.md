@@ -29,11 +29,11 @@ $ cd redisu
 $ python utils/dumpload.py load ru101/data/ru101.json
 ```
 
-`dumpload.py` is a utility to dump and load keys from Redis. I slightly modified this utility to work for me. Usage:
+`dumpload.py` is a small utility to dump and load keys from Redis in it's *propriety* format. I slightly modified this utility to work for me. Usage:
 ```
-python dumpload.py dump <input.json> <prefix>'
+python dumpload.py dump <input.json> <prefix>
 
-python dumpload.py load <output.json>'
+python dumpload.py load <output.json>
 ```
 
 ```
@@ -42,9 +42,18 @@ rpush test:list a b c
 sadd test:set 1 2 3
 hset test:hash field1 value1 field2 value2 field3 value3 
 ```
+
 To dump with: 
 ```
 python dumpload.py dump test.json test:*
+```
+
+test.json
+```
+{"t": "set", "k": "test:set", "ttl": -1, "v": ["2", "3", "1"]}
+{"t": "string", "k": "test:string", "ttl": -1, "e": "embstr", "v": "testing"}
+{"t": "hash", "k": "test:hash", "ttl": -1, "v": {"field1": "value1", "field2": "value2", "field3": "value3"}}
+{"t": "list", "k": "test:list", "ttl": -1, "v": ["a", "", "c"]}
 ```
 
 ```
