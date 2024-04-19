@@ -341,13 +341,13 @@ BGSAVE [SCHEDULE]
 LASTSAVE 
 ``` 
 
-#### 1. `SAVE` synchronously saves the database(s) to disk. 
+`SAVE` synchronously saves the database(s) to disk. 
 
 The `SAVE` commands performs a **synchronous** save of the dataset producing a point in time snapshot of all the data inside the Redis instance, in the form of an RDB file.
 
 You almost never want to call SAVE in production environments where it will block all the other clients. Instead usually `BGSAVE` is used. However in case of issues preventing Redis to create the background saving child (for instance errors in the fork(2) system call), the SAVE command can be a good last resort to perform the dump of the latest dataset.
 
-#### 2. `BGSAVE` asynchronously saves the database(s) to disk. 
+`BGSAVE` asynchronously saves the database(s) to disk. 
 
 Normally the `OK` code is immediately returned. Redis forks, the parent continues to serve the clients, the child saves the DB on disk then exits.
 
@@ -357,7 +357,7 @@ If BGSAVE SCHEDULE is used, the command will immediately return OK when an AOF r
 
 A client may be able to check if the operation succeeded using the LASTSAVE command.
 
-#### 3. `LASTSAVE` returns the Unix timestamp of the last successful save to disk. 
+`LASTSAVE` returns the Unix timestamp of the last successful save to disk. 
 
 A client may check if a `BGSAVE` command succeeded reading the `LASTSAVE` value, then issuing a `BGSAVE` command and checking at regular intervals every N seconds if `LASTSAVE` changed. Redis considers the database saved successfully at startup.
 
