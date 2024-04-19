@@ -287,7 +287,7 @@ Now run the data loader script, passing it the name of the folder containing the
 python data_loader.py --dir data/books --redis redis://default:password@host:port/
 ```
 
-`data_loader.py` is a customized utility to load scattered book JSON data within a folder, upon finished loading, further verification is done check the data. 
+`data_loader.py` is a customized utility to load scattered book JSON data within a folder, upon finished loading, further verification is done to check the data. 
 
 
 ### V. Eraser 
