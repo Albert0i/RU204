@@ -29,7 +29,7 @@ $ cd redisu
 $ python utils/dumpload.py load ru101/data/ru101.json
 ```
 
-`dumpload.py` is a utility to dump and load keys from Redis. It dumps Redis Core datatypes, ie. `string`, `list`, `set`, `sorted set` and `hash` into a kind/line of JSON format which can then be restored back into system. I slightly modified the source code to suit my need. Usage: 
+`dumpload.py` is a utility to dump and load keys from Redis. It dumps [Redis Core datatypes](https://redis.io/docs/latest/develop/data-types/), ie. `string`, `list`, `set`, `sorted set` and `hash` into a kind/line of JSON format which can then be restored back into system. I slightly modified the source code to suit my need. Usage: 
 ```
 python dumpload.py dump <output.json> <prefix>
 
