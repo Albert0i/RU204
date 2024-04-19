@@ -365,6 +365,8 @@ Invoking `info persistence` command will give concise information:
 
 ![alt save](img/save.JPG)
 
+A typical Redis operations is sub-millisecond levels, 0.69s means hundreds of operations will be blocked, 0.69s means a lot... 
+
 
 ### VII. Introspection
 `Learn by comparison` is my motto when confronting new challenges. While relational database emphasizes reliable and consistency, we tackle thread synchronization and [isolation level](https://www.geeksforgeeks.org/transaction-isolation-levels-dbms/) issue. A typical DBMS implementation use a [`redo log`](https://en.wikipedia.org/wiki/Redo_log) technique: 
