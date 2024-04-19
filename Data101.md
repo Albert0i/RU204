@@ -378,7 +378,7 @@ Invoking `info persistence` command will give precise information:
 
 
 ### Epilogue
-I have enrolled four courses in [Redis University](https://redis.io/university/), each course has it's own way to feed sample data... Even worse, I do not have any knowledge of [`python`](https://www.python.org/) whatsoever... which makes me dizzy in the very beginning... 
+I have enrolled four courses in [Redis University](https://redis.io/university/), each course has it's own way to feed sample data... Even worse, I do not have any prior knowledge of [`python`](https://www.python.org/) and whatsoever... which makes me dizzy in the very beginning... 
 
 
 ### EOF (2024/04/19)
