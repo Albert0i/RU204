@@ -367,12 +367,19 @@ Invoking `info persistence` command will give concise information:
 
 
 ### VII. Introspection
-`Learn by comparison` is my motto when confronting new challenge. While relational database emphasizes reliable and consistency, we tackle thread synchronization and [isolation level](https://www.geeksforgeeks.org/transaction-isolation-levels-dbms/). 
+`Learn by comparison` is my motto when confronting new challenges. While relational database emphasizes reliable and consistency, we tackle thread synchronization and [isolation level](https://www.geeksforgeeks.org/transaction-isolation-levels-dbms/) issue. A typical DBMS implementation use a [`redo log`](https://en.wikipedia.org/wiki/Redo_log) technique: 
 
+> Whenever something changes in a datafile, Oracle records the change in the redo log. The name redo log indicates its purpose: If the database crashes, the RDBMS can redo (re-process) all changes on datafiles which will take the database data back to the state it was when the last redo record was written. 
 
+Redis, emerged from a cache layer, operates mainly in RAM, persists data to disk according to settings in `redis.conf`. Redis is single threaded and thus has no thread synchronization nor consistency issue. System crashes can be offset by clustering. 
+
+localhost 
 ![alt dbsize localhost](img/dbsize_localhost.JPG)
 
+redis-cloud
 ![alt dbsize cloud](img/dbsize_cloud.JPG)
+
+The [Eviction policy](https://redis.io/docs/latest/operate/rs/databases/memory-performance/eviction-policy/) determines what happens when a database reaches its memory limit. To make room for new data, older data is evicted (removed) according to the selected policy.To prevent this from happening, make sure your database is large enough to hold all desired keys.
 
 
 ### VIII. Bibliography 
