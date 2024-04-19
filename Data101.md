@@ -7,7 +7,7 @@
 
 
 ### Prologue 
-Sailing across the sea of sequels in solitude, a sense of fury and placidness surged within and without. For I was there, I have been crafting sequels for more than three decades. I have seen raging sea storms uproar several hundreds of miles, I have seen whirlpools embeddedly descended numerous fathoms down to hell. And now in my skiff, it is both smooth and soothing as in my soul... 
+Sailing across the sea of sequels in solitude, a sense of fury and placidness surged within and without. For I was there, I have been crafting sequels for more than three decades. I have seen raging sea storms uproar several hundreds of miles, I have seen whirlpools embeddedly descended numerous fathoms down to hell. And now in my boat, it is both smooth and soothing as in my soul... 
 
 
 ### I. [RU101](https://github.com/redislabs-training/ru101)
