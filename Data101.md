@@ -373,10 +373,10 @@ Invoking `info persistence` command will give concise information:
 
 Redis, emerged from a cache layer, operates mainly in RAM, persists data to disk according to settings in `redis.conf`. Redis is single threaded and thus has no thread synchronization nor consistency issue. System crashes can be offset by clustering. 
 
-localhost 
+memory used in local Redis
 ![alt dbsize localhost](img/dbsize_localhost.JPG)
 
-redis-cloud
+memory used in Redis Cloud
 ![alt dbsize cloud](img/dbsize_cloud.JPG)
 
 The [Eviction policy](https://redis.io/docs/latest/operate/rs/databases/memory-performance/eviction-policy/) determines what happens when a database reaches its memory limit. To make room for new data, older data is evicted (removed) according to the selected policy.To prevent this from happening, make sure your database is large enough to hold all desired keys.
