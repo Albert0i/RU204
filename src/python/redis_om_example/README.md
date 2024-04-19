@@ -17,6 +17,18 @@ python3 -m venv venv
 . ./venv/bin/activate
 ```
 
+You need to make a few adjustments since the Windows command prompt uses a different syntax. 
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+After running the activation command, you will see the name of the virtual environment (in this case, "venv") displayed in the command prompt. This indicates that you are working within the virtual environment.
+
+Remember to use the deactivate command to exit the virtual environment when you're done working within it.
+```
+venv\Scripts\deactivate
+```
+
 Install Redis OM Python and any other dependencies before running the code:
 
 ```bash
@@ -27,6 +39,11 @@ Ensure that your Redis Stack instance is running, and that you have set the `RED
 
 ```bash
 export REDIS_OM_URL=redis://user:password@host:port
+```
+
+On Windows 10, the equivalent command to set an environment variable is slightly different than using export on Unix/Linux-based systems. 
+```
+set REDIS_OM_URL=redis://user:password@host:port
 ```
 
 ## Run the Code
