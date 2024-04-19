@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { Client } from 'redis-om';
 import { bookSchema } from './model.js';
 import { readdir, readFile } from 'node:fs/promises';

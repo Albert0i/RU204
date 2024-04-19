@@ -21,6 +21,7 @@
     "node": ">=14.8"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "redis": "^4.2.0"
   }
 }

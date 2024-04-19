@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { createClient } from 'redis';
 
 const BOOK_KEY = 'ru204:book:99999';

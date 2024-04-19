@@ -1,3 +1,4 @@
+import 'dotenv/config'
 import { Client, Entity, Schema } from 'redis-om';
 
 const client = new Client();
