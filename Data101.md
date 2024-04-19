@@ -181,7 +181,8 @@ rdb-del-sync-files no
 dir ./
 ```
 In the above settings, data store name is `dump.rdb` and located in the same folder of the `redis-server` program. 
-Shut down your redis server, replace the *.rdb file and restart. 
+
+Shut down your redis server, replace the *.rdb file and restart. That's it! 
 
 
 ### II. [RU102JS](https://github.com/redislabs-training/ru102js): Using python data loader 
