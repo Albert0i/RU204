@@ -298,6 +298,7 @@ UNLINK key [key ...]
 ```
 
 `DEL` deletes one or more keys. 
+
 `UNLINK` asynchronously deletes one or more keys. 
 
 
