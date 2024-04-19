@@ -363,15 +363,19 @@ Invoking `info persistence` command will give precise information:
 
 ![alt save](img/save.JPG)
 
+
+### VII. Introspection
+
 ![alt dbsize localhost](img/dbsize_localhost.JPG)
 
 ![alt dbsize cloud](img/dbsize_cloud.JPG)
 
 
-### VII. Bibliography 
+### VIII. Bibliography 
 1. [Ways to delete multiple keys from Redis cache.](https://medium.com/geekculture/how-to-delete-multiple-keys-from-redis-cache-252275a95579)
 2. [Redis : Backup and restore your database](https://www.dbi-services.com/blog/redis-backup-and-restore-your-database/)
 3. [THE OLD MAN AND THE SEA](https://gutenberg.ca/ebooks/hemingwaye-oldmanandthesea/hemingwaye-oldmanandthesea-00-h.html)
+
 
 ### Epilogue
 I have enrolled four courses in [Redis University](https://redis.io/university/), each course has it's own way to feed sample data into the lab environment. Even worse, I don't not have any knowledge of [`python`](https://www.python.org/) whatsoever... which makes me dizzy in the very beginning... 
