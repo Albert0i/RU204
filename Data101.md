@@ -29,18 +29,20 @@ $ cd redisu
 $ python utils/dumpload.py load ru101/data/ru101.json
 ```
 
-`dumpload.py` is a small utility to dump and load keys from Redis in it's *propriety* format. I slightly modified this utility to work for me. Usage:
+`dumpload.py` is a utility to dump and load keys from Redis. It dumps Redis Core datatypes, ie. `string`, `list`, `set`, `sorted set` and `hash` into a kind/line of JSON format which can then be restored back into system. I slightly modified the source code to suit my need. Usage: 
 ```
 python dumpload.py dump <output.json> <prefix>
 
 python dumpload.py load <input.json>
 ```
 
+To test with: 
 ```
-set test:string testing
-rpush test:list a b c 
-sadd test:set 1 2 3
-hset test:hash field1 value1 field2 value2 field3 value3 
+set test:string "Testing Testing"
+rpush test:list a b c 1 2 3
+sadd test:set A B C 1 2 3
+hset test:hash field1 101 field2 "Boy" field3 True
+zadd test:zset 1 A 2 B 3 C 4 D 5 E 6 F 
 ```
 
 To dump with: 
@@ -50,24 +52,26 @@ python dumpload.py dump test.json test:*
 
 test.json
 ```
-{"t": "set", "k": "test:set", "ttl": -1, "v": ["2", "3", "1"]}
-{"t": "string", "k": "test:string", "ttl": -1, "e": "embstr", "v": "testing"}
-{"t": "hash", "k": "test:hash", "ttl": -1, "v": {"field1": "value1", "field2": "value2", "field3": "value3"}}
-{"t": "list", "k": "test:list", "ttl": -1, "v": ["a", "", "c"]}
+{"t": "set", "k": "test:set", "ttl": -1, "v": ["1", "3", "2", "B", "A", "C"]}
+{"t": "zset", "k": "test:zset", "ttl": -1, "v": [["A",  1.0], ["B",  2.0], ["C",  3.0], ["D",  4.0], ["E",  5.0], ["F",  6.0]]}
+{"t": "string", "k": "test:string", "ttl": -1, "e": "embstr", "v": "Testing Testing"}
+{"t": "hash", "k": "test:hash", "ttl": -1, "v": {"field1": "101", "field2": "Boy", "field3": "True"}}
+{"t": "list", "k": "test:list", "ttl": -1, "v": ["a", "b", "c", "1", "2", "3"]}
 ```
 
+Remove test data: 
 ```
 del test:string 
 del test:list 
 del test:set
 del test:hash 
+del test:zset
 ```
 
 To load with: 
 ```
 python dumpload.py load test.json
 ```
-**caveat**<br />For some unknown reasons, the Sorted Set is not working... 
 
 
 #### 2. Replacing the data store in one go
