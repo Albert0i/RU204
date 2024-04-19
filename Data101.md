@@ -242,7 +242,7 @@ module.exports = {
 };
 
 ```
-It's worth noting that there are two redis client libraries for javascript, namely [Node-Redis](https://www.npmjs.com/package/redis) and [ioredis](https://www.npmjs.com/package/ioredis). 
+It's worth noting that currently there are two redis client libraries for javascript, namely [Node-Redis](https://www.npmjs.com/package/redis) and [ioredis](https://www.npmjs.com/package/ioredis). 
 
 Node-Redis:
 - Pros:
@@ -271,7 +271,7 @@ To load this data, run the following command from your terminal:
 ```
 redis-cli < commands.redis > output.txt
 ```
-This is the most natural and easy way, as every line is virtually a single Redis command. 
+This is the most natural and easy way, as every line is virtually a single Redis command. Much in the same way of using `insert` statements to populate a relational database. 
 
 
 ### IV. [RU204](https://github.com/redislabs-training/ru204): Using python data loader 
@@ -318,8 +318,22 @@ return "Total "..count.." keys Deleted" ;
 redis-cli --eval delete_keys.lua , my_prefix 
 ```
 
+### VI. Summary
+
+
+
+![alt dbsize localhost](img/dbsize_localhost.JPG)
+
+![alt dbsize cloud](img/dbsize_cloud.JPG)
+
+
+### VII. Bibliography 
+1. [Ways to delete multiple keys from Redis cache.](https://medium.com/geekculture/how-to-delete-multiple-keys-from-redis-cache-252275a95579)
+2. [Redis : Backup and restore your database](https://www.dbi-services.com/blog/redis-backup-and-restore-your-database/)
+3. [THE OLD MAN AND THE SEA](https://gutenberg.ca/ebooks/hemingwaye-oldmanandthesea/hemingwaye-oldmanandthesea-00-h.html)
+
 ### Epilogue
-I have enrolled four courses in [Redis University](https://redis.io/university/), each course has it's own way to setup and feed data into the lab environment. Even worse, loaders are written in [`python`](https://www.python.org/), a language I am completely unfamiliar with... I was almost dizzy and crazy about that... 
+I have enrolled four courses in [Redis University](https://redis.io/university/), each course has it's own way to feed sample data into the lab environment. Even worse, I don't not have any knowledge of [`python`](https://www.python.org/) whatsoever... which makes me dizzy in the very beginning... 
 
 
 ### EOF (2024/04/19)
