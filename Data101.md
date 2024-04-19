@@ -330,7 +330,7 @@ return "Total "..count.." keys Deleted" ;
 redis-cli --eval delete_keys.lua , my_prefix 
 ```
 
-### VI. saviour
+### VI. Saviour
 ```
 SAVE
 
