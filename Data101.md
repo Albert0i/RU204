@@ -297,11 +297,11 @@ DEL key [key ...]
 UNLINK key [key ...]
 ```
 
-#### 1. `DEL` deletes one or more keys. 
+`DEL` deletes one or more keys. 
 `UNLINK` asynchronously deletes one or more keys. 
 
 
-#### 2. The `UNLINK` command is very similar to DEL: it removes the specified keys. Just like DEL a key is ignored if it does not exist. However the command performs the actual memory reclaiming in a different thread, so **it is not blocking, while DEL is**. This is where the command name comes from: the command just unlinks the keys from the keyspace. The actual removal will happen later asynchronously.An analogy in using `keys` command and the more sophisticated `scan` commands. 
+The `UNLINK` command is very similar to DEL: it removes the specified keys. Just like DEL a key is ignored if it does not exist. However the command performs the actual memory reclaiming in a different thread, so **it is not blocking, while DEL is**. This is where the command name comes from: the command just unlinks the keys from the keyspace. The actual removal will happen later asynchronously.An analogy in using `keys` command and the more sophisticated `scan` commands. 
 
 There is no `DEL [pattern]` as `DELETE FROM [file] WHERE [condition]` in relational database. To cope with this awkwardness, a [Lua](https://www.lua.org/) comes into pla: 
 
