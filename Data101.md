@@ -287,7 +287,7 @@ Now run the data loader script, passing it the name of the folder containing the
 python data_loader.py --dir data/books --redis redis://default:password@host:port/
 ```
 
-`data_loader.py` is a customized utility to load scattered book JSON data within a folder, upon finished loading, further verification is done to check the data. 
+`data_loader.py` is a customized utility to load scattered book JSON data within a folder, upon finished loading, further verification is done to check the data integrity. 
 
 
 ### V. Eraser 
@@ -355,18 +355,20 @@ An error is returned if there is already a background save running or if there i
 
 If BGSAVE SCHEDULE is used, the command will immediately return OK when an AOF rewrite is in progress and schedule the background save to run at the next opportunity.
 
-A client may be able to check if the operation succeeded using the LASTSAVE command.
+A client may be able to check if the operation succeeded using the `LASTSAVE` command.
 
 `LASTSAVE` returns the Unix timestamp of the last successful save to disk. 
 
 A client may check if a `BGSAVE` command succeeded reading the `LASTSAVE` value, then issuing a `BGSAVE` command and checking at regular intervals every N seconds if `LASTSAVE` changed. Redis considers the database saved successfully at startup.
 
-Invoking `info persistence` command will give precise information:
+Invoking `info persistence` command will give concise information:
 
 ![alt save](img/save.JPG)
 
 
 ### VII. Introspection
+`Learn by comparison` is my motto when confronting new challenge. While relational database emphasizes reliable and consistency, we tackle thread synchronization and [isolation level](https://www.geeksforgeeks.org/transaction-isolation-levels-dbms/). 
+
 
 ![alt dbsize localhost](img/dbsize_localhost.JPG)
 
@@ -374,9 +376,10 @@ Invoking `info persistence` command will give precise information:
 
 
 ### VIII. Bibliography 
-1. [Ways to delete multiple keys from Redis cache.](https://medium.com/geekculture/how-to-delete-multiple-keys-from-redis-cache-252275a95579)
-2. [Redis : Backup and restore your database](https://www.dbi-services.com/blog/redis-backup-and-restore-your-database/)
-3. [THE OLD MAN AND THE SEA](https://gutenberg.ca/ebooks/hemingwaye-oldmanandthesea/hemingwaye-oldmanandthesea-00-h.html)
+1. [Redis Commands](https://redis.io/docs/latest/commands/)
+2. [Ways to delete multiple keys from Redis cache.](https://medium.com/geekculture/how-to-delete-multiple-keys-from-redis-cache-252275a95579)
+3. [Redis : Backup and restore your database](https://www.dbi-services.com/blog/redis-backup-and-restore-your-database/)
+4. [THE OLD MAN AND THE SEA](https://gutenberg.ca/ebooks/hemingwaye-oldmanandthesea/hemingwaye-oldmanandthesea-00-h.html)
 
 
 ### Epilogue
