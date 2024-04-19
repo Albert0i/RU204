@@ -299,9 +299,9 @@ UNLINK key [key ...]
 `DEL` deletes one or more keys. 
 `UNLINK` asynchronously deletes one or more keys. 
 
-The `UNLINK` command is very similar to DEL: it removes the specified keys. Just like DEL a key is ignored if it does not exist. However the command performs the actual memory reclaiming in a different thread, so **it is not blocking, while DEL is**. This is where the command name comes from: the command just unlinks the keys from the keyspace. The actual removal will happen later asynchronously.
+The `UNLINK` command is very similar to DEL: it removes the specified keys. Just like DEL a key is ignored if it does not exist. However the command performs the actual memory reclaiming in a different thread, so **it is not blocking, while DEL is**. This is where the command name comes from: the command just unlinks the keys from the keyspace. The actual removal will happen later asynchronously.An analogy in using `keys` command and the more sophisticated `scan` commands. 
 
-An analogy in using `keys` command and the more sophisticated `scan` commands. There is no such command as `DEL [pattern]` as `DELETE FROM file WHERE condition` in relational database. To cope with this awkwardness, a [Lua](https://www.lua.org/) comes into pla: 
+There is no `DEL [pattern]` as `DELETE FROM [file] WHERE [condition]` in relational database. To cope with this awkwardness, a [Lua](https://www.lua.org/) comes into pla: 
 
 delete-keys.lua
 ```
@@ -330,8 +330,34 @@ return "Total "..count.." keys Deleted" ;
 redis-cli --eval delete_keys.lua , my_prefix 
 ```
 
-### VI. Summary
+### VI. saviour
+```
+SAVE
 
+BGSAVE [SCHEDULE]
+
+LASTSAVE 
+``` 
+
+`SAVE` synchronously saves the database(s) to disk. 
+
+The `SAVE` commands performs a **synchronous** save of the dataset producing a point in time snapshot of all the data inside the Redis instance, in the form of an RDB file.
+
+You almost never want to call SAVE in production environments where it will block all the other clients. Instead usually `BGSAVE` is used. However in case of issues preventing Redis to create the background saving child (for instance errors in the fork(2) system call), the SAVE command can be a good last resort to perform the dump of the latest dataset.
+
+`BGSAVE` asynchronously saves the database(s) to disk. 
+
+Normally the `OK` code is immediately returned. Redis forks, the parent continues to serve the clients, the child saves the DB on disk then exits.
+
+An error is returned if there is already a background save running or if there is another non-background-save process running, specifically an in-progress AOF rewrite.
+
+If BGSAVE SCHEDULE is used, the command will immediately return OK when an AOF rewrite is in progress and schedule the background save to run at the next opportunity.
+
+A client may be able to check if the operation succeeded using the LASTSAVE command.
+
+`LASTSAVE` returns the Unix timestamp of the last successful save to disk. 
+
+A client may check if a `BGSAVE` command succeeded reading the `LASTSAVE` value, then issuing a `BGSAVE` command and checking at regular intervals every N seconds if `LASTSAVE` changed. Redis considers the database saved successfully at startup.
 
 
 ![alt dbsize localhost](img/dbsize_localhost.JPG)
