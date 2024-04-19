@@ -1,5 +1,5 @@
 
-### Data 101 : The way to feed and misfeed a Redis database
+### Data 101 : The road to feed and misfeed a Redis database
 
 "There is no cause without consequences."
 
