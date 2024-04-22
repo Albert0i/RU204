@@ -62,6 +62,11 @@ response = await r.json.get(BOOK_KEY, {
   ]
 });
 
+// This doesn't work AS EXPECTED... 
+//response = await r.json.get(BOOK_KEY, "$.author", "$.metrics.score" );
+//response = await r.json.get(BOOK_KEY, ["$.author", "$.metrics.score"] );
+//
+
 console.log('Author and score:');
 console.log(response);
 
