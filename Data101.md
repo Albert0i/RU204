@@ -29,6 +29,20 @@ $ cd redisu
 $ python utils/dumpload.py load ru101/data/ru101.json
 ```
 
+On Windows 10, the equivalent command to set an environment variable is slightly different than using export on Unix/Linux-based systems. 
+
+```
+set REDIS_URL=redis://user:password@host:port
+```
+
+To confirm that the environment variable is set correctly, you can run the echo command followed by the environment variable name:
+
+```
+echo %REDIS_URL%
+```
+
+This will display the value of the REDIS_OM_URL environment variable.
+
 `dumpload.py` is a utility to dump and load keys from Redis. It dumps [Redis Core datatypes](https://redis.io/docs/latest/develop/data-types/), ie. `string`, `list`, `set`, `sorted set` and `hash` into a kind/line of JSON format which can then be restored back into system. I slightly modified the source code to suit my need. Usage: 
 ```
 python dumpload.py dump <output.json> <prefix>
@@ -280,6 +294,21 @@ First, with your shell in the ru204 folder create a Python virtual environment, 
 python3 -m venv venv
 . ./venv/bin/activate
 pip install -r requirements.txt
+```
+
+You need to make a few adjustments since the Windows command prompt uses a different syntax. 
+
+```cmd
+python -m venv venv
+venv\Scripts\activate
+```
+
+After running the activation command, you will see the name of the virtual environment (in this case, "venv") displayed in the command prompt. This indicates that you are working within the virtual environment.
+
+Remember to use the deactivate command to exit the virtual environment when you're done working within it.
+
+```
+venv\Scripts\deactivate
 ```
 
 Now run the data loader script, passing it the name of the folder containing the JSON data files to load into Redis.
