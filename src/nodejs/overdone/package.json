@@ -2,7 +2,7 @@
   "name": "overdone",
   "version": "1.0.0",
   "description": "",
-  "main": "oversoneExercise",
+  "main": "overdone",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,8 +11,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.13.0",
     "dotenv": "^16.4.5",
     "redis": "^4.6.13",
     "redis-om": "^0.4.3"
+  },
+  "devDependencies": {
+    "prisma": "^5.13.0"
   }
 }
