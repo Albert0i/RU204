@@ -11,3 +11,8 @@ const pong = await redisClient.ping()
 console.log(pong)
 
 export { redisClient }
+
+/*
+   redis-om-node
+   https://github.com/redis/redis-om-node
+*/

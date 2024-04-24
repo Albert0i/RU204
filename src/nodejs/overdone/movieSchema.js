@@ -31,3 +31,8 @@ export const movieSchema = new Schema(process.env.REDIS_OM_PREFIX + "movie", {
     {
         dataStructure: process.env.REDIS_OM_DATASTRUCTURE
     });
+
+/*
+   redis-om-node
+   https://github.com/redis/redis-om-node
+*/

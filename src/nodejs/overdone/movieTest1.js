@@ -49,3 +49,8 @@ console.log(`newMovie3 ULID: ${newMovie3[EntityId]}`);
 console.log('Saved movies in Redis.');
 
 await redisClient.quit();
+
+/*
+   redis-om-node
+   https://github.com/redis/redis-om-node
+*/
