@@ -1,0 +1,17 @@
+### OM vs ORM 
+
+### Prologue 
+
+### Round 1: 
+
+### Round 2: 
+
+### Round 3: 
+
+### Round 4: 
+
+### Round up
+
+### Epilogue
+
+### EOF (2024/04/25)
