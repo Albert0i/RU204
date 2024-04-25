@@ -1,17 +1,27 @@
 ### [OM](https://www.npmjs.com/package/redis-om) vs [ORM](https://www.prisma.io/docs/orm/overview/prisma-in-your-stack/is-prisma-an-orm) 
 
+
 ### Prologue 
 Every happening has it own connotation behind the scenes, this is the conviction throughout my life. Events, no matter how minute they are, may entangle even more incidents of any scale. More often than not, the effect is not instantaneous and thus not palpable in secular society. We just can't conceive their interworking, can't figure out their causes and consequences, if any. Based on this belief, we can definitely say that "there is no such thing as coincidence!". The term "laws of nature" refers to fundamental principles or regularities that govern the behavior and operations of the natural world. These laws apply to basic physical elements but not to high level mental activities. 
 
-### Round 1: Setup 
 
-### Round 2: Seeding
+### I. Round 1: Setup 
 
-### Round 3: Searching
 
-### Round 4: Aggregation
+### II. Round 2: Seeding
 
-### Round up
+
+### III. Round 3: Searching
+
+
+### IV. Round 4: Aggregation
+
+
+### V. Round up
+
+
+### VI. Bibliography
+
 
 ### Epilogue
 `Learn by comparison` is my motto in studying. The rationale behind is commonality and differential. While questing for some knowledge of [Redis Stack](https://redis.io/about/about-stack/), I was chanced to be aware of some fun facts: 
