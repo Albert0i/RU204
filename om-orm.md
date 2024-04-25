@@ -14,7 +14,7 @@ Every happening has it own connotation behind the scenes, this is the conviction
 ### Round up
 
 ### Epilogue
-`Learn by comparison` is my motto in studying. The rationale behind is commonality and differential. While questing for the knowledge of [Redis Stack](https://redis.io/about/about-stack/), I was chanced to be aware of some fun facts: 
+`Learn by comparison` is my motto in studying. The rationale behind is commonality and differential. While questing for some knowledge of [Redis Stack](https://redis.io/about/about-stack/), I was chanced to be aware of some fun facts: 
 
 1. [SINTER](https://redis.io/docs/latest/commands/sinter/) and alike to be used in [Faceted Search](https://www.oxfordsemantic.tech/faqs/what-is-faceted-search) is an analogy to [SQL INNER JOIN](https://www.w3schools.com/sql/sql_join_inner.asp) operation. 
 
@@ -22,7 +22,7 @@ Every happening has it own connotation behind the scenes, this is the conviction
 
 3. Partial [Indexing](https://redis.io/docs/latest/develop/interact/search-and-query/indexing/) as a result of reducing memory usage, works similarly to [SQL Views](https://www.w3schools.com/sql/sql_view.asp). 
 
-Does this a pure coincidence? Or some underlaying intricacy drives them together? 
+Does these pure coincidence? Or some underlaying intricacy drives them together? 
 
 
 ### EOF (2024/04/25)
