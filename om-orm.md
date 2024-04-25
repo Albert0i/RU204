@@ -8,7 +8,7 @@ Every happening has it own connotation behind the scenes, this is the conviction
 ### I. Round 1: Setup 
 
 
-### II. Round 2: Seeding
+### II. Round 2: [Seeding](https://www.prisma.io/docs/orm/prisma-migrate/workflows/seeding#integrated-seeding-with-prisma-migrate)
 
 
 ### III. Round 3: Searching
