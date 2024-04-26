@@ -1,23 +1,28 @@
-import 'dotenv/config'
 import { Repository, EntityId } from 'redis-om'
 import { redisClient } from './redisClient.js'
 import { movieSchema } from './movieSchema.js'
 import { movieData } from '../data/movieData.js'
 
 const movieRepository = new Repository(movieSchema, redisClient)
+await movieRepository.createIndex()
 
 async function main() {
    let response
    // Erase old data... 
-   //response = await redisClient.sendCommand(['ft.drop', `${process.env.REDIS_OM_PREFIX}index`])
+   console.log(`Removing index ${movieSchema.indexName}...`)
+   // Dropping an index and all accompanied documents 
+   response = await redisClient.sendCommand(['ft.drop', `${movieSchema.indexName}`])
+   // Redis-OM uses a string to keep track of index re-creation. 
+   response = await redisClient.sendCommand(['del', `${movieSchema.indexName}:hash`])
    
-   // To use search you have to build an index. If you don't, you'll get errors. To build an index, just call .createIndex on your repository:
+   // To re-create the index 
+   console.log(`Creating index ${movieSchema.indexName}...`)
    await movieRepository.createIndex()
 
    // Seed new data 
-   for (let i = 0; i < movieData.length; i++) {
+   for (let i = 0; i < movieData.length; i++) {  
      response = await movieRepository.save(movieData[i])
-     console.log(`movie id: ${response[EntityId]}`)     
+     console.log(`movie id: ${response[EntityId]}`)
    }
     console.log(`${movieData.length} record(s) created`) 
   }

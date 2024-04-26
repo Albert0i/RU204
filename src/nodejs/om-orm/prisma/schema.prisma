@@ -17,13 +17,18 @@ datasource db {
 model Movie {
   id Int @id @default(autoincrement())
 
-  title    String  @db.VarChar(128)
-  released Int     @db.Year
+  title    String  
+  released Int     
   runtime  Int
-  stars    String  @db.VarChar(128)
+  stars    String  
   summary  String  @db.LongText
   rating   Float
-  inStock  Boolean @default(true)
+  inStock  Boolean 
+  director String  
+  genre    String  
+  country  String  
+  language String  
+  sequel   Boolean 
 }
 
 //
