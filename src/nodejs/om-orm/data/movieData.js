@@ -108,7 +108,7 @@ let movieData = [
     inStock: true,
     director: "David Fincher",
     genre: "Drama",
-    country: "United States, Germany",
+    country: "United States",
     language: "English",
     sequel: false
   },
@@ -121,8 +121,8 @@ let movieData = [
     rating: 8.8,
     inStock: true,
     director: "Peter Jackson",
-    genre: "Adventure, Drama, Fantasy",
-    country: "United States, New Zealand",
+    genre: "Fantasy",
+    country: "United States",
     language: "English",
     sequel: true
   },
@@ -135,7 +135,7 @@ let movieData = [
     rating: 8.8,
     inStock: true,
     director: "Robert Zemeckis",
-    genre: "Drama, Romance",
+    genre: "Romance",
     country: "United States",
     language: "English",
     sequel: false
@@ -149,9 +149,9 @@ let movieData = [
     rating: 8.5,
     inStock: true,
     director: "Bryan Singer",
-    genre: "Crime, Mystery, Thriller",
-    country: "United States, Germany",
-    language: "English, Hungarian, Spanish, French",
+    genre: "Crime",
+    country: "United States",
+    language: "English",
     sequel: false
   },
   {
@@ -163,9 +163,9 @@ let movieData = [
     rating: 8.5,
     inStock: true,
     director: "Roger Allers, Rob Minkoff",
-    genre: "Animation, Adventure, Drama",
+    genre: "Animation",
     country: "United States",
-    language: "English, Swahili, Xhosa, Zulu",
+    language: "English",
     sequel: true
   },
   {
@@ -177,9 +177,9 @@ let movieData = [
     rating: 8.0,
     inStock: true,
     director: "Joss Whedon",
-    genre: "Action, Adventure, Sci-Fi",
+    genre: "Sci-Fi",
     country: "United States",
-    language: "English, Russian",
+    language: "English",
     sequel: true
   },
   {
@@ -191,7 +191,7 @@ let movieData = [
     rating: 8.5,
     inStock: true,
     director: "Robert Zemeckis",
-    genre: "Adventure, Comedy, Sci-Fi",
+    genre: "Sci-Fi",
     country: "United States",
     language: "English",
     sequel: true
@@ -205,9 +205,9 @@ let movieData = [
     rating: 8.5,
     inStock: true,
     director: "Martin Scorsese",
-    genre: "Crime, Drama, Thriller",
-    country: "United States, Hong Kong",
-    language: "English, Cantonese",
+    genre: "Crime",
+    country: "United States",
+    language: "English",
     sequel: false
   }
 ]  
