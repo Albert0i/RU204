@@ -11,9 +11,9 @@ async function main() {
    // Erase old data... 
    console.log(`Removing index ${movieSchema.indexName}...`)
    // Dropping an index and all accompanied documents 
-   response = await redisClient.sendCommand(['ft.drop', `${movieSchema.indexName}`])
+   response = await redisClient.sendCommand(['FT.DROP', `${movieSchema.indexName}`])
    // Redis-OM uses a string to keep track of index re-creation. 
-   response = await redisClient.sendCommand(['del', `${movieSchema.indexName}:hash`])
+   response = await redisClient.sendCommand(['DEL', `${movieSchema.indexName}:hash`])
    
    // To re-create the index 
    console.log(`Creating index ${movieSchema.indexName}...`)
