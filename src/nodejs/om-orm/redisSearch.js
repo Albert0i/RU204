@@ -15,6 +15,7 @@ movies = await movieRepository.search()
                 .return.page(0, 5)
 console.log(movies)
 
+console.log(" “To OM, or not to OM, that is the question”")
 //FT.SEARCH moviedb:movie:index "@sequel:{0}" RETURN 3 title genre released SORTBY released DESC LIMIT 0 5
 movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@sequel:{0}', 'RETURN', '3', 'title', 'genre', 'released', 'SORTBY', 'released', 'DESC', 'LIMIT', '0', '5'])
 console.log(movies)
