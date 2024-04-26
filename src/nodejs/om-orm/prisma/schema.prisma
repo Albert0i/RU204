@@ -4,8 +4,13 @@
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// Full-Text Search is currently in Preview and only available for PostgreSQL and MySQL. 
+// To use search, you'll need to enable the fullTextSearch preview feature.
+
+// For MySQL, you will also need to include the fullTextIndex preview feature flag:
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -17,7 +22,7 @@ datasource db {
 model Movie {
   id Int @id @default(autoincrement())
 
-  title    String  
+  title    String
   released Int     
   runtime  Int
   stars    String  
@@ -29,9 +34,26 @@ model Movie {
   country  String  
   language String  
   sequel   Boolean 
+
+  @@fulltext([title])
+  @@fulltext([summary])
 }
 
+// 
+// Every time you made changes to the model, be sure to run: 
+// npx prisma db push  --> to reflect changes in server side
+// npx prisma generate --> to reflect changes in client side 
+// 
 //
 // prisma docs | MySQL/MariaDB 
 // https://www.prisma.io/docs/orm/overview/databases/mysql
 //
+// Prisma Client API reference
+// https://www.prisma.io/docs/orm/reference/prisma-client-reference#filter-conditions-and-operators
+// 
+// Full-text search
+// https://www.prisma.io/docs/orm/prisma-client/queries/full-text-search
+// 
+// 14.9 Full-Text Search Functions
+// https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html
+// 
