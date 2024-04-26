@@ -49,6 +49,7 @@ movies = await prisma.movie.findMany({
  })
 console.log(movies)
 
+await prisma.$disconnect()
 // These are pretty much all I can do with single file search in prisma... 
 
 /*
