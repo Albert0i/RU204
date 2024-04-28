@@ -1,11 +1,24 @@
 ### [OM](https://www.npmjs.com/package/redis-om) vs [ORM](https://www.prisma.io/docs/orm/overview/prisma-in-your-stack/is-prisma-an-orm) 
 
+```
+“April is the cruellest month, breeding
+Lilacs out of the dead land, mixing
+Memory and desire, stirring
+Dull roots with spring rain.”
+The Waste Land
+BY T. S. ELIOT
+```
+
 
 ### Prologue 
 Every happening has it own connotation behind the scenes, this is the conviction throughout my life. Events, no matter how minute they are, may entangle even more incidents of any scale. More often than not, the effect is not instantaneous and thus not palpable in secular society. We just can't conceive their interworking, can't figure out their causes and consequences, if any. Based on this belief, we can definitely say that "there is no such thing as coincidence!". The term "laws of nature" refers to fundamental principles or regularities that govern the behavior and operations of the natural world. These laws apply to basic physical elements but not to high level mental activities. 
 
 
 ### I. Round 1: Setup 
+Few people ever works with more than one database system in a project, especially 
+heterogeneous ones. 
+
+![alt docker](img/docker-compose.png)
 
 
 ### II. Round 2: [Seeding](https://www.prisma.io/docs/orm/prisma-migrate/workflows/seeding#integrated-seeding-with-prisma-migrate)
@@ -18,6 +31,28 @@ Every happening has it own connotation behind the scenes, this is the conviction
 
 
 ### V. Round up
+
+[Prisma](https://www.prisma.io/)
+**Pros**
+1. Implementation agnostic, suports mainsream RDBMS (except Oracle); 
+2. Code First and Database First bi-directional approach; 
+3. Complete SDLC (Software Development Life Cycle) support; 
+
+**Cons**
+1. Longer learning curve; 
+2. One kind of database per project;
+3. Performance overhead; 
+
+[Redis-OM](https://github.com/redis/redis-om-node)
+**Pros**
+1. Enablement of document database in Redis;
+2. Manage Redis index automatically; 
+3. Endows data types on HASH data structure; 
+
+**Cons**
+1. Still under development; 
+2. Libraries for Python, Java, Javascript and C# only; 
+3. Less features than [mongoose](https://mongoosejs.com/);
 
 
 ### VI. Bibliography
@@ -34,5 +69,10 @@ Every happening has it own connotation behind the scenes, this is the conviction
 
 Does these pure coincidence? Or some underlaying intricacy drives them together? 
 
+```
+“To be, or not to be, that is the question”
+BY WILLIAM SHAKESPEARE
+```
 
-### EOF (2024/04/25)
+
+### EOF (2024/05/03)
