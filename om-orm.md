@@ -31,7 +31,7 @@ Rare chance when it is required to to tap on multiple database systems in a sing
 
 ### V. Round up
 
-[Prisma](https://www.prisma.io/)
+#### [Prisma](https://www.prisma.io/)
 
 **Pros**
 1. Implementation agnostic, suports mainsream RDBMS (except Oracle); 
@@ -43,7 +43,7 @@ Rare chance when it is required to to tap on multiple database systems in a sing
 2. One kind of database per project;
 3. Performance overhead; 
 
-[Redis-OM](https://github.com/redis/redis-om-node)
+#### [Redis-OM](https://github.com/redis/redis-om-node)
 
 **Pros**
 1. Enablement of document database in Redis;
