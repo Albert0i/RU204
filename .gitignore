@@ -13,5 +13,6 @@ venv/
 **/.classpath
 **/.project
 redisdata/
+mysqldata/
 *.sql 
 .env

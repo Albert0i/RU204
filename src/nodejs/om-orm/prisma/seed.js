@@ -6,8 +6,17 @@ const prisma = new PrismaClient()
 async function main() {
    let response
    // Erase old data... 
-   response = await prisma.movie.deleteMany()
-   console.log(`${response.count} record(s) deleted`) 
+   // response = await prisma.movie.deleteMany()
+   // Not works in Linux but Windows !!!
+   console.log('platform is ', process.platform)
+   if (process.platform ==='linux' ) {
+      response = await prisma.$executeRaw`truncate table movie`
+      console.log('Table truncated') 
+   }
+   else {
+      response = await prisma.movie.deleteMany()
+      console.log(`${response.count} record(s) deleted`) 
+   } 
 
    // Seed new data 
    for (let i = 0; i < movieData.length; i++) {
@@ -35,4 +44,7 @@ main()
 /*
    Seeding
    https://www.prisma.io/docs/orm/prisma-migrate/workflows/seeding#integrated-seeding-with-prisma-migrate   
+
+   Raw queries
+   https://www.prisma.io/docs/orm/prisma-client/queries/raw-database-access/raw-queries
 */

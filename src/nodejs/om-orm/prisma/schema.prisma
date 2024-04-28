@@ -35,8 +35,12 @@ model Movie {
   language String  
   sequel   Boolean 
 
+  // Enable full text search on these fields
   @@fulltext([title])
   @@fulltext([summary])
+
+  // Linux would map to 'Movie' not 'movie' otherwise
+  @@map("movie")
 }
 
 // 
@@ -57,3 +61,5 @@ model Movie {
 // 14.9 Full-Text Search Functions
 // https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html
 // 
+// mysql -u root -p -h 127.0.0.1
+//

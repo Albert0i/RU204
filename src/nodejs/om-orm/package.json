@@ -4,7 +4,7 @@
   "description": "",
   "main": "overdone",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1", 
+    "test": "echo \"Error: no test specified\" && exit 1",
     "om-seed": "node om/seed.js"
   },
   "type": "module",
