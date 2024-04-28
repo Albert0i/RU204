@@ -15,7 +15,7 @@ Every happening has it own connotation behind the scenes, this is the conviction
 
 
 ### I. Round 1: Setup 
-Rare chance is when you are demanded to tap on multiple database systems in a single project, especially heterogeneous ones. 
+Rare chance when it is required to to tap on multiple database systems in a single project, especially heterogeneous ones. 
 
 ![alt docker](img/docker-compose.png)
 
