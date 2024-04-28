@@ -47,7 +47,7 @@ Rare chance when it is required to to tap on multiple database systems in a sing
 
 **Pros**
 1. Enablement of document database in Redis;
-2. Manage Redis index automatically; 
+2. Manage indexes automatically; 
 3. Endows data types on HASH data structure; 
 
 **Cons**
