@@ -66,7 +66,7 @@ Rare chance when it is required to to tap on multiple database systems in a sing
 
 3. Partial [Indexing](https://redis.io/docs/latest/develop/interact/search-and-query/indexing/) as a result of reducing memory usage, works similarly to [SQL Views](https://www.w3schools.com/sql/sql_view.asp). 
 
-Does these pure coincidence? Or some underlaying intricacy drives them together? 
+Does these pure coincidence? Or some underlaying intricacy drives them together? I not know... 
 
 ```
 “To be, or not to be, that is the question”
