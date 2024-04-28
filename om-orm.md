@@ -32,6 +32,7 @@ Rare chance when it is required to to tap on multiple database systems in a sing
 ### V. Round up
 
 [Prisma](https://www.prisma.io/)
+
 **Pros**
 1. Implementation agnostic, suports mainsream RDBMS (except Oracle); 
 2. Code First and Database First bi-directional approach; 
@@ -43,6 +44,7 @@ Rare chance when it is required to to tap on multiple database systems in a sing
 3. Performance overhead; 
 
 [Redis-OM](https://github.com/redis/redis-om-node)
+
 **Pros**
 1. Enablement of document database in Redis;
 2. Manage Redis index automatically; 
