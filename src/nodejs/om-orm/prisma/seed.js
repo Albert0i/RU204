@@ -7,16 +7,9 @@ async function main() {
    let response
    // Erase old data... 
    // response = await prisma.movie.deleteMany()
-   // Not works in Linux but Windows !!!
-   console.log('platform is ', process.platform)
-   if (process.platform ==='linux' ) {
-      response = await prisma.$executeRaw`truncate table movie`
-      console.log('Table truncated') 
-   }
-   else {
-      response = await prisma.movie.deleteMany()
-      console.log(`${response.count} record(s) deleted`) 
-   } 
+   // Won't reset autonum field to 1 !!!
+   response = await prisma.$executeRaw`truncate table movie`
+   console.log('Table truncated') 
 
    // Seed new data 
    for (let i = 0; i < movieData.length; i++) {

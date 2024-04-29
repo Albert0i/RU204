@@ -9,15 +9,11 @@ await movieRepository.createIndex()
 async function main() {
    let response
    // Erase old data... 
-   console.log(`Removing index ${movieSchema.indexName}...`)
-
-   // Attention: 
-   // As for the first time of seeding, you may need to comment the 'FT.DROP' below;
-   // 'FT.DROP' seems an undocumented feature not mention in any redis documentation.
-   // Dropping an index and all accompanied documents, which seems to be an 
-   response = await redisClient.sendCommand(['FT.DROP', `${movieSchema.indexName}`])
-   // Redis-OM uses a string to keep track of index re-creation. 
-   response = await redisClient.sendCommand(['DEL', `${movieSchema.indexName}:hash`])
+   console.log(`Removing index ${movieSchema.indexName} and documents...`)   
+   //response = await redisClient.sendCommand(['FT.DROP', `${movieSchema.indexName}`])
+   response = await redisClient.sendCommand(['FT.DROPINDEX', `${movieSchema.indexName}`, 'DD'])
+   // Redis-OM has a string to keep track of index re-creation. Also remove it!!! 
+   response = await redisClient.del(`${movieSchema.indexName}:hash`)
    
    // To re-create the index 
    console.log(`Creating index ${movieSchema.indexName}...`)
