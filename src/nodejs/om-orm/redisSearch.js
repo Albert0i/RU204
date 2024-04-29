@@ -67,7 +67,7 @@ movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@su
 console.log(movies)
 
 await redisClient.quit();
-// These are pretty much all I can do with single file search in prisma... 
+// These are pretty much all I can do with single file search in redis... 
 
 /*
    redis-om-node
