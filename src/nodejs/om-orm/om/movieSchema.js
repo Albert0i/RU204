@@ -1,11 +1,11 @@
 import { Schema } from 'redis-om'
 
 const movieSchema = new Schema("moviedb:movie", {
-        title: { type: 'string' },
+        title: { type: 'text' },
         released: { type: 'number', sortable: true}, 
         runtime: { type: 'number'}, 
         stars:  { type: 'string[]' },
-        summary: { type: 'string' }, 
+        summary: { type: 'text' }, 
         rating: { type: 'number' },
         inStock: { type: 'boolean' },
         director: { type: 'string' },

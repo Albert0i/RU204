@@ -209,6 +209,48 @@ let movieData = [
     country: "United States",
     language: "English",
     sequel: false
+  },
+  {
+    title: "Schindler's List",
+    released: 1993,
+    runtime: 195,
+    stars: ["Liam Neeson", "Ralph Fiennes", "Ben Kingsley"],
+    summary: "In German-occupied Poland during World War II, industrialist Oskar Schindler gradually becomes concerned for his Jewish workforce after witnessing their persecution by the Nazis.",
+    rating: 8.9,
+    inStock: true,
+    director: "Steven Spielberg",
+    genre: "Biography",
+    country: "United States",
+    language: "English",
+    sequel: false
+  },
+  {
+    title: "The Silence of the Lambs",
+    released: 1991,
+    runtime: 118,
+    stars: ["Jodie Foster", "Anthony Hopkins", "Lawrence A. Bonney"],
+    summary: "A young FBI cadet must receive the help of an incarcerated and manipulative cannibal killer to help catch another serial killer, a madman who skins his victims.",
+    rating: 8.6,
+    inStock: true,
+    director: "Jonathan Demme",
+    genre: "Thriller",
+    country: "United States",
+    language: "English",
+    sequel: false
+  },
+  {
+    title: "The Green Mile",
+    released: 1999,
+    runtime: 189,
+    stars: ["Tom Hanks", "Michael Clarke Duncan", "David Morse"],
+    summary: "The lives of guards on Death Row are affected by one of their charges: a black man accused of child murder and rape, yet who has a mysterious gift.",
+    rating: 8.6,
+    inStock: true,
+    director: "Frank Darabont",
+    genre: "Drama",
+    country: "United States",
+    language: "English",
+    sequel: false
   }
 ]  
 

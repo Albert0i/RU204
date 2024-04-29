@@ -13,17 +13,21 @@ movies = await prisma.movie.findMany({
     skip: 0, 
     take: 5
   })
+console.log('answer 1')
 console.log(movies)
 
-// 2. Find all movies acted by "Morgan Freeman" or "Leonardo DiCaprio"
-//    select 'title' and 'stars'
+// 2. Find all movies starred by "Morgan Freeman" or "Leonardo DiCaprio"
+//    select 'title', 'stars' and 'released' year
+//    order by 'released' year in ascending order
 movies = await prisma.movie.findMany({
      where: { OR: [
         { stars: { contains: "Morgan Freeman" } } , 
         { stars: { contains: "Leonardo DiCaprio" } } 
      ] },
-     select: { title: true, stars: true },
+     orderBy: [ { released: 'asc' } ],
+     select: { title: true, stars: true, released: true }
    })
+console.log('answer 2')
 console.log(movies)
 
 // 3. Find all movies with rating 7~8 (inclusive)
@@ -35,6 +39,7 @@ movies = await prisma.movie.findMany({
    ] },
    select: { title: true, rating: true },
  })
+console.log('answer 3')
 console.log(movies)
 
 // 4. Find all movie with a summary that contains 'crime' or 'police'.
@@ -47,6 +52,7 @@ movies = await prisma.movie.findMany({
     },
     select: { id: true, title: true, summary: true }
  })
+console.log('answer 4')
 console.log(movies)
 
 await prisma.$disconnect()
