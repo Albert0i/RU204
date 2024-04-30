@@ -9,14 +9,6 @@ The Waste Land
 BY T. S. ELIOT
 ```
 
-Without further ado
-Stop beating around the bushes
-Time to rollup your sheelves 
-Let get started
-For better or worse 
-
-We'll look at examples written in Python, .NET, Node.js,
-and Java.
 
 ### Prologue 
 Every happening has it own connotation behind the scenes, this is the conviction throughout my life. Events, no matter how minute they are, may entangle even more incidents of any scale. More often than not, the effect is not instantaneous and thus not palpable in secular society. We just can't conceive their interworking, can't figure out their causes and consequences, if any. Based on this belief, we can definitely say that "there is no such thing as coincidence!". The term "laws of nature" refers to fundamental principles or regularities that govern the behavior and operations of the natural world. These laws apply to elementary physical elements, not to those in high level mental activities. 
@@ -330,3 +322,13 @@ BY WILLIAM SHAKESPEARE
 > It is also recommended to refrain from indexing all of the fields within a document, as that will consume considerable compute overhead and space, which is an antipattern of Redis. (Indexing JSON Documents with RediSearch)
 
 ### EOF (2024/05/03)
+
+Without further ado
+Stop beating around the bushes
+Time to rollup your sheelves 
+Let get started
+For better or worse 
+
+We'll look at examples written in Python, .NET, Node.js,
+and Java.
+
