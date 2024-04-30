@@ -17,11 +17,6 @@ movies = await movieRepository.search()
 console.log('answer 1')
 console.log(movies)
 
-console.log(" “To OM, or not to OM, that is the question”")
-// FT.SEARCH moviedb:movie:index "@sequel:{0}" RETURN 3 title genre released SORTBY released DESC LIMIT 0 5
-movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@sequel:{0}', 'RETURN', '3', 'title', 'genre', 'released', 'SORTBY', 'released', 'DESC', 'LIMIT', '0', '5'])
-console.log(movies)
-
 // 2. Find all movies starred by "Morgan Freeman" or "Leonardo DiCaprio"
 //    select 'title', 'stars' and 'released' year
 //    order by 'released' year in ascending order
@@ -33,11 +28,6 @@ movies = await movieRepository.search()
 console.log('answer 2')
 console.log(movies)
 
-console.log(" “To OM, or not to OM, that is the question”")
-// FT.SEARCH moviedb:movie:index "@stars:{Morgan Freeman|Leonardo DiCaprio}" SORTBY released ASC RETURN 3 title stars released
-movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@stars:{Morgan Freeman|Leonardo DiCaprio}', 'SORTBY', 'released', 'ASC', 'RETURN', '3', 'title', 'stars', 'released'])
-console.log(movies)
-
 // 3. Find all movies with rating 7~8 (inclusive)
 //    select 'title' and 'rating'
 movies = await movieRepository.search()
@@ -47,11 +37,6 @@ movies = await movieRepository.search()
 console.log('answer 3')
 console.log(movies)
 
-console.log(" “To OM, or not to OM, that is the question”")
-// FT.SEARCH moviedb:movie:index "@stars:{Morgan Freeman|Leonardo DiCaprio}" SORTBY released ASC RETURN 3 title stars released
-movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@rating:[7 8]', 'RETURN', '2', 'title', 'rating'])
-console.log(movies)
-
 // 4. Find all movie with a summary that contains 'crime' or 'police'.
 //    select 'id', 'title' and 'summary' 
 movies = await movieRepository.search()
@@ -59,11 +44,6 @@ movies = await movieRepository.search()
                 .or('summary').match('police')
                 .return.all()
 console.log('answer 4')
-console.log(movies)
-
-console.log(" “To OM, or not to OM, that is the question”")
-// FT.SEARCH moviedb:movie:index "@summary:(crime|police)" RETURN 2 title summary HIGHLIGHT
-movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@summary:(crime|police)', 'RETURN', '2', 'title', 'summary', 'HIGHLIGHT'])
 console.log(movies)
 
 await redisClient.quit();

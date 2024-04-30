@@ -36,7 +36,8 @@ console.log(movies)
 //    skip: 0,
 //    take: 10,
 //   })
-// FT.AGGREGATE moviedb:movie:index "*" GROUPBY 1 @genre REDUCE COUNT 0 AS Total SORTBY 2 @Total ASC
+// FT.AGGREGATE moviedb:movie:index "*" GROUPBY 1 @genre REDUCE COUNT 0 AS Total SORTBY 2 @Total DESC filter "@Total >= 3" LIMIT 0 10
+movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', "*", 'GROUPBY', '1', '@genre', 'REDUCE', 'COUNT', '0', 'AS', 'Total', 'SORTBY', '2', '@Total', 'DESC', 'filter', "@Total >= 3", 'LIMIT', '0', '10'])
 console.log('answer 3')
 console.log(movies)
 

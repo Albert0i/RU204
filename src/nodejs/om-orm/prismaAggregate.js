@@ -45,7 +45,7 @@ console.log('answer 3')
 console.log(movies)
 
 await prisma.$disconnect()
-// These are pretty much all I can do with single file search in prisma... 
+// These are pretty much all I can do with single file aggregation in prisma... 
 
 /*
    Filtering and Sorting
