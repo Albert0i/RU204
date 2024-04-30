@@ -449,14 +449,4 @@ BY WILLIAM SHAKESPEARE
 
 > It is also recommended to refrain from indexing all of the fields within a document, as that will consume considerable compute overhead and space, which is an antipattern of Redis. (Indexing JSON Documents with RediSearch)
 
-### EOF (2024/05/03)
-
-Without further ado
-Stop beating around the bushes
-Time to rollup your sheelves 
-Let get started
-For better or worse 
-
-We'll look at examples written in Python, .NET, Node.js,
-and Java.
-Last but not least... 
+### EOF (2024/04/30)
