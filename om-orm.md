@@ -251,7 +251,7 @@ npm run om-seed
 
 
 ### III. Round 3: Searching
-Take a seat and drink a beer! Here come more rounds... 
+Take a seat and drink a beer! Here come more rounds... First prisma... then Redis... 
 
 1. Find all movies which are not sequel, select 'title', 'genre' and 'released' year, order by 'released' year in descending order.
    return the first 5 matched. 
@@ -326,10 +326,11 @@ Take a seat and drink a beer! Here come more rounds...
                 .return.all()
 
    ```
+Both tools have abundance of operators in searching. [Redis-OM](https://github.com/redis/redis-om-node) can't select individual fields to return. 
 
 
 ### IV. Round 4: Aggregation
-Last but not least... 
+RDBMS evinces unparalleled flexibility in searching and aggregation since all data are arranged in tabular format. Sad to say [Redis-OM](https://github.com/redis/redis-om-node) for Node.js doesn't have direct support of aggregation. I managed to compete with the underlaying redis client and [RediSearch](https://github.com/RediSearch/RediSearch) functions. This is *not* a level play... 
 
 1. How many movies are not sequel? 
 ```
@@ -458,4 +459,4 @@ For better or worse
 
 We'll look at examples written in Python, .NET, Node.js,
 and Java.
-
+Last but not least... 
