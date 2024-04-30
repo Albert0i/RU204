@@ -422,7 +422,7 @@ movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', "
 7. [MySQL Full-Text Search Functions](https://dev.mysql.com/doc/refman/8.0/en/fulltext-search.html)
 8. [Learn Prisma In 60 Minutes, by WDS](https://youtu.be/RebA5J-rlwg)
 
-#### redis 
+#### Redis-OM
 1. [Storing, querying, and indexing JSON at speed, Redis University](https://university.redis.com/courses/ru204/)
 2. [Redis Stack for Application Modernization, by Luigi Fugaro, Mirko Ortensi](https://www.amazon.com/Redis-Stack-Application-Modernization-applications-ebook/dp/B0CMR28RT1/ref=sr_1_1?crid=22O91FJWWHK9Y&dib=eyJ2IjoiMSJ9.y5lDgi1pCr-YeUHEjJAo6Q.HmDkpYrL9BqnFJj2V-yDtMVVaXfzfpQ-nKIMW8h6EgQ&dib_tag=se&keywords=Redis+Stack+for+Application+Modernization&qid=1714444777&s=books&sprefix=redis+stack+for+application+modernization%2Cstripbooks-intl-ship%2C258&sr=1-1)
 3. [Node-Redis](https://github.com/redis/node-redis)
