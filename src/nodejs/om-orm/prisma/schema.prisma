@@ -23,7 +23,7 @@ model Movie {
   id Int @id @default(autoincrement())
 
   title    String
-  released Int     
+  released Int     @db.Year
   runtime  Int
   stars    String  
   summary  String  @db.LongText
