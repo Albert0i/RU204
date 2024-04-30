@@ -412,7 +412,7 @@ movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', "
 
 
 ### VI. Bibliography
-#### prisma
+#### Prisma
 1. [prisma/docs | MySQL/MariaDB](https://www.prisma.io/docs/orm/overview/databases/mysql)
 2. [Prisma Client Quickstart](https://www.prisma.io/docs/getting-started/quickstart)
 3. [Prisma Client API reference](https://www.prisma.io/docs/orm/reference/prisma-client-reference)
