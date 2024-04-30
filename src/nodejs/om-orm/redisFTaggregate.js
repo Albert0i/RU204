@@ -20,22 +20,6 @@ console.log('answer 2')
 console.log(movies)
 
 // 3. Group by genre. having count >=3 and list top 10 only.  
-// movies = await prisma.movie.groupBy({
-//    by: ['genre'],
-//    _count: { title: true }, 
-//    orderBy: {
-//       _count: { title: 'desc' },
-//    },
-//    having: {
-//       title: {
-//         _count: {
-//           gte: 3,
-//         },
-//       },
-//     },
-//    skip: 0,
-//    take: 10,
-//   })
 // FT.AGGREGATE moviedb:movie:index "*" GROUPBY 1 @genre REDUCE COUNT 0 AS Total SORTBY 2 @Total DESC filter "@Total >= 3" LIMIT 0 10
 movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', "*", 'GROUPBY', '1', '@genre', 'REDUCE', 'COUNT', '0', 'AS', 'Total', 'SORTBY', '2', '@Total', 'DESC', 'filter', "@Total >= 3", 'LIMIT', '0', '10'])
 console.log('answer 3')

@@ -251,9 +251,136 @@ npm run om-seed
 
 
 ### III. Round 3: Searching
+Take a seat and drink a beer! Here come more rounds... 
+
+1. Find all movies which are not sequel, select 'title', 'genre' and 'released' year, order by 'released' year in descending order.
+   return the first 5 matched. 
+   ```
+   movies = await prisma.movie.findMany({
+    where: { sequel: false },
+    select: { title: true, genre: true, released: true },
+    orderBy: [ { released: 'desc' } ],
+    skip: 0, 
+    take: 5
+   })
+   ```
+   ```
+   movies = await movieRepository.search()
+                .where('sequel').equals(false)
+                .sortBy('released', 'DESC')
+                .return.page(0, 5)
+   ```
+
+2. Find all movies starred by "Morgan Freeman" or "Leonardo DiCaprio", select 'title', 'stars' and 'released' year, 
+   order by 'released' year in ascending order
+   ```
+   movies = await prisma.movie.findMany({
+     where: { OR: [
+        { stars: { contains: "Morgan Freeman" } } , 
+        { stars: { contains: "Leonardo DiCaprio" } } 
+     ] },
+     orderBy: [ { released: 'asc' } ],
+     select: { title: true, stars: true, released: true }
+   })
+   ```
+   ```
+   movies = await movieRepository.search()
+                .where('stars').contain("Morgan Freeman")
+                .or('stars').contain("Leonardo DiCaprio")
+                .sortBy('released', 'ASC')
+                .return.all()
+   ```
+
+3. Find all movies with rating 7~8 (inclusive), select 'title' and 'rating'
+   ```
+   movies = await prisma.movie.findMany({
+   where: { AND: [
+      { rating: { gte: 7 } }, 
+      { rating: { lte: 8 } }
+   ] },
+   select: { title: true, rating: true },
+  })
+   ```
+   ```
+   movies = await movieRepository.search()
+                .where('rating').gte(7)
+                .and('rating').lte(8)
+                .return.all()
+   ```
+
+4. Find all movie with a summary that contains 'crime' or 'police', select 'id', 'title' and 'summary' 
+   ```
+   movies = await prisma.movie.findMany({
+   where: {
+      summary: {
+         search: 'police crime',
+      },
+    },
+    select: { id: true, title: true, summary: true }
+   })
+   ```
+   ```
+   movies = await movieRepository.search()
+                .where('summary').match('crime')
+                .or('summary').match('police')
+                .return.all()
+
+   ```
 
 
 ### IV. Round 4: Aggregation
+Last but not least... 
+
+1. How many movies are not sequel? 
+```
+movies = await prisma.movie.count({
+    where: {
+      sequel: false
+    }
+  })
+```  
+```
+movies = await redisClient.sendCommand(['FT.SEARCH', 'moviedb:movie:index', '@sequel:{0}', 'LIMIT', '0', '0'])
+```
+
+2. Min, max, avg runtime in movies which are not sequel? 
+```
+movies = await prisma.movie.aggregate({
+   _count: { title: true }, 
+   _max: { runtime: true }, 
+   _min: { runtime: true }, 
+   _avg: { runtime: true }, 
+   where: {
+     sequel: false
+   }
+ })
+``` 
+```
+movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', '@sequel:{0}', 'GROUPBY', '0', 'REDUCE', 'COUNT', '0', 'AS', 'Total', 'REDUCE', 'MAX', '1', '@runtime', 'AS', 'Maxinum', 'REDUCE', 'MIN', '1', '@runtime', 'AS', 'Minimum', 'REDUCE', 'AVG', '1', '@runtime', 'AS', 'Average'])
+```
+
+3. Group by genre. having count >=3 and list top 10 only.  
+```
+movies = await prisma.movie.groupBy({
+   by: ['genre'],
+   _count: { title: true }, 
+   orderBy: {
+      _count: { title: 'desc' },
+   },
+   having: {
+      title: {
+        _count: {
+          gte: 3,
+        },
+      },
+    },
+   skip: 0,
+   take: 10,
+  })
+```
+```
+movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', "*", 'GROUPBY', '1', '@genre', 'REDUCE', 'COUNT', '0', 'AS', 'Total', 'SORTBY', '2', '@Total', 'DESC', 'filter', "@Total >= 3", 'LIMIT', '0', '10'])
+```
 
 
 ### V. Round up
@@ -279,7 +406,7 @@ npm run om-seed
 
 **Cons**
 1. Still under development; 
-2. Libraries for Python, Java, Javascript and C# only; 
+2. Libraries for Python, .NET, Node.js, and Java only; 
 3. Less features than [mongoose](https://mongoosejs.com/);
 
 
