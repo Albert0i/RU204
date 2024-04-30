@@ -299,7 +299,7 @@ Take a seat and drink a beer! Here come more rounds...
       { rating: { lte: 8 } }
    ] },
    select: { title: true, rating: true },
-  })
+   })
    ```
    ```
    movies = await movieRepository.search()
