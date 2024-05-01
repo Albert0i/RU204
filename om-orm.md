@@ -461,6 +461,8 @@ movies = await redisClient.sendCommand(['FT.AGGREGATE', 'moviedb:movie:index', "
 
 3. Partial [Indexing](https://redis.io/docs/latest/develop/interact/search-and-query/indexing/) as a result of reducing memory usage, works similarly to [SQL Views](https://www.w3schools.com/sql/sql_view.asp). 
 
+4. Indexing on multiple prefixes is an analogy of [SQL UNION](https://www.w3schools.com/sql/sql_union.asp) operation. 
+
 Does these pure coincidence? Or some underlaying intricacy drives them together? I not know... 
 
 ```
