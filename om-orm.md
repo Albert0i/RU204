@@ -253,6 +253,19 @@ npm run om-seed
 ### III. Round 3: Searching
 Take a seat and drink a beer! Here come more rounds... First prisma... then Redis... 
 
+First thing first...
+```
+import { PrismaClient } from '@prisma/client'
+const prisma = new PrismaClient()
+```
+```
+import { Repository, EntityId } from 'redis-om'
+import { redisClient } from './om/redisClient.js';
+import { movieSchema } from './om/movieSchema.js';
+
+const movieRepository = new Repository(movieSchema, redisClient)
+```
+
 1. Find all movies which are not sequel, select 'title', 'genre' and 'released' year, order by 'released' year in descending order.
    return the first 5 matched. 
    ```
@@ -327,6 +340,14 @@ Take a seat and drink a beer! Here come more rounds... First prisma... then Redi
 
    ```
 Both tools have abundance of operators in searching. [Redis-OM](https://github.com/redis/redis-om-node) can't select individual fields to return. 
+
+Last but not least...
+```
+await prisma.$disconnect()
+```
+```
+await redisClient.quit();
+```
 
 
 ### IV. Round 4: Aggregation
