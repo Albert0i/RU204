@@ -13,7 +13,7 @@ INSERT INTO customers (id, name, email) VALUES (790, 'Alice', 'alice@example.com
 INSERT INTO inventory (id, product_id, quantity) VALUES (1002, 456, 20);
 INSERT INTO orders (id, customer_id, total) VALUES (459, 790, 99.99);
 INSERT INTO users (id, name, age) VALUES (3, 'David', 40);
-INSERT INTO products (id, name, price) VALUES (789, 'Accessory', 5.99);
+INSERT INTO products (id, name, price) VALUES (789, 'Accessory;Bccessary', 5.99);
 INSERT INTO employees (id, name, salary) VALUES (103, 'Carol', 5500);
 INSERT INTO orders (id, customer_id, total) VALUES (460, 791, 150.75);
 INSERT INTO customers (id, name, email) VALUES (791, 'Charlie', 'charlie@example.com');
