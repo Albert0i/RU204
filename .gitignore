@@ -14,5 +14,4 @@ venv/
 **/.project
 redisdata/
 mysqldata/
-*.sql 
 .env
