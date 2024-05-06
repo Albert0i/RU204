@@ -407,7 +407,7 @@ Invoking `info persistence` command will give concise information:
 A typical Redis operations is sub-millisecond levels, 0.69s means hundreds of operations will be blocked, 0.69s means a lot... 
 
 
-### VIII. Convert SQL Insert to HSET 
+### VIII. Convert SQL Insert into HSET 
 `Insert2HSET` is a small utility to convert SQL Insert statements into HSET, suitable for Redis `HASH` using [node-sql-parser](https://www.npmjs.com/package/node-sql-parser). 
 
 ```
