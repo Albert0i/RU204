@@ -4,7 +4,8 @@ const { Parser } = require('node-sql-parser');
 const parser = new Parser();
 
 // Read the file with SQL INSERT statements
-fs.readFile('sql_inserts.sql', 'utf8', (err, data) => {
+//fs.readFile('sql_inserts.sql', 'utf8', (err, data) => {
+fs.readFile('titles.sql', 'utf8', (err, data) => {    
     if (err) {
         console.error(err);
         return;

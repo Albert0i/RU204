@@ -361,7 +361,17 @@ return "Total "..count.." keys Deleted" ;
 redis-cli --eval delete_keys.lua , my_prefix 
 ```
 
-### VI. Saviour
+
+### VI. [FT.DROPINDEX](https://redis.io/docs/latest/commands/ft.dropindex/)
+> If we want to delete an index and all of the indexed documents, we would call FT.DROPINDEX with the optional DD clause. (5.3 Hands-on Exercise)
+
+By dint of defining a dummy index over `HASH` or `JSON` objects and then delete the index with DD option. The side effect is to erase all associated documents. 
+
+Note: 
+FT.DROP = FT.DROPINDEX with DD 
+
+
+### VII. Saviour
 ```
 SAVE
 
@@ -397,7 +407,20 @@ Invoking `info persistence` command will give concise information:
 A typical Redis operations is sub-millisecond levels, 0.69s means hundreds of operations will be blocked, 0.69s means a lot... 
 
 
-### VII. Introspection
+### VIII. Convert SQL Insert to HSET 
+`Insert2HSET` is a small utility to convert SQL Insert statements into HSET, suitable for Redis `HASH` using [node-sql-parser](https://www.npmjs.com/package/node-sql-parser). 
+
+```
+Usage: node insert2hset sql_inxerts.sql [predix]
+```
+
+```
+node insert2hset sql_inserts.sql employeedb:
+```
+![alt insert2hset](img/insert2hset.JPG)
+
+
+### IX. Introspection
 `Learn by comparison` is my motto when confronting new challenges. While relational database emphasizes reliable and consistency, we tackle thread synchronization and [isolation level](https://www.geeksforgeeks.org/transaction-isolation-levels-dbms/) issue. A typical DBMS implementation use a [`redo log`](https://en.wikipedia.org/wiki/Redo_log) technique: 
 
 > Whenever something changes in a datafile, Oracle records the change in the redo log. The name redo log indicates its purpose: If the database crashes, the RDBMS can redo (re-process) all changes on datafiles which will take the database data back to the state it was when the last redo record was written. 
@@ -413,7 +436,7 @@ memory used in Redis Cloud
 The [Eviction policy](https://redis.io/docs/latest/operate/rs/databases/memory-performance/eviction-policy/) determines what happens when a database reaches its memory limit. To make room for new data, older data is evicted (removed) according to the selected policy.To prevent this from happening, make sure your database is large enough to hold all desired keys.
 
 
-### VIII. Bibliography 
+### X. Bibliography 
 1. [Redis Commands](https://redis.io/docs/latest/commands/)
 2. [Ways to delete multiple keys from Redis cache.](https://medium.com/geekculture/how-to-delete-multiple-keys-from-redis-cache-252275a95579)
 3. [Redis : Backup and restore your database](https://www.dbi-services.com/blog/redis-backup-and-restore-your-database/)
@@ -424,4 +447,5 @@ The [Eviction policy](https://redis.io/docs/latest/operate/rs/databases/memory-p
 I have enrolled four courses in [Redis University](https://redis.io/university/), each course has it's own way to feed sample data... Even worse, I do not have any prior knowledge of [`python`](https://www.python.org/) or whatsoever... which makes me fuzzy and dizzy in the very beginning... 
 
 
+### EOF (2024/05/06)
 ### EOF (2024/04/19)
