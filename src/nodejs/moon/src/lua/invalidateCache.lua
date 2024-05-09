@@ -1,23 +1,31 @@
 
--- invalidate tag set(s)
+-- Invalidate tag(s)
+-- @param KEYS[1] (string) The prefix 
+-- @param ARGV[1]~ARGV[n] (string) The tag(s)
+-- @return (number) The number of successful DEL operation(s)
+
 local result = nil
 local cursor = "0"
 local members = nil
+local cnt = 0
 
--- iterate through all tag set(s)
+-- iterate through each tag set(s)
 for _, value in pairs(ARGV) do
+    -- iterate through each member of individual set via SSCAN
     repeat
         result = redis.call("SSCAN", KEYS[1]..'tag:'..value, cursor)
-        cursor = result[1]
-        members = result[2]
+        cursor = result[1]  -- prepare for next SSCAN operation 
+        members = result[2] -- members returned so far 
         
+        -- iterate through each member of in members 
         for _, member in pairs(members) do
-            -- Remove each stored value 
-            redis.call('DEL', member) 
+            -- DEL a stored value
+            cnt = cnt + redis.call('DEL', member) 
         end
     until cursor == "0"
-    -- also remove the tag set 
-    redis.call('DEL', KEYS[1]..'tag:'..value)
+
+    -- DEL the tag set
+    cnt = cnt + redis.call('DEL', KEYS[1]..'tag:'..value) 
 end
 
-return result
+return cnt
