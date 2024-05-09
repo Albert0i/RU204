@@ -40,8 +40,8 @@ else
   console.log('different value')
 
 // Invalidate tag(s)
-// const result2 = await invalidateCache([ "tagB", "tagC" ])
-// console.log('result2 =', result2)
+const result2 = await invalidateCache([ "*" ])
+console.log('result2 =', result2)
 
 // Retrieve stored value 
 // const value2 = await readCache(key)
