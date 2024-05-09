@@ -12,11 +12,17 @@ local key = KEYS[1]..'data:'..KEYS[2]
 local ttl = tonumber(KEYS[3], 10)
 local value = ARGV[1]
 
+
 -- check TTL 
 assert (type(ttl) == 'number', "Invalid TTL in 'writeCache'")
 
 -- store the value 
-local result1 = redis.call('SET', key, value, 'EX', '60')
+local result1 = nil
+if ttl==-1 then
+    result1 = redis.call('SET', key, value)
+else
+    result1 = redis.call('SET', key, value, 'EX', tostring(ttl))
+end
 assert (result1.ok == 'OK', "Failed to SET in 'writeCache'")
 
 -- iterate through each tag(s) and add key to set

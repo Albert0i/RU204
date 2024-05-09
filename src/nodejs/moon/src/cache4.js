@@ -26,7 +26,7 @@ const jsonData = {
   }
 
 // Store test value 
-const result = await writeCache(key, jsonData, tags)
+const result = await writeCache(key, jsonData, [], 60)
 console.log('result =', result)
 
 // Retrieve stored value 
