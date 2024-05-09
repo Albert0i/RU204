@@ -29,9 +29,9 @@ const shaWrite = await redisClient.scriptLoad(readFileSync('./lua/writeCache.lua
 const shaInvalidate = await redisClient.scriptLoad(readFileSync('./lua/invalidateCache.lua', 'utf8'))
 
 // Check existence
-if (await redisClient.scriptExists(shaRead)) { console.log('readCache loaded') } 
-if (await redisClient.scriptExists(shaWrite)) { console.log('writeCache loaded') } 
-if (await redisClient.scriptExists(shaInvalidate)) { console.log('invalidateCache loaded') } 
+if (await redisClient.scriptExists(shaRead)) { console.log(`'readCache' loaded ${shaRead}`) } 
+if (await redisClient.scriptExists(shaWrite)) { console.log(`'writeCache' loaded ${shaWrite}`) } 
+if (await redisClient.scriptExists(shaInvalidate)) { console.log(`'invalidateCache' loaded ${shaInvalidate}`) } 
 
 // Retrieve a stored value 
 const readCache = async (key, prefix='cache:') => { 
@@ -39,10 +39,10 @@ const readCache = async (key, prefix='cache:') => {
 }
 
 // Store a value
-const writeCache = async (key, value, tags=[], prefix='cache:') => { 
+const writeCache = async (key, value, tags=[], ttl=-1, prefix='cache:') => { 
   return redisClient.evalSha(shaWrite, 
                               { 
-                                keys: [ prefix, key ],
+                                keys: [ prefix, key, ttl.toString() ],
                                 arguments: [JSON.stringify(value), ...tags]
                               })
 }
