@@ -7,7 +7,7 @@ repeat
     local members = result[2]
     
     for i, member in ipairs(members) do
-        if tonumber(member) then
+        if tonumber(member) then 
           sum = sum + tonumber(member)
         end
     end
