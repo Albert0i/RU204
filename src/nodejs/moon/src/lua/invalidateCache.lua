@@ -9,12 +9,6 @@ local cursor = "0"
 local members = nil
 local cnt = 0
 
--- what if a single * is provided as ARGV?
-if (#ARGV == 1 and ARGV[1] == '*') then
-    return redis.call('KEYS', KEYS[1]..'tag:*')
-end
-
--- Normal flow 
 -- iterate through each tag set(s)
 for _, value in pairs(ARGV) do
     -- iterate through each member of individual set via SSCAN

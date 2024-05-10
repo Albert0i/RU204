@@ -8,7 +8,7 @@ const redisClient = new createClient(
         scripts: {
             luaVer: defineScript({
               NUMBER_OF_KEYS: 0,
-              SCRIPT: 'return _VERSION',
+              SCRIPT: 'return "Redis " .. redis.REDIS_VERSION.. ", " .. _VERSION',
               transformArguments() {
                 return [];
               },
@@ -27,11 +27,13 @@ console.log(await redisClient.luaVer())
 const shaRead = await redisClient.scriptLoad(readFileSync('./lua/readCache.lua', 'utf8'))
 const shaWrite = await redisClient.scriptLoad(readFileSync('./lua/writeCache.lua', 'utf8'))
 const shaInvalidate = await redisClient.scriptLoad(readFileSync('./lua/invalidateCache.lua', 'utf8'))
+const shaFlush = await redisClient.scriptLoad(readFileSync('./lua/flushCache.lua', 'utf8'))
 
 // Check existence
 if (await redisClient.scriptExists(shaRead)) { console.log(`'readCache' loaded ${shaRead}`) } 
 if (await redisClient.scriptExists(shaWrite)) { console.log(`'writeCache' loaded ${shaWrite}`) } 
 if (await redisClient.scriptExists(shaInvalidate)) { console.log(`'invalidateCache' loaded ${shaInvalidate}`) } 
+if (await redisClient.scriptExists(shaFlush)) { console.log(`'flushCache' loaded ${shaFlush}`) } 
 
 // Retrieve a stored value 
 const readCache = async (key, prefix='cache:') => { 
@@ -56,7 +58,15 @@ const invalidateCache = async (tags, prefix='cache:') => {
                               })
 }
 
-export { redisClient, readCache, writeCache, invalidateCache }
+// Flush all object(s)
+const flushCache = async (prefix='cache:') => {
+  return redisClient.evalSha(shaFlush, 
+    { 
+      keys: [ prefix ]
+    })
+}
+
+export { redisClient, readCache, writeCache, invalidateCache, flushCache }
 
 /*
    Node-Redis
