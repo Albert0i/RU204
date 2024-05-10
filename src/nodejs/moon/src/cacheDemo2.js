@@ -1,4 +1,4 @@
-import { redisClient, readCache, writeCache, invalidateCache, flushCache } from "./config/redisClientCombo.js";
+import { redisClient, readCache, writeCache } from "./config/redisClientCombo.js";
 import { leonard, sheldon, rajesh, howard, penny, bernadette, amy, stuart, leslie, barry } from "./bbt.js"
 
 // Store all main characters, use TTL to do housekeeping. 
@@ -18,13 +18,8 @@ await writeCache('barry', barry, [], 60)
 console.log(await readCache('rajesh'))
 
 // Retrieve individual after 60 seconds 
-//console.log(await readCache('rajesh'))
 setTimeout(async () => {
     console.log('60 seconds later...')
     console.log(await readCache('rajesh'))
     await redisClient.disconnect()    
 }, 60000 )
-
-// Flush cache 
-//await flushCache()
-//await redisClient.disconnect()
