@@ -1,13 +1,20 @@
 
 ### 
 
+
 ### Prologue
+Being an eternal strategic and complicated issue, *caching* plays an emerging role in modern computer systems. Technically speaking, it's completely possible to implement any systems using decent and orthodox RDBMS. While RDBMS manages to keep up with the renewed application requirements and as yet, in some scenarios, caching is more necessary than required especially when real-time and mobile computing is involved. It's always awkard and not cost-effective to pursue such traits in monolithic system design. Therefore, a flexible and elastic solution is to attach a caching system to RDBMS. 
 
-### 
 
-### 
+### I. Data Model 
 
-### Bibliography 
+### II. Passive 
+
+### III. Active 
+
+### IV. Summary 
+
+### V. Bibliography 
 1. [What is Redis Cache?](https://youtu.be/Tqaqdfxi-J4)
 2. [QUERY CACHING WITH REDIS](https://redis.io/blog/query-caching-redis/)
 3. [Using Redis with Nodejs and MongoDB](https://subhrapaladhi.medium.com/using-redis-with-nodejs-and-mongodb-28e5a39a2696)
@@ -21,6 +28,10 @@
 
 
 ### Epilogue
+I know that this is not easy, 
+I know that this is a long road, 
+but it did explore some of the in-depth nuts and bolts of 
+implementation details regarding NodeJS, Redis and Lua. 
 
 
 ### EOF (2024/05/10)
