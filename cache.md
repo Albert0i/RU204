@@ -3,7 +3,7 @@
 
 
 ### Prologue
-Being an eternal strategic and complicated issue, *caching* plays an emerging role in modern computer systems. Technically speaking, it's completely possible to implement any systems using decent and orthodox RDBMS. While RDBMS manages to keep up with the renewed application requirements and as yet, in some scenarios, caching is more necessary than required especially when real-time and mobile computing is involved. It's always awkard and not cost-effective to pursue such traits in monolithic system design. Therefore, a flexible and elastic solution is to attach a caching system to RDBMS. 
+Being an eternal strategic and challenging issue, *caching* plays an emerging role in modern computer systems. Technically speaking, it's completely possible to implement any systems using decent and orthodox RDBMS. While RDBMS manages to keep up with the renewed application requirements and as yet, in some scenarios, caching is more necessary than required especially when real-time and mobile computing is involved. It's always awkard and not cost-effective to pursue such traits in monolithic system design. Therefore, a flexible and elastic solution is to attach a caching system to RDBMS. 
 
 
 ### I. Data Model 
