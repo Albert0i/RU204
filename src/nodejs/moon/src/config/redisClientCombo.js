@@ -8,7 +8,16 @@ const redisClient = new createClient(
         scripts: {
             luaVer: defineScript({
               NUMBER_OF_KEYS: 0,
-              SCRIPT: 'return "Redis " .. redis.REDIS_VERSION.. ", " .. _VERSION',
+              SCRIPT: ` 
+                        local redisVersion = redis.REDIS_VERSION
+                        local luaVersion = _VERSION
+
+                        if (redisVersion == nil) then
+                          redisVersion = "?.??"
+                        end 
+                        
+                        return "Redis " .. redisVersion .. ", " .. luaVersion
+                      `,
               transformArguments() {
                 return [];
               },

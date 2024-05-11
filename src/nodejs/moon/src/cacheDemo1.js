@@ -24,5 +24,5 @@ await invalidateCache(['apartment-4A', 'apartment-4B'])
 console.log(await readCache('rajesh'))
 
 // Flush cache 
-//await flushCache()
+await flushCache()
 await redisClient.disconnect()
