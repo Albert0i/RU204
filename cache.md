@@ -141,7 +141,7 @@ Data, per se, is a complicated thing... More often than not, static data, CRUD d
 
 ### Epilogue
 
-![alt fun with flags](https://pbs.twimg.com/media/EbblRaPXkAA4bcZ?format=jpg&name=medium)
+[![alt fun with flags](https://pbs.twimg.com/media/EbblRaPXkAA4bcZ?format=jpg&name=medium)](https://twitter.com/Ukraine/status/1276459637450002433)
 
 
 ### EOF (2024/05/17)
