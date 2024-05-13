@@ -54,7 +54,7 @@ Invalidate two tags.
 ```javascript
 await invalidateCache(['apartment-4A', 'apartment-4B'])
 ```
-There is a catch! If a key is associated with more than one tags. Invaliding a set may result in *dangling* key in other and memory will be wasted... 
+There is a catch! If a key is associated with more than one tags. Invaliding a set may result in *dangling* key in the other and memory will be wasted... 
 
 Flush cache. 
 ```javascript
