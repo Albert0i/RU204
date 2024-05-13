@@ -114,7 +114,7 @@ setTimeout(async () => {
 
 
 ### IV. Summary 
-Data, per se, is a complicated things... More often than not, static data, CRUD data and transactional may be handled differently within a system. Static data such as products list, employee info and code tables etc changed infrequently. CRUD data such as shopping cart and books list etc only changed from time to time. Transactional data such as purchase order, invoice and receipt require high accuracy and security. 
+Data, per se, is a complicated thing... More often than not, static data, CRUD data and transactional may be handled differently within one system. Static data such as product list, employee list and code table changed infrequently. CRUD data such as shopping cart and book list only changed from time to time. Transactional data such as purchase order, invoice and receipt require high accuracy and security. 
 
 
 ### V. Bibliography 
