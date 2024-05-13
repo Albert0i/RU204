@@ -12,7 +12,6 @@ local key = KEYS[1]..'data:'..KEYS[2]
 local ttl = tonumber(KEYS[3], 10)
 local value = ARGV[1]
 
-
 -- check TTL 
 assert (type(ttl) == 'number', "Invalid TTL in 'writeCache'")
 

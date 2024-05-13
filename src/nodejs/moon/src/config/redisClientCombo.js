@@ -13,7 +13,7 @@ const redisClient = new createClient(
                         local luaVersion = _VERSION
 
                         if (redisVersion == nil) then
-                          redisVersion = "?.??"
+                          redisVersion = "< 7.0.0"
                         end 
                         
                         return "Redis " .. redisVersion .. ", " .. luaVersion
@@ -35,12 +35,14 @@ console.log(await redisClient.luaVer())
 // loading scripts
 const shaRead = await redisClient.scriptLoad(readFileSync('./lua/readCache.lua', 'utf8'))
 const shaWrite = await redisClient.scriptLoad(readFileSync('./lua/writeCache.lua', 'utf8'))
+const shaRemove = await redisClient.scriptLoad(readFileSync('./lua/removeCache.lua', 'utf8'))
 const shaInvalidate = await redisClient.scriptLoad(readFileSync('./lua/invalidateCache.lua', 'utf8'))
 const shaFlush = await redisClient.scriptLoad(readFileSync('./lua/flushCache.lua', 'utf8'))
 
 // Check existence
 if (await redisClient.scriptExists(shaRead)) { console.log(`'readCache' loaded ${shaRead}`) } 
 if (await redisClient.scriptExists(shaWrite)) { console.log(`'writeCache' loaded ${shaWrite}`) } 
+if (await redisClient.scriptExists(shaRemove)) { console.log(`'removeCache' loaded ${shaRemove}`) } 
 if (await redisClient.scriptExists(shaInvalidate)) { console.log(`'invalidateCache' loaded ${shaInvalidate}`) } 
 if (await redisClient.scriptExists(shaFlush)) { console.log(`'flushCache' loaded ${shaFlush}`) } 
 
@@ -55,6 +57,15 @@ const writeCache = async (key, value, tags=[], ttl=-1, prefix='cache:') => {
                               { 
                                 keys: [ prefix, key, ttl.toString() ],
                                 arguments: [JSON.stringify(value), ...tags]
+                              })
+}
+
+// Remove a value 
+const removeCache = async (key, tags=[], prefix='cache:') => { 
+  return redisClient.evalSha(shaRemove, 
+                              { 
+                                keys: [ prefix, key],
+                                arguments: tags
                               })
 }
 
@@ -75,7 +86,7 @@ const flushCache = async (prefix='cache:') => {
     })
 }
 
-export { redisClient, readCache, writeCache, invalidateCache, flushCache }
+export { redisClient, readCache, writeCache, removeCache, invalidateCache, flushCache }
 
 /*
    Node-Redis
