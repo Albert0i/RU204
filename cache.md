@@ -60,6 +60,7 @@ Flush cache.
 ```javascript
 await flushCache()
 ```
+![alt cacheDemo1](img/cacheDemo1.JPG)
 
 Last but not least, to find out all friends and schoolmate. 
 ```
@@ -79,6 +80,7 @@ Last but not least, to find out all friends and schoolmate.
 3) "cache:data:rajesh"
 4) "cache:data:howard"
 ```
+![alt BBT cacheDemo1](img/sinter-bbt.JPG)
 
 
 ### III. Passive and Auto 
@@ -111,10 +113,11 @@ setTimeout(async () => {
     await redisClient.disconnect()    
 }, 60000 )
 ```
+![alt cacheDemo2](img/cacheDemo2.JPG)
 
 
 ### IV. Summary 
-Data, per se, is a complicated thing... More often than not, static data, CRUD data and transactional may be handled differently within one system. Static data such as product list, employee list and code table changed infrequently. CRUD data such as shopping cart and book list only changed from time to time. Transactional data such as purchase order, invoice and receipt require high accuracy and security. 
+Data, per se, is a complicated thing... More often than not, static data, CRUD data and transactional may be handled differently within one system. Static data such as product list, employee list and code table changed infrequently, are perfect candidates for passive caching and with minimal effort. CRUD data such as shopping cart and book list only changed from time to time, a more proactive policy is desired to prevent staleness. Transactional data such as purchase order, invoice and receipt require high accuracy and security, may not be cached at all. 
 
 
 ### V. Bibliography 
