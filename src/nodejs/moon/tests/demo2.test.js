@@ -38,3 +38,10 @@ test(`${testSuiteName}: basic readCache (60 seconds later)`, async () => {
         expect(keyValue).toBe(null);
     }, 60000 )
 });
+
+/*
+   npm run test -t demo2 
+   
+   "Uncaught SyntaxError: Cannot use import statement outside a module" when importing ECMAScript 6
+   https://stackoverflow.com/questions/58211880/uncaught-syntaxerror-cannot-use-import-statement-outside-a-module-when-import
+*/

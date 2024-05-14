@@ -30,5 +30,8 @@ test(`${testSuiteName}: basic hello world test`, async () => {
 /* eslint-enable */
 
 /*
-   npm run test -t demo2 
+   npm run test -t hello 
+
+   "Uncaught SyntaxError: Cannot use import statement outside a module" when importing ECMAScript 6
+   https://stackoverflow.com/questions/58211880/uncaught-syntaxerror-cannot-use-import-statement-outside-a-module-when-import
 */

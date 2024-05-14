@@ -6,7 +6,7 @@
   "scripts": {
     "demo1": "node src/cacheDemo1.js",
     "demo2": "node src/cacheDemo2.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js", 
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --colors", 
     "lua": "lua54 "
   }, 
   "type": "module",
