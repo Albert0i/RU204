@@ -33,11 +33,11 @@ await redisClient.connect()
 console.log(await redisClient.luaVer())
 
 // loading scripts
-const shaRead = await redisClient.scriptLoad(readFileSync('./lua/readCache.lua', 'utf8'))
-const shaWrite = await redisClient.scriptLoad(readFileSync('./lua/writeCache.lua', 'utf8'))
-const shaRemove = await redisClient.scriptLoad(readFileSync('./lua/removeCache.lua', 'utf8'))
-const shaInvalidate = await redisClient.scriptLoad(readFileSync('./lua/invalidateCache.lua', 'utf8'))
-const shaFlush = await redisClient.scriptLoad(readFileSync('./lua/flushCache.lua', 'utf8'))
+const shaRead = await redisClient.scriptLoad(readFileSync('./src/lua/readCache.lua', 'utf8'))
+const shaWrite = await redisClient.scriptLoad(readFileSync('./src/lua/writeCache.lua', 'utf8'))
+const shaRemove = await redisClient.scriptLoad(readFileSync('./src/lua/removeCache.lua', 'utf8'))
+const shaInvalidate = await redisClient.scriptLoad(readFileSync('./src/lua/invalidateCache.lua', 'utf8'))
+const shaFlush = await redisClient.scriptLoad(readFileSync('./src/lua/flushCache.lua', 'utf8'))
 
 // Check existence
 if (await redisClient.scriptExists(shaRead)) { console.log(`'readCache' loaded ${shaRead}`) } 

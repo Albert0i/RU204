@@ -1,6 +1,6 @@
 
 import {expect, jest, test} from '@jest/globals';
-import { redisClient } from "../config/redisClient.js";
+import { redisClient } from "../src/config/redisClientCombo.js";
 
 const testSuiteName = 'Hello';
 const testKey = 'hello';
@@ -30,5 +30,5 @@ test(`${testSuiteName}: basic hello world test`, async () => {
 /* eslint-enable */
 
 /*
-   npm run test -t hello
+   npm run test -t demo2 
 */
