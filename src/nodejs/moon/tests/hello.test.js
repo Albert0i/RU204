@@ -1,5 +1,6 @@
 
-import { redisClient } from "../src/config/redisClient.js";
+import {expect, jest, test} from '@jest/globals';
+import { redisClient } from "../config/redisClient.js";
 
 const testSuiteName = 'Hello';
 const testKey = 'hello';
@@ -7,7 +8,7 @@ const testKey = 'hello';
 /* eslint-disable no-undef */
 
 beforeAll(() => {
-  //jest.setTimeout(60000);
+  jest.setTimeout(60000);
 });
 
 afterAll(async () => {
@@ -27,3 +28,7 @@ test(`${testSuiteName}: basic hello world test`, async () => {
 });
 
 /* eslint-enable */
+
+/*
+   npm run test -t hello
+*/
