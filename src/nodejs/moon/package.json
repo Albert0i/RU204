@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js", 
     "lua": "lua54 "
   },
+  "jest": {
+    "transform": {}
+  }, 
   "type": "module",
   "keywords": [],
   "author": "",
@@ -14,5 +17,8 @@
   "dependencies": {
     "dotenv": "^16.4.5",
     "redis": "^4.6.13"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
