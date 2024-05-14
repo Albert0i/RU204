@@ -36,18 +36,28 @@ test(`${testSuiteName}: basic readCache`, async () => {
 });
 
 test(`${testSuiteName}: basic removeCache`, async () => {
-    await removeCache(testKey2);   
+    const num = await removeCache(testKey2, ['friends', 'apartment-4B', 'The-Cheesecake-Factory', 'second-couple']); 
+    expect(num).toEqual(4);
+});
+
+test(`${testSuiteName}: basic readCache`, async () => {
     const keyValue = await readCache(testKey2);
     expect(keyValue).toBe(null);
 });
 
 test(`${testSuiteName}: basic invalidateCache`, async () => {
-    await invalidateCache(['apartment-4A', 'apartment-4B'])    
-    const keyValue1 = await readCache('leonard');
-    const keyValue2 = await readCache('sheldon');
+    const num = await invalidateCache(['apartment-4A'])
+    expect(num).toEqual(3);
+});
 
-    expect(keyValue1).toBe(null);
-    expect(keyValue2).toBe(null);
+test(`${testSuiteName}: basic readCache`, async () => {
+    const keyValue = await readCache('leonard');
+    expect(keyValue).toBe(null);
+});
+
+test(`${testSuiteName}: basic readCache`, async () => {
+    const keyValue = await readCache('sheldon');
+    expect(keyValue).toBe(null);
 });
 
 /*
