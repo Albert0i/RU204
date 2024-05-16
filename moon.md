@@ -70,7 +70,7 @@ In Lua, string literal are either encased by single quote (`'`) or double quote:
 "I fear thy skinny hand!"
 ```
 
-multiple line string literal are encased by `--[[` and `]]--`. 
+Multiple line string literal are encased by `--[[` and `]]--`. 
 
 ```lua
 --[[ 
