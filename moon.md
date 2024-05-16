@@ -101,12 +101,15 @@ Var2 = 'lua'
 In Lua, strings and other objects can be concatenate using two-dot (`..`) operator:
 
 ```lua
-local first_name = "Samuel"
 local last_name = "Taylor"
 local age = 61 
 
-print(first_name .. last .. name)
+print(first_name .. ' ' .. last_name)
 print('Die on age ' .. age)
+
+-- Output: 
+-- Samuel Taylor
+-- Die on age 61
 ```
 
 
@@ -150,7 +153,8 @@ local person = {name = "John", age = 30}
 for key, value in pairs(person) do
     print(key, value)
 end
--- Output: name   John
+-- Output: 
+--         name   John
 --         age    30
 ```
 
