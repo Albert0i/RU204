@@ -325,7 +325,7 @@ In addition, the following external libraries are loaded and accessible to scrip
 
 
 ### Epilogue
-I was from ancient times and love ancient things... My very first programming language is BASIC on [The TRS-80 Model I](http://www.trs-80.org/model-1/) which came with 4K of RAM, and a 4K ROM. 
+I was from ancient times and love ancient things... My very first programming language was BASIC on [The TRS-80 Model I](http://www.trs-80.org/model-1/) which came with 4K of RAM, and a 4K ROM. 
 
 
 ### EOF (2024/05/17)
