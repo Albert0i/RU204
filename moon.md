@@ -243,7 +243,7 @@ In this case, the returned values are collected into a table coordinates using a
 
 
 ### 9. Coroutine 
-Note: Copied verbatim from section **2.6 – Coroutines** of [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/manual.html). 
+Note: Copied verbatim from section **2.6 – Coroutines** of [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/). 
 
 Lua supports coroutines, also called collaborative multithreading. A coroutine in Lua represents an independent thread of execution. Unlike threads in multithread systems, however, a coroutine only suspends its execution by explicitly calling a yield function.
 
