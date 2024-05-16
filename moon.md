@@ -74,6 +74,7 @@ Multiple line string literal are encased by `--[[` and `]]--`.
 
 ```lua
 --[[ 
+    An orphan's curse would drag to hell
     A spirit from on high;
     But oh! more horrible than that
     Is the curse in a dead man's eye!
