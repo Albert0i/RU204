@@ -242,7 +242,97 @@ print(coordinates[1], coordinates[2], coordinates[3])  -- Output: 10 20 30
 In this case, the returned values are collected into a table coordinates using a single assignment.
 
 
-### 9. Coroutine 
+### 9. [Modules](https://www.lua.org/manual/5.4/manual.html#6.3)
+In Lua, modules are used to organize and encapsulate code into reusable units. Here's an example code snippet that demonstrates how to create and use a module in Lua:
+
+Consider a module named `mathUtils.lua` that contains some mathematical utility functions:
+
+```lua
+-- mathUtils.lua
+
+local mathUtils = {}  -- Create a table to hold the module functions
+
+-- Function to calculate the factorial of a number
+function mathUtils.factorial(n)
+  if n == 0 then
+    return 1
+  else
+    return n * mathUtils.factorial(n - 1)
+  end
+end
+
+-- Function to check if a number is prime
+function mathUtils.isPrime(n)
+  if n <= 1 then
+    return false
+  end
+
+  for i = 2, math.sqrt(n) do
+    if n % i == 0 then
+      return false
+    end
+  end
+
+  return true
+end
+
+return mathUtils  -- Return the module table
+```
+
+Now, let's use the `mathUtils` module in another Lua script:
+
+```lua
+-- main.lua
+
+local mathUtils = require("mathUtils")  -- Load the module
+
+local number = 5
+
+print("Factorial of", number, "is", mathUtils.factorial(number))
+
+if mathUtils.isPrime(number) then
+  print(number, "is a prime number.")
+else
+  print(number, "is not a prime number.")
+end
+```
+
+In this example, the `mathUtils.lua` module defines two functions: `factorial` and `isPrime`. The `require` function is used in the `main.lua` script to load the module and assign it to the `mathUtils` variable.
+
+The `factorial` and `isPrime` functions are then invoked using the `mathUtils` module prefix. This allows us to access and use the functions defined in the module.
+
+By using modules, you can organize your code into separate files, promote code reuse, and maintain a clean and modular project structure in Lua.
+
+
+### 10. [Colon](https://dictionary.cambridge.org/dictionary/english-chinese-traditional/colon)
+In Lua, the colon `:` is a syntactic sugar that simplifies method calls on objects. When using the colon syntax, the Lua interpreter automatically inserts the object as the first argument for the method call. This provides a convenient way to define and call object-oriented methods in Lua. Here's an example to illustrate its usage:
+
+```lua
+-- Define a simple object with a method
+local myObject = {
+  value = 10,  -- A property of the object
+
+  -- A method of the object
+  increment = function(self, amount)
+    self.value = self.value + amount
+  end
+}
+
+-- Call the method using colon syntax
+myObject:increment(5)
+
+-- Access the updated value
+print(myObject.value)  -- Output: 15
+```
+
+In this example, `myObject` is a table representing an object. It has a property `value` and a method `increment`. When using the colon syntax `myObject:increment(5)`, Lua automatically passes `myObject` as the first argument to the `increment` method. This is equivalent to `myObject.increment(myObject, 5)`.
+
+Using the colon syntax simplifies the method call syntax by removing the need to explicitly pass `self` as an argument. It improves code readability and makes it more concise, especially when working with object-oriented code in Lua.
+
+Note that the colon syntax is not limited to working with tables as objects. It can also be used with metatables and userdata types to simplify method calls and object-oriented programming in Lua.
+
+
+### 11. Coroutine 
 Note: Copied verbatim from section **2.6 – Coroutines** of [Lua 5.4 Reference Manual](https://www.lua.org/manual/5.4/). 
 
 Lua supports coroutines, also called collaborative multithreading. A coroutine in Lua represents an independent thread of execution. Unlike threads in multithread systems, however, a coroutine only suspends its execution by explicitly calling a yield function.
@@ -295,7 +385,7 @@ co-body 1       10
 You can also create and manipulate coroutines through the C API: see functions lua_newthread, lua_resume, and lua_yield.
 
 
-### 10. [Executing Lua in Redis](https://redis.io/docs/latest/develop/interact/programmability/lua-api/)
+### 12. [Executing Lua in Redis](https://redis.io/docs/latest/develop/interact/programmability/lua-api/)
 Note: Copied verbatim from **Runtime libraries** sectioin of [Redis Lua API reference](https://redis.io/docs/latest/develop/interact/programmability/lua-api/). 
 
 Redis includes an embedded [Lua 5.1](https://www.lua.org/) interpreter. The interpreter runs user-defined [ephemeral scripts and functions](https://redis.io/docs/latest/develop/interact/programmability/eval-intro/). Scripts run in a sandboxed context and can only access specific Lua packages. This page describes the packages and APIs available inside the execution's context.
