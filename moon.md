@@ -13,7 +13,7 @@ A sense of remembrance and exoticism surges within and without upon beholding he
 
 Being an embedded scriping language by design, Lua emits an odour of linguistic features of old, such as array subscript starts with one (instead of zero), goto statement and coroutine (協同子程式) which are not presents in most of the modern programming languages. 
 
-This is doomed to be a small article in which I am going to pen down. A note of bizarreness and strangeness of Lua with the help of ChatGPT. 
+This is doomed to be a short article in which I am going to pen down. A manuscript of bizarreness and strangeness of Lua in stanzas of zodiac, with the help of ChatGPT. 
 
 
 ### 1. Terminator and separator 
