@@ -327,5 +327,16 @@ In addition, the following external libraries are loaded and accessible to scrip
 ### Epilogue
 I was from ancient times and love ancient things... My very first programming language was BASIC on [The TRS-80 Model I](http://www.trs-80.org/model-1/) which came with 4K of RAM, and a 4K ROM. 
 
+```
+Old man, why you study everyday? 
+'cause my days are numbered.
+Old man, why you learn so hard? 
+'cause the more I learnt the more I do not. 
+Your footsteps are slow, better rest a while, lest you tumble down... 
+Yea, my eyes are blur, my body is weary and worn and yet...
+I have to go my way... 
+```
+
+And this concludes my voyage to the moon...
 
 ### EOF (2024/05/17)
