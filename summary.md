@@ -46,7 +46,7 @@ Here are some key features of RedisJSON:
 
 - New commands enabling atomic operations on all JSON value types.
 
-Commands
+`Commands`
 
 RedisJSON adds many new commands to Redis. All RedisJSON commands have the "JSON." prefix. To store or update a document, we use `JSON.SET`. To retrieve either a complete document or a fragment of one, we'll use `JSON.GE`T.
 
