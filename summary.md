@@ -13,9 +13,9 @@ Each unit will have a hands-on exercise designed to explore the topics covered a
 
 1. Storing and Retrieving JSON with Redis Strings
 
-The traditional approach to storing JSON documents in Redis has been to serialize them to Strings. Serialization happens in application code, with the resulting String value saved in Redis using the SET command.
+The traditional approach to storing JSON documents in Redis has been to *serialize* them to Strings. Serialization happens in application code, with the resulting String value saved in Redis using the `SET` command.
 
-Reading or updating JSON documents stored in this way can be a costly operation. The entire document needs to be retrieved from Redis, and deserialized back to its original form, a process that usually happens in your application's code.
+Reading or updating JSON documents stored in this way can be a costly operation. The entire document needs to be retrieved from Redis, and *deserialized* back to its original form, a process that usually happens in your application's code.
 
 ![alt asset-v1_redislabs+RU204+2022_01+type@asset+block@JSON_to_String](img/asset-v1_redislabs+RU204+2022_01+type@asset+block@JSON_to_String.png)
 
