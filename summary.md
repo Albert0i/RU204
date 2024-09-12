@@ -79,7 +79,7 @@ In this section, we'll introduce some RedisJSON commands, using the following si
 
 2.1. Storing a JSON Document
 
-To create a new JSON document in Redis, use the JSON.SET command:
+To create a new JSON document in Redis, use the `JSON.SET` command:
 ```
 JSON.SET ru204:book:18161 $ '{"base_id":18161,"author":"Jennifer L. Armentrout","title":"Obsidian","pages":999,"inventory":[{"stock_number":"18161_1","status":"on_loan"},{"stock_number":"18161_3","status":"maintenance"}],"genres":["Young Adult","Fantasy","Science Fiction (Aliens)","Science Fiction"]}'
 ```
@@ -92,7 +92,7 @@ If you are using RedisInsight, you should see the document displayed as above wh
 
 2.2. Setting a value within an existing JSON Document
 
-The JSON.SET command is also used to update existing documents. For example, to change the number of pages in our book, we need to update the value of the "pages" field. As this field is at the root level, we use the JSONPath $.pages to identify it. To change the number of pages from 999 to 1025 for the book whose ID is 18161, use this command:
+The `JSON.SET` command is also used to update existing documents. For example, to change the number of pages in our book, we need to update the value of the "pages" field. As this field is at the root level, we use the JSONPath $.pages to identify it. To change the number of pages from 999 to 1025 for the book whose ID is 18161, use this command:
 ```
 JSON.SET ru204:book:18161 $.pages 1025
 ```
@@ -105,7 +105,7 @@ The JSONPath selector syntax to access embedded objects and arrays is similar to
 
 2.3. Accessing a JSON Document
 
-Use the JSON.GET command to retrieve RedisJSON documents from Redis. JSON.GET can be used to retrieve the entire document, multiple fields, or a single field.
+Use the `JSON.GET` command to retrieve RedisJSON documents from Redis. JSON.GET can be used to retrieve the entire document, multiple fields, or a single field.
 
 Let's get the entire document for book 18161:
 ```
