@@ -1067,7 +1067,7 @@ You've seen how to work with JSON documents in Redis using some of the most popu
 
 When storing document data in a database, it's common to use object mapping tools to handle the conversion of objects in your programming language to a particular database and storage model. For example, [Object Relational Mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping) tools (commonly referred to as ORMs) are used to provide a higher level interface between object-oriented programming languages and relational databases.
 
-The Redis OM family of clients were designed to provide this level of abstraction when working with document data in Redis. Rather than working with arbitrary JSON document structures and low-level commands such as JSON.SET, the Redis OM clients allow you to define an object model and persist domain objects to Redis simply by calling a "save" function. This makes for more readable code, and saves developers from having to learn the specifics of many Redis commands - the client abstracts this away for you.
+The Redis OM family of clients were designed to provide this level of abstraction when working with document data in Redis. Rather than working with arbitrary JSON document structures and low-level commands such as `JSON.SET`, the Redis OM clients allow you to define an object model and persist domain objects to Redis simply by calling a "save" function. This makes for more readable code, and saves developers from having to learn the specifics of many Redis commands - the client abstracts this away for you.
 
 There are four Redis OM clients, one each for Python, Node.js, .NET (C#) and Java (Spring). Each has been designed with the conventions and idioms of the target language in mind, so should feel familiar to developers.
 
@@ -1077,7 +1077,9 @@ To get a feel for how each client works, check out the video that follows before
 
 ##### 6. [Redis OM Overview Video](https://youtu.be/DFNKmbGKa5w)
 
-##### 7. What are ULIDs?
+##### 7. [Redis Stack Workshop: Redis Stack OM Library for Node.js](https://youtu.be/KUfufrwpBkM)
+
+##### 8. What are ULIDs?
 
 In the previous module, we said that one of the capabilities of Redis OM is ID generation. When creating and storing domain entities in a database, each entity requires some sort of unique or primary identifier. For key/value stores such as Redis, this identifier is the key name. For example, in our sample data set, we store the book "The Moon is a Harsh Mistress" by Robert Heinlein at key ru204:book:3903.
 
@@ -1093,7 +1095,7 @@ One of the advantages of using these identifiers is that they can be generated i
 
 If you'd like to learn more about ULIDs, check out the official specification. Note that detailed knowledge of the specification is optional, and not required to be successful with this course!
 
-##### 8. Document Modeling with Redis OM for Node.js
+##### 9. Document Modeling with Redis OM for Node.js
 
 We've provided you with a small example program that uses the Node.js Redis OM client to store and manipulate a new book object in Redis.
 
@@ -1169,7 +1171,7 @@ await bookRepository.save(aBook);
 Further Details
 For more about the Redis OM Node.js client, explore the documentation on GitHub. We'll cover indexing and searching capabilities later in this course.
 
-##### 9. Hands-On Exercise
+##### 10. Hands-On Exercise
 
 We've shown you the basics of JSON data modeling with the four Redis OM clients, now it's your turn to try it out in your preferred programming language.
 
