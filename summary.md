@@ -716,7 +716,7 @@ While it is important to understand how to use the Redis CLI to use the RedisJSO
 
 In this exercise you will update existing RedisJSON documents with new properties and new values. While we will be using every command covered in this unit, this is not an exhaustive list of commands available in RedisJSON. Refer to the [RedisJSON command documentation](https://redis.io/commands/?group=json) for a full list of available commands.
 
-Adding new properties to an existing document
+- Adding new properties to an existing document
 
 8.1. Adding a new property and value to a document
 
@@ -778,7 +778,7 @@ JSON.ARRPOP ru204:book:425 $.genres 3
 
 The return value is the element fiction "popped" from the list.
 
-Updating existing properties in a document
+- Updating existing properties in a document
 
 8.1. Updating an existing property's value in a document
 
