@@ -526,7 +526,7 @@ Redis returns:
 "[{\"status\":\"maintenance\",\"stock_id\":\"206_4\"},{\"status\":\"on_loan\",\"stock_id\":\"206_5\"},{\"status\":\"available\",\"stock_id\":\"206_6\"},{\"status\":\"maintenance\",\"stock_id\":\"206_7\"}]"
 ```
 
-Miscellaneous
+- Miscellaneous
 
 6.1. Retrieving the length of a string in a document
 
