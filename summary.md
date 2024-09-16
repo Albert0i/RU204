@@ -1061,8 +1061,146 @@ If you like to code in a language other than Python, Node.js, C# or Java and wou
 
 Best of luck!
 
-##### 5. 
-##### 6. 
+##### 5. Introducing the Redis OM Clients
+
+You've seen how to work with JSON documents in Redis using some of the most popular Redis clients available. These general purpose clients generally map each Redis command to a function call in the programming language that they support. While this makes for a quick and easy API to learn, it also means that you're operating at a low level of abstraction and need to know a lot about individual Redis commands.
+
+When storing document data in a database, it's common to use object mapping tools to handle the conversion of objects in your programming language to a particular database and storage model. For example, [Object Relational Mapping](https://en.wikipedia.org/wiki/Object%E2%80%93relational_mapping) tools (commonly referred to as ORMs) are used to provide a higher level interface between object-oriented programming languages and relational databases.
+
+The Redis OM family of clients were designed to provide this level of abstraction when working with document data in Redis. Rather than working with arbitrary JSON document structures and low-level commands such as JSON.SET, the Redis OM clients allow you to define an object model and persist domain objects to Redis simply by calling a "save" function. This makes for more readable code, and saves developers from having to learn the specifics of many Redis commands - the client abstracts this away for you.
+
+There are four Redis OM clients, one each for Python, Node.js, .NET (C#) and Java (Spring). Each has been designed with the conventions and idioms of the target language in mind, so should feel familiar to developers.
+
+In the modules that follow, we'll introduce you to the object mapping capabilities of the Redis OM clients with RedisJSON. Later, in section 4, you'll learn how these clients also provide an easy to learn yet powerful query interface to retrieve and aggregate document data using the power of RediSearch.
+
+To get a feel for how each client works, check out the video that follows before diving into example code where you'll see how to model our book objects in the four supported languages.
+
+##### 6. [Redis OM Overview Video](https://youtu.be/DFNKmbGKa5w)
+
+##### 7. What are ULIDs?
+
+In the previous module, we said that one of the capabilities of Redis OM is ID generation. When creating and storing domain entities in a database, each entity requires some sort of unique or primary identifier. For key/value stores such as Redis, this identifier is the key name. For example, in our sample data set, we store the book "The Moon is a Harsh Mistress" by Robert Heinlein at key ru204:book:3903.
+
+The Redis OM clients provide a mechanism for automatically generating unique IDs for you, and they use this ID as part of the key name when persisting your document data to Redis. These IDs are Universally Unique Lexicographically Sortable Identifiers - ULIDs for short. Think of a ULID as a sort of user-friendly, globally unique identifier that is also URL safe and reasonably human readable.
+
+
+A typical ULID looks like this: 01ARZ3NDEKTSV4RRFFQ69G5FAV.
+
+
+The Redis OM clients allow you to specify your own key naming patterns, so you could for example persist book objects as ru204:book:<ulid> and author objects as ru204:author:<ulid>.
+
+One of the advantages of using these identifiers is that they can be generated in the client, and are guaranteed to be unique. This means that many client instances can concurrently create objects and persist them to Redis without having to have some sort of database managed unique identifier process in place.
+
+If you'd like to learn more about ULIDs, check out the official specification. Note that detailed knowledge of the specification is optional, and not required to be successful with this course!
+
+##### 8. Document Modeling with Redis OM for Node.js
+
+We've provided you with a small example program that uses the Node.js Redis OM client to store and manipulate a new book object in Redis.
+
+The code is located in the src/nodejs/redis_om_example folder in the course GitHub repository. You should have already cloned this repository to your machine as part of the initial course setup step.
+
+Follow the instructions in the README.md file if you'd like to run the code in your local environment.
+
+Code Walkthrough
+The code is contained in a single file, json_om_example.js. Click here to open this file in GitHub - you will need to refer to it throughout this module.
+
+Data Model
+Let's begin by looking at the way that Redis OM Node.js models our book document. We have a schema bookSchema that defines what our entities look like and what the data type of each property is.
+
+Note that at this time, Redis OM for Node.js does not support nested objects in JSON documents, so we're using a slightly "flattened' version of the model used with the other clients. We'll update this course when this capability has been added to Redis OM Node.js.
+
+Here's our entity and schema definition:
+
+class Book extends Entity {};
+
+const bookSchema = new Schema(Book, {
+  author: { type: 'string' },
+  id: { type: 'string' }, 
+  description: { type: 'string' },
+  genres:  { type: 'string[]' },
+  pages: { type: 'number' },
+  title: { type: 'string' },
+  url: { type: 'string' },
+  yearPublished:  { type: 'number' },
+  // Redis OM Node does not yet support embedded objects, 
+  // so the metrics object has been flattened to the following
+  // two fields, and we have omitted the inventory array of 
+  // objects for the same reason.
+  ratingVotes: { type: 'number' },
+  score: { type: 'number' }
+}, {
+  prefix: 'ru204:redis-om-node:book'
+});    
+The prefix is used to specify metadata about our book entities. Here we're saying that we want Redis OM to store books in Redis using keys beginning with ru204:redis-om-node:book. The full key name for a given book will be ru204:redis-om-node:book:%lt;;ulid%gt;, using the ULID generated by Redis OM when we create a Book instance.
+
+Storing Entities in Redis
+To create and persist entities with Redis OM Node.js, we need to obtain a Repository:
+
+const bookRepository = client.fetchRepository(bookSchema);
+Now we can create an entity:
+
+const newBook = bookRepository.createEntity({
+  author: 'Redis Staff',
+  id: '999',
+  description: 'This is a book all about Redis.',
+  genres: [ 'redis', 'tech', 'computers' ],
+  pages: 1000,
+  title: 'Redis for Beginners',
+  url: 'https://university.redis.com/courses/ru204/',
+  yearPublished: 2022,
+  ratingVotes: 4000,
+  score: 4.5
+});      
+Redis OM generates a ULID ID for this entity that we can access as the entityId property:
+
+newBook.entityId
+Without knowing what the Redis command(s) involved are, we can store our new book in Redis like this:
+
+await bookRepository.save(newBook);
+Retrieving Entities from Redis
+Let's retrieve that book using its ULID (note we don't need to know the entire Redis key to retrieve the book):
+
+const aBook = await bookRepository.fetch(newBook.entityId);
+Updating Entities in Redis
+To update a property, change its value and save the book back to Redis:
+
+aBook.author = 'Redis University';
+await bookRepository.save(aBook);  
+Further Details
+For more about the Redis OM Node.js client, explore the documentation on GitHub. We'll cover indexing and searching capabilities later in this course.
+
+##### 9. Hands-On Exercise
+
+We've shown you the basics of JSON data modeling with the four Redis OM clients, now it's your turn to try it out in your preferred programming language.
+
+If you're not a coder, don't worry - this is an ungraded exercise!
+
+Coding Exercise
+Imagine we're operating a video rental store. We've decided to represent each of the movies in our inventory using JSON documents that have the following structure:
+
+{
+  "title": "The Matrix",
+  "released": 1999,
+  "runtime": 137,
+  "stars": [
+    "Keanu Reeves",
+    "Laurence Fishburne",
+    "Carrie-Ann Moss"
+  ],
+  "Summary": "A stranger leads computer hacker Neo to a forbidding underworld, he discovers the truth: the life he knows is the elaborate deception of an evil cyber-intelligence."
+} 
+Using the sample code from the previous modules as a template, write code in your preferred language that uses the Redis OM client to:
+
+Model the JSON structure above as an entity of class Movie.
+Create some Movie instances for 2-3 of your favorite movies (look them up on IMDB!)
+Persist them to Redis, and verify that the correct JSON structure is stored in Redis for each document.
+Don't forget that you'll need to have your Redis Stack instance up and running with the course sample data loaded. If you need help with this, please consult the README in the course GitHub repository.
+
+Check that your code worked by using RedisInsight or the redis-cli to view the contents of the database.
+
+Should you need help or would like to share your success with Redis staff and your fellow students, reach out to us on the course Discord channel.
+
+Best of luck!
 
 
 #### III. Indexing and Searching JSON Documents
