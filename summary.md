@@ -820,7 +820,7 @@ Redis responds with the updated value for rating_votes:
 [3426]
 ```
 
-Removing elements, arrays, objects, properties, and documents
+- Removing elements, arrays, objects, properties, and documents
 
 The `JSON.DEL` command can be used to remove properties of an existing document or delete an entire existing document.
 
