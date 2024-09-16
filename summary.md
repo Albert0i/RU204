@@ -530,248 +530,310 @@ Redis selects the title property and returns the length of the title value "Time
 RedisJSON includes many commands specifically designed for updating each of the data types used in JSON documents. These include the ability to atomically update parts of a document on the Redis server without the complexities, performance issues and network bandwidth associated with handling this in your application code. Let's begin with a look at how to efficiently and atomically update an array in a JSON document stored in Redis.
 
 Updating Arrays in a JSON Document
-1. Adding an element to an array with JSON.ARRAPPEND
-JSON.ARRAPPEND pushes one or more new elements onto the right of a given array. This can be compared to an RPUSH command when working with Redis Lists.
 
-Let's add a new copy of book 18161 to the inventory array of the JSON document stored at ru204:book:18161:
+7.1. Adding an element to an array with `JSON.ARRAPPEND`
 
+`JSON.ARRAPPEND` pushes one or more new elements onto the right of a given array. This can be compared to an `RPUSH` command when working with Redis Lists.
+
+Let's add a new copy of book 18161 to the inventory array of the JSON document stored at **ru204:book:18161**:
+```
 JSON.ARRAPPEND ru204:book:18161 $.inventory '{"stock_number": "18161_5","status": "maintenance"}'
+```
 
 Redis returns the new length of the array that was appended to:
-
+```
 3
+```
 
-2. Inserting a new element into an array with JSON.ARRINSERT
-The JSON.ARRINSERT command extends the functionality of JSON.ARRAPPEND by providing an index argument. This command allows the insertion of a new element directly before the provided index (thus shifting the original index element to the right). Using 0 as an index inserts the element at the beginning of the array. Using -1 as the index inserts the element at the end of the array.
+7.2. Inserting a new element into an array with `JSON.ARRINSERT`
+
+The `JSON.ARRINSERT` command extends the functionality of `JSON.ARRAPPEND` by providing an index argument. This command allows the insertion of a new element directly before the provided index (thus shifting the original index element to the right). Using 0 as an index inserts the element at the beginning of the array. Using -1 as the index inserts the element at the end of the array.
 
 This command inserts a new object in the book inventory array at index position 1:
-
+```
 JSON.ARRINSERT ru204:book:18161 $.inventory 1 '{"stock_number": "18161_2","status": "available"}'
+```
 
 Redis responds with the new length of the array:
-
+```
 4
+```
 
 This command inserts a new object into the book inventory array at index position 3:
-
+```
 JSON.ARRINSERT ru204:book:18161 $.inventory 3 '{"stock_number": "18161_2","status": "available"}'
-
+```
 Again, the response from Redis contains the new length of the array:
-
+```
 5
+```
 
-3. Removing elements from an array with JSON.ARRPOP
-Use the JSON.ARRPOP command to remove elements from an array. By default, JSON.ARRPOP removes the last element of a specified array within a document. When an optional index argument is provided, JSON.ARRPOP removes and returns the element at that index.
+7.3. Removing elements from an array with `JSON.ARRPOP`
+
+Use the `JSON.ARRPOP` command to remove elements from an array. By default, `JSON.ARRPOP` removes the last element of a specified array within a document. When an optional index argument is provided, `JSON.ARRPOP` removes and returns the element at that index.
 
 This command removes the last element in the inventory array of the ru204:book:18161 document:
-
+```
 JSON.ARRPOP ru204:book:18161 $.inventory
+```
 
 Redis responds with the element that was removed:
-
+```
 "{\"stock_number\":\"18161_5\",\"status\":\"maintenance\"}"
+```
 
 This command removes the element at index 2 of the inventory array:
-
+```
 JSON.ARRPOP ru204:book:18161 $.inventory 2
+```
 
 Again, Redis responds with the element that was removed:
-
+```
 "{\"stock_number\":\"18161_3\",\"status\":\"maintenance\"}"
+```
 
 Updating numerical data in a JSON document
-RedisJSON includes commands similar to the Redis INCRBY command to handle atomic addition and subtraction operations on numerical data stored in a JSON document. This is useful for incrementing page views, adjusting inventory counts, and any situation where only the value needs to be updated, not the entire document.
 
-Here is a command that we can use to keep a count of the total number of times a specific book title has been checked out to a user. Each time a user checks out a book to read, the system runs this to increment the checked_out value by 1:
+RedisJSON includes commands similar to the Redis `INCRBY` command to handle atomic addition and subtraction operations on numerical data stored in a JSON document. This is useful for incrementing page views, adjusting inventory counts, and any situation where only the value needs to be updated, not the entire document.
+
+Here is a command that we can use to keep a count of the total number of times a specific book title has been checked out to a user. Each time a user checks out a book to read, the system runs this to increment the **checked_out** value by 1:
 
 First, lets create a checked_out property within the book document:
-
+```
 JSON.SET ru204:book:18161 $.checked_out 0
+```
 
-Then let's call the JSON.NUMINCRBY command:
+Then let's call the `JSON.NUMINCRBY` command:
 
 JSON.NUMINCRBY ru204:book:18161 $.checked_out 1
 
 Redis responds with:
-
+```
 [1]
+```
 
 And if we run the same command again, we can see that Redis updates the value stored at $.checked_out to 2:
-
+```
 JSON.NUMINCRBY ru204:book:18161 $.checked_out 1
+```
 
 Redis responds with an updated value:
-
+```
 [2]
+```
 
-To decrement a numerical value, use a negative number. Let's add some ratings metrics to the document ru204:book:18161 then decrement the rating_votes stored within:
-
+To decrement a numerical value, use a negative number. Let's add some ratings metrics to the document **ru204:book:18161** then decrement the rating_votes stored within:
+```
 JSON.SET ru204:book:18161 $.metrics '{"rating_votes":784, "score":3.97}'
+```
 
-Now let's call JSON.NUMINCRBY on the property ratings_votes with a negative value:
-
+Now let's call `JSON.NUMINCRBY` on the property ratings_votes with a negative value:
+```
 JSON.NUMINCRBY ru204:book:18161 $.metrics.rating_votes -10
+```
 
 Redis responds with the new value stored at $.metrics.rating_votes:
-
+```
 [774]
+```
 
-It should be noted that numerical values within a document MUST exist before performing commands upon them.
+It should be noted that numerical values within a document **MUST** exist before performing commands upon them.
 
 Updating strings in a JSON document
-1. Updating a string value in a JSON document
-To change the value of a string within a document, use the JSON.SET command. Let's change the value of author from Jennifer L Armentrout to Jennifer Lynn Armentrout:
 
+7.1. Updating a string value in a JSON document
+
+To change the value of a string within a document, use the JSON.SET command. Let's change the value of author from Jennifer L Armentrout to Jennifer Lynn Armentrout:
+```
 JSON.SET ru204:book:18161 $.author '"Jennifer Lynn Armentrout"'
+```
 
 Appending to a string value in a JSON document
-The command JSON.STRAPPEND provides a simple method to add a string to the end of an existing string within a document. Let's maybe add the suffix ", Esq."
 
+The command `JSON.STRAPPEND` provides a simple method to add a string to the end of an existing string within a document. Let's maybe add the suffix ", Esq."
+```
 JSON.STRAPPEND ru204:book:18161 $.author '", Esq."'
+```
 
 Redis returns the new length of the string:
-
+```
 30
+```
 
 Updating boolean data in a JSON document
-Boolean values in a document can be quickly "flipped" by using the JSON.TOGGLE command. Let's add a property has_ebook_version and set it to false:
 
+Boolean values in a document can be quickly "flipped" by using the `JSON.TOGGLE` command. Let's add a property **has_ebook_version** and set it to **false**:
+```
 JSON.SET ru204:book:18161 $.has_ebook_version false
+```
 
 Note that booleans do not need any quotes around them as they are interpreted by Redis as boolean true or false.
 
-Now when the JSON.TOGGLE command is called on the value, the boolean state is flipped:
-
+Now when the `JSON.TOGGLE` command is called on the value, the boolean state is flipped:
+```
 JSON.TOGGLE ru204:book:18161 $.has_ebook_version
+```
 
 Redis responds with a numeric representation of the new boolean state:
-
+```
 1
+```
 
 Removing properties from a JSON document
-Use the JSON.DEL command to remove a property and its associated value from a JSON document.
 
-Let's remove the entire genres array from the ru204:book:18161 document:
+Use the `JSON.DEL` command to remove a property and its associated value from a JSON document.
 
+Let's remove the entire **genres** array from the **ru204:book:18161** document:
+```
 JSON.DEL ru204:book:18161 $.genres
+```
 
 Redis returns the number of properties successfully removed; in this case one:
-
+```
 1
+```
 
 While it is important to understand how to use the Redis CLI to use the RedisJSON commands to create and maintain documents within Redis, most developers will want to perform these operations from their application code directly. In the next section, we will explore how to manage JSON documents in Redis using popular Redis client libraries for commonly used programming languages.
 
 8. Hands-On Exercise
 
-In this exercise you will update existing RedisJSON documents with new properties and new values. While we will be using every command covered in this unit, this is not an exhaustive list of commands available in RedisJSON. Refer to the RedisJSON command documentation for a full list of available commands.
+In this exercise you will update existing RedisJSON documents with new properties and new values. While we will be using every command covered in this unit, this is not an exhaustive list of commands available in RedisJSON. Refer to the [RedisJSON command documentation](https://redis.io/commands/?group=json) for a full list of available commands.
 
 Adding new properties to an existing document
-1. Adding a new property and value to a document
-The JSON.SET command can be used to add property value pairs to any existing document. In this exercise we will be using the data set of book objects, specifically the object ru204:book:425
+
+8.1. Adding a new property and value to a document
+
+The `JSON.SET` command can be used to add property value pairs to any existing document. In this exercise we will be using the data set of book objects, specifically the object **ru204:book:425**
 
 Let's add a publisher property with the value "Simon and Schuster" to the object:
-
+```
 JSON.SET ru204:book:425 $.publisher '"Simon and Schuster"'
+```
 
 Redis responds with "OK" when the document has been updated.
 
-The JSON.SET command will accept the JSONPath $.publisher as a new property if it doesn't already exist. For the value, the string must be a valid JSON string, which requires that it be encased in double quotes as well as single quotes.
+The `JSON.SET` command will accept the JSONPath **$.publisher** as a new property if it doesn't already exist. For the value, the string must be a valid JSON string, which requires that it be encased in double quotes as well as single quotes.
 
-2. Adding an array to an existing document
-Arrays and objects can also be added to documents with the JSON.SET command. Lets add an array of available book formats ["paperback", "hardcover", "audio book", ".epub", ".txt"] to the book document:
+8.2. Adding an array to an existing document
 
+Arrays and objects can also be added to documents with the `JSON.SET` command. Lets add an array of available book formats ["paperback", "hardcover", "audio book", ".epub", ".txt"] to the book document:
+```
 JSON.SET ru204:book:425 $.formats '["paperback", "hardcover", "audio book", ".epub", ".txt"]'
+```
 
 Redis again responds with an "OK" when the document is updated.
 
-3. Adding objects to existing documents
-Objects can also be added with a similar pattern to an array. Let's add an object tracking checkout popularity amongst age groups to the metrics subdocument in the book ru204:book:425.
+8.3. Adding objects to existing documents
 
+Objects can also be added with a similar pattern to an array. Let's add an object tracking checkout popularity amongst age groups to the **metrics** subdocument in the book **ru204:book:425**.
+```
 JSON.SET ru204:book:425 $.metrics.popularity '{"<18": 20, "18-25": 32, "26-35": 48, "36-45": 56, "46-55": 64, ">55": 37}'
+```
 
 Redis responds with "OK".
 
-4. Adding an element to an array in an existing document
-To add an element to an existing array within a document, RedisJSON offers two commands: ARRAPPEND and ARRINSERT.
+8.4. Adding an element to an array in an existing document
 
-ARRAPPEND appends an element to the end of a given array within a document. Lets add another book into the inventory array of the book object ru204:book:425:
+To add an element to an existing array within a document, RedisJSON offers two commands: `ARRAPPEND` and `ARRINSERT`.
 
+`ARRAPPEND` appends an element to the end of a given array within a document. Lets add another book into the inventory array of the book object **ru204:book:425**:
+```
 JSON.ARRAPPEND ru204:book:425 $.inventory '{"status":"available","stock_id":"425_10"}'
+```
 
 Redis returns 10 as the new length of the array inventory.
 
-ARRINSERT allows the client to insert an element into the array at a given index. This is useful when the order of elements is important. The genres array in each book is maintained in alphabetical order, so lets add a new genre futuristic at index 4.
-
+`ARRINSERT` allows the client to insert an element into the array at a given index. This is useful when the order of elements is important. The **genres** array in each book is maintained in alphabetical order, so lets add a new genre **futuristic** at index 4.
+```
 JSON.ARRINSERT ru204:book:425 $.genres 4 '"futuristic"'
+```
 
 Redis responds with 11, the new length of the array.
 
-5. Removing an element from an array in an existing document
-RedisJSON provides the ARRPOP command to remove an element from an array within a document. Normally, a list pop function removes the last element within an array; this is the default behavior of ARRPOP when an index argument is not provided. ARRPOP will remove an element at any position in the array when an index is provided.
+8.5. Removing an element from an array in an existing document
 
-Let's remove the the genre fiction from our book object ru204:book:425:
+RedisJSON provides the `ARRPOP` command to remove an element from an array within a document. Normally, a list pop function removes the last element within an array; this is the default behavior of `ARRPOP` when an index argument is not provided. `ARRPOP` will remove an element at any position in the array when an index is provided.
 
+Let's remove the the genre **fiction** from our book object **ru204:book:425**:
+```
 JSON.ARRPOP ru204:book:425 $.genres 3
+```
 
 The return value is the element fiction "popped" from the list.
 
 Updating existing properties in a document
-1. Updating an existing property's value in a document
-To update an existing property with a known value in a document, the JSON.SET command can again be used. The full command is similar to adding a new property and value to an existing document:
 
+8.1. Updating an existing property's value in a document
+
+To update an existing property with a known value in a document, the JSON.SET command can again be used. The full command is similar to adding a new property and value to an existing document:
+```
 JSON.SET ru204:book:425 $.publisher '"Random House"'
+```
 
 Redis responds with an "OK".
 
-2. Updating an existing array element in a document
-To update an existing value within an array in a document, the JSON.SET command should be used. Let's set the status of one of the books in our inventory for ru204:book:425 from maintenance to available. We will use bracket notation to access the specific element within the array then dot notation to target the status property.
+8.2. Updating an existing array element in a document
 
+To update an existing value within an array in a document, the `JSON.SET` command should be used. Let's set the status of one of the books in our inventory for **ru204:book:425** from **maintenance** to **available**. We will use bracket notation to access the specific element within the array then dot notation to target the status property.
+```
 JSON.SET ru204:book:425 $.inventory[7].status '"available"'
 
 "OK"
+```
 
 Working with numbers in existing documents
-Practice using the JSON.NUMINCRBY command by increasing the rating_votes count by 23. rating_votes is stored within the metrics subdocument of the book object. Let's continue using the document ru204:book:425:
 
+Practice using the `JSON.NUMINCRBY` command by increasing the **rating_votes** count by 23. **rating_votes** is stored within the **metrics** subdocument of the book object. Let's continue using the document **ru204:book:425**:
+```
 JSON.NUMINCRBY ru204:book:425 $.metrics.rating_votes 23
+```
 
 Redis responds with the updated value for rating_votes:
-
+```
 [3436]
+```
 
-The JSON.NUMINCRBY command may also be used to decrement numerical values as well. Using a negative number performs subtraction upon any numerical value within the document. Let's reduce the rating_votes by 10:
-
+The `JSON.NUMINCRBY` command may also be used to decrement numerical values as well. Using a negative number performs subtraction upon any numerical value within the document. Let's reduce the **rating_votes** by 10:
+```
 JSON.NUMINCRBY ru204:book:425 $.metrics.rating_votes -10
+```
 
 Redis responds with the updated value for rating_votes:
-
+```
 [3426]
+```
 
 Removing elements, arrays, objects, properties, and documents
-The JSON.DEL command can be used to remove properties of an existing document or delete an entire existing document.
 
-Let's remove the last book from the inventory array in the object ru204:book:425:
+The `JSON.DEL` command can be used to remove properties of an existing document or delete an entire existing document.
 
+Let's remove the last book from the inventory array in the object **ru204:book:425**:
+```
 JSON.DEL ru204:book:425 $.inventory[-1]
+```
 
 Redis responds with the number of properties deleted:
-
+```
 1
+```
 
 Now let's remove the document entirely from Redis:
-
+```
 JSON.DEL ru204:book:425
+```
 
 Redis responds with the number of documents deleted:
-
+```
 1
+```
 
-Let's add the book ru204:book:425 back to our documents collection for future use:
-
+Let's add the book **ru204:book:425** back to our documents collection for future use:
+```
 JSON.SET ru204:book:425 $ '{  "author":"Sophie Littlefield",  "id":"425",  "description":  "Awakening in a bleak landscape as scarred as her body, Cass Dollar vaguely recalls surviving something terrible. Having no idea how many weeks have passed, she slowly realizes the horrifying truth: Ruthie has vanished.And with her, nearly all of civilization.Where once-lush hills carried cars and commerce, the roads today see only cannibalistic Beaters -- people turned hungry for human flesh by a government experiment gone wrong.In a broken, barren California, Cass will undergo a harrowing quest to get Ruthie back. Few people trust an outsider, let alone a woman who became a zombie and somehow turned back, but she finds help from an enigmatic outlaw, Smoke. Smoke is her savior, and her safety.For the Beaters are out there.And the humans grip at survival with their trigger fingers. Especially when they learn that she and Ruthie have become the most feared, and desired, of weapons in a brave new worldxe2x80xa6.",  "editions":["english","spanish","french"],  "genres":["apocalyptic (post apocalyptic)","fantasy (paranormal)","fantasy (urban fantasy)","futuristic","horror","horror (zombies)","science fiction","science fiction (apocalyptic)","science fiction (dystopia)","young adult"],  "inventory":[    {"status":"maintenance","stock_id":"425_1"},{"status":"maintenance","stock_id":"425_2"},{"status":"maintenance","stock_id":"425_3"},{"status":"available","stock_id":"425_4"},{"status":"on_loan","stock_id":"425_5"},{"status":"available","stock_id":"425_6"},{"status":"available","stock_id":"425_7"},{"status":"available","stock_id":"425_8"},{"status":"maintenance","stock_id":"425_9"},{"status":"available","stock_id":"425_10"}  ],    "metrics":{      "rating_votes":3459,      "score":3.54,      "popularity":{"<18":20,"18-25":32,"26-35":48,"36-45":56,"46-55":64,">55":37}    },  "pages":738,  "title":"Aftertime",  "url":"https://www.goodreads.com/book/show/9065272-aftertime",  "year_published":2011,  "publisher":"Random House",  "formats":["paperback","hardcover","audio book",".epub",".txt"]}'
 Redis returns an "OK" meaning the document has been successfully created:
 
 "OK"
+```
 
 
 #### II. Application Development with RedisJSON
