@@ -855,6 +855,10 @@ Redis returns an "OK" meaning the document has been successfully created:
 
 #### II. Application Development with RedisJSON
 
+Now that you've seen how to create and manage JSON document data in Redis using Redis CLI and RedisInsight, it's time to switch gears and consider how to use the capabilities of RedisJSON in your application code. 
+
+In this section, you'll learn what Redis client libraries are and how to use them to execute RedisJSON commands from popular programming languages. We'll then show you how to model and persist document data using the higher-level [? RedisOM ?] family of clients. Let's get started.
+
 1. 
 2. 
 3. 
