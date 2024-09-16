@@ -859,7 +859,7 @@ Now that you've seen how to create and manage JSON document data in Redis using 
 
 In this section, you'll learn what Redis client libraries are and how to use them to execute RedisJSON commands from popular programming languages. We'll then show you how to model and persist document data using the higher-level [? RedisOM ?] family of clients. Let's get started.
 
-1. Introducing Redis Clients
+##### 1. Introducing Redis Clients
 
 Redis Clients are software libraries that provide a mapping between Redis commands and functions that developers can call in their application code. A wide selection of Redis clients are available, making Redis accessible from almost any programming language that you can think of. A community maintained list of Redis clients is [available on redis.io](https://redis.io/docs/clients/).
 
@@ -874,37 +874,41 @@ We'll begin by working with a popular Redis client for each language:
 
 Having seen how to manage JSON documents in Redis using these clients and the RedisJSON commands, we'll move on to explore the Redis OM family of clients. These clients operate at a higher level of abstraction, shielding the developer from the underlying RedisJSON commands. Here you'll see how to model and manage document data in each of our four programming languages. In later sections, we'll build on this foundation and introduce powerful searching and secondary indexing capabilities.
 
-2. 
-3. 
-4. 
-5. 
+##### 2. 
+##### 3. 
+##### 4. 
+##### 5. 
+##### 6. 
 
 
 #### III. Indexing and Searching JSON Documents
 
-1. 
-2. 
-3. 
-4. 
-5. 
+##### 1. 
+##### 2. 
+##### 3. 
+##### 4. 
+##### 5. 
+##### 6. 
 
 
 #### IV. Indexing and Searching in Your Application
 
-1. 
-2. 
-3. 
-4. 
-5. 
+##### 1. 
+##### 2. 
+##### 3. 
+##### 4. 
+##### 5. 
+##### 6. 
 
 
 #### V. Advanced Topics
 
-1. 
-2. 
-3. 
-4. 
-5. 
+##### 1. 
+##### 2. 
+##### 3. 
+##### 4. 
+##### 5. 
+##### 6. 
 
 
 #### Epilogue 
