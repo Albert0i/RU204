@@ -546,7 +546,7 @@ Redis selects the title property and returns the length of the title value "Time
 
 RedisJSON includes many commands specifically designed for updating each of the data types used in JSON documents. These include the ability to atomically update parts of a document on the Redis server without the complexities, performance issues and network bandwidth associated with handling this in your application code. Let's begin with a look at how to efficiently and atomically update an array in a JSON document stored in Redis.
 
-Updating Arrays in a JSON Document
+- Updating Arrays in a JSON Document
 
 7.1. Adding an element to an array with `JSON.ARRAPPEND`
 
@@ -609,7 +609,7 @@ Again, Redis responds with the element that was removed:
 "{\"stock_number\":\"18161_3\",\"status\":\"maintenance\"}"
 ```
 
-Updating numerical data in a JSON document
+- Updating numerical data in a JSON document
 
 RedisJSON includes commands similar to the Redis `INCRBY` command to handle atomic addition and subtraction operations on numerical data stored in a JSON document. This is useful for incrementing page views, adjusting inventory counts, and any situation where only the value needs to be updated, not the entire document.
 
@@ -656,7 +656,7 @@ Redis responds with the new value stored at $.metrics.rating_votes:
 
 It should be noted that numerical values within a document **MUST** exist before performing commands upon them.
 
-Updating strings in a JSON document
+- Updating strings in a JSON document
 
 7.1. Updating a string value in a JSON document
 
@@ -696,7 +696,7 @@ Redis responds with a numeric representation of the new boolean state:
 1
 ```
 
-Removing properties from a JSON document
+- Removing properties from a JSON document
 
 Use the `JSON.DEL` command to remove a property and its associated value from a JSON document.
 
