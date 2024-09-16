@@ -385,7 +385,7 @@ This is an efficient method to retrieve the length of an array without fetching 
 
 5.6. Retrieve the same property from multiple documents
 
-The command `JSON.MGET` retrieves one property from multiple documents. Let's gather the titles from the documents **ru204:book:18161** and **ru204:book:684**:
+The command `JSON.MGET` retrieves *one property from multiple documents*. Let's gather the titles from the documents **ru204:book:18161** and **ru204:book:684**:
 ```
 JSON.MGET ru204:book:18161 ru204:book:684 $.title
 ```
