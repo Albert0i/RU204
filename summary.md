@@ -48,7 +48,7 @@ Here are some key features of RedisJSON:
 
 `Commands`
 
-RedisJSON adds many new commands to Redis. All RedisJSON commands have the "JSON." prefix. To store or update a document, we use `JSON.SET`. To retrieve either a complete document or a fragment of one, we'll use `JSON.GE`T.
+RedisJSON adds many new commands to Redis. All RedisJSON commands have the "JSON." prefix. To store or update a document, we use `JSON.SET`. To retrieve either a complete document or a fragment of one, we'll use `JSON.GET`.
 
 In this section, we'll introduce some RedisJSON commands, using the following simple document as our data source:
 
