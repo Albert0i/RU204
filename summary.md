@@ -225,11 +225,9 @@ The goal of this exercise is to become familiar with storing and retrieving simp
 
 Before continuing with this challenge, you should have a Redis instance running with the RU204 data loaded. If you haven't done so already, refer to the instructions here.
 
-`Document creation`
-
 4.1. Store a JSON Document in Redis
 
-To create a new JSON document in Redis, use the JSON.SET command. The command format is:
+To create a new JSON document in Redis, use the `JSON.SET` command. The command format is:
 ```
 JSON.SET KEY $ JSONSTRING
 ```
