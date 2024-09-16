@@ -11,7 +11,7 @@ Welcome to the first section of RU204, Managing JSON Data in Redis. In the next 
 
 Each unit will have a hands-on exercise designed to explore the topics covered and solidify your Redis JSON skills. Since the goal of this section is to familiarize you with Redis JSON, the exercises will be based on entering commands into the Command Line Interface to demonstrate common actions performed on JSON documents.
 
-1. Storing and Retrieving JSON with Redis Strings
+##### 1. Storing and Retrieving JSON with Redis Strings
 
 The traditional approach to storing JSON documents in Redis has been to *serialize* them to Strings. Serialization happens in application code, with the resulting String value saved in Redis using the `SET` command.
 
@@ -32,7 +32,7 @@ Using more of the native data types in Redis, Lists and Hashes could be created 
 --- 
 In simple terms, an "anti-pattern" is a common solution to a problem that seems good at first but actually makes things worse in the long run. It's like a recipe for disaster in the world of problem-solving or software development. Just like how a bad cake recipe leads to a terrible cake, an anti-pattern can lead to problems, inefficiencies, or difficulties in projects or processes. It's something you want to avoid if you want things to work smoothly and efficiently.
 
-2. Introducing RedisJSON
+##### 2. Introducing RedisJSON
 
 RedisJSON is a component within Redis Stack that lets you store, update and retrieve JSON documents in Redis as a native data type. With RedisJSON, documents can be updated atomically and efficiently in-place in Redis. Your application code no longer needs to read an entire document from Redis or deal with serialization and deserialization in order to update or retrieve document fragments.
 
@@ -119,7 +119,7 @@ Redis returns an array containing the JSON for book 18161:
 
 In the next module we'll examine how to use JSONPath expressions to retrieve single fields and parts of a document.
 
-3. [RedisJSON Explained Video](https://youtu.be/I-ohlZXXaxs)
+##### 3. [RedisJSON Explained Video](https://youtu.be/I-ohlZXXaxs)
 
 Hello, and welcome back. In this video, we'll take a look at what's new with Redis JSON. The big news is that you can now efficiently query and index your JSON documents in Redis. I want to revisit my previous challenge of organizing my favorite food trucks in Oakland, but this time let's add some extra spice with JSON path syntax and querying documents with Redis search. Tuck in, and let's get started
 ![alt RedisJSON_Explained](img/RedisJSON_Explained.JPG)
@@ -200,7 +200,7 @@ Pro tip-- if I wanted to search for events with exactly five assigned vendors, I
 
 That's a lot of delicious options. OK. That was a lot of info to go over. If you'd like to learn more about the new Redis JSON and how well it interacts with RediSearch at your own pace, check out our new Redis University course, [RU204](https://redis.io/university/courses/ru204/), Storing, Querying, and Indexing JSON at Speed. It's just one of many courses available to you covering specific topics within Redis. If you'd like to try it out Redis Stack, use one of the links in the video description below. You can download Redis Stack, or you can provision a basic instance in the cloud for free. No installation or local configuration necessary. Thanks for watching. I hope you enjoy these delicious new updates to Redis JSON and find them just as appetizing as I do.
 
-4. Hands-On Exercise
+##### 4. Hands-On Exercise
 
 The goal of this exercise is to become familiar with storing and retrieving simple JSON documents in Redis. If you have any questions or difficulties, don't hesitate to ask for clarification in the [ru204](https://discord.com/channels/697882427875393627/910996015266558022) channel in Discord, we are more than happy to help.
 
@@ -255,7 +255,7 @@ Redis returns the following response containing the JSON document stored at ru20
 
 Note that this response is contained in an array. This is because `JSON.GET` can accept multiple JSONPaths, returning the matching parts of the document as a single array response. This is something that we'll explore later.
 
-5. Retrieving Data with RedisJSON
+##### 5. Retrieving Data with RedisJSON
 
 The key to efficient data retrieval with RedisJSON is a good understanding of the JSONPath syntax. Using the correct JSONPath expression ensures that only the data that your application needs is returned by Redis. This saves time and data transfer bandwidth between your application and the Redis Server. Let's see how JSONPath expressions can help us retrieve book data from the course data set.
 
@@ -394,7 +394,7 @@ Redis returns:
 
 In the next module we'll explore how to update documents by amending existing properties and adding new ones.
 
-6. Hands-On Exercise
+##### 6. Hands-On Exercise
 
 In this exercise you will explore a few JSONPath expressions to retrieve specific fragments of a stored document. You'll be using the `JSON.GET` command and writing JSONPath expressions so that you can select a specific intended target or retrieve all fragments that match a given criteria. These exercises won't cover all possibilities, but will provide examples of the most common use cases. Refer to the [JSONPath documentation](https://goessner.net/articles/JsonPath/) for a full explanation of the expressions.
 
@@ -525,7 +525,7 @@ Redis responds with:
 
 Redis selects the title property and returns the length of the title value "Timeless: Diego and the Rangers of the Vastlantic".
 
-7. Updating Data with RedisJSON
+##### 7. Updating Data with RedisJSON
 
 RedisJSON includes many commands specifically designed for updating each of the data types used in JSON documents. These include the ability to atomically update parts of a document on the Redis server without the complexities, performance issues and network bandwidth associated with handling this in your application code. Let's begin with a look at how to efficiently and atomically update an array in a JSON document stored in Redis.
 
@@ -695,7 +695,7 @@ Redis returns the number of properties successfully removed; in this case one:
 
 While it is important to understand how to use the Redis CLI to use the RedisJSON commands to create and maintain documents within Redis, most developers will want to perform these operations from their application code directly. In the next section, we will explore how to manage JSON documents in Redis using popular Redis client libraries for commonly used programming languages.
 
-8. Hands-On Exercise
+##### 8. Hands-On Exercise
 
 In this exercise you will update existing RedisJSON documents with new properties and new values. While we will be using every command covered in this unit, this is not an exhaustive list of commands available in RedisJSON. Refer to the [RedisJSON command documentation](https://redis.io/commands/?group=json) for a full list of available commands.
 
