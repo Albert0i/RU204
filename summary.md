@@ -201,7 +201,7 @@ Now, I want to create an index for our event JSON documents. For this index, I'l
 
 ```
 FT.CREATE idx:event 
-ON　JSON PREFIX 1 "event:" 
+ON JSON PREFIX 1 "event:" 
 SCHEMA $.assigned_vendors AS assigned_vendors NUMERIC SORTABLE 
        $.name AS name TEXT SORTABLE 
        $.location_name AS location_name TEST 
