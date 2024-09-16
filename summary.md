@@ -1033,7 +1033,33 @@ The value of response will be 3: the new length of the array in the JSON documen
 
 ##### 4. Hands-On Exercise
 
+Now that you've seen how to work with JSON documents and RedisJSON commands with four different Redis clients, it's time to try working with your favorite programming language and the sample data provided!
 
+If you're not a coder, don't worry - this is an ungraded exercise!
+
+- Coding Exercise
+
+Using the sample code from the previous modules as a template, write code in your preferred language that performs some of all of the following operations on the sample data set:
+
+- Try out the [JSON.STRAPPEND](https://redis.io/commands/json.strappend/) command to add the "Jr." suffix to the author of the book at key ru204:book:21, making the author's name "Kurt Busiek Jr.".
+- Use the [JSON.MGET](https://redis.io/commands/json.mget/) path to get the titles for the books whose keys are ru204:book:91, ru204:book:2718 and ru204:book:171.
+- Add a new entry to the inventory array for the book at key ru204:book:10542 with the [JSON.ARRINSERT](https://redis.io/commands/json.arrinsert/) command. Add your new entry at position 2 in the array, and use the following object:
+```
+{
+  "status": "maintenance",
+  "stock_id": "10542_5"
+}
+```
+
+Don't forget that you'll need to have your Redis Stack instance up and running with the course sample data loaded. If you need help with this, please consult the [README](https://github.com/redislabs-training/ru204/blob/main/README.md) in the course GitHub repository.
+
+Check that your code worked by using RedisInsight or the redis-cli to view the contents of the database.
+
+Should you need help or would like to share your success with Redis staff and your fellow students, reach out to us on the [course Discord channel](https://discord.gg/46upnugY5B).
+
+If you like to code in a language other than Python, Node.js, C# or Java and would like to implement the example code in that language, [send us a pull request](https://github.com/redislabs-training/ru204/pulls) - we'd love to expand the scope of this section of the course!
+
+Best of luck!
 
 ##### 5. 
 ##### 6. 
