@@ -105,7 +105,7 @@ The JSONPath selector syntax to access embedded objects and arrays is similar to
 
 2.3. Accessing a JSON Document
 
-Use the `JSON.GET` command to retrieve RedisJSON documents from Redis. JSON.GET can be used to retrieve the entire document, multiple fields, or a single field.
+Use the `JSON.GET` command to retrieve RedisJSON documents from Redis. `JSON.GET` can be used to retrieve the entire document, multiple fields, or a single field.
 
 Let's get the entire document for book 18161:
 ```
