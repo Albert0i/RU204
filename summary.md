@@ -199,6 +199,14 @@ Next, I'll search for a tag data type. Remember that we set the cuisines array i
 Now, I want to create an index for our event JSON documents. For this index, I'll be searching through all keys with the prefix event colon. The `SCHEMA` will have three fields to search through-- $.assigned_vendors AS assigned_underscore `NUMERIC` `SORTABLE`. This indicates that assigned vendors will be a number. I'll want to be able to sort the results, so I'm including the option, `SORTABLE`. $.name will be treated the same as the vendor object's name. I'll set it as a text search type, and the results will be sortable. I want to treat $.location_name the same as name. I'll set it as location_name `TEXT`. 
 ![alt RedisJSON_Explained_19](img/RedisJSON_Explained_19.JPG)
 
+```
+FT.CREATE idx:event 
+ON　JSON PREFIX 1 "event:" 
+SCHEMA $.assigned_vendors AS assigned_vendors NUMERIC SORTABLE 
+       $.name AS name TEXT SORTABLE 
+       $.location_name AS location_name TEST 
+```
+
 Now, I'll try to find an event with five or more food trucks. I'll call `FT.SEARCH`, specifying idx:event as the index the search. In my query, @assigned_vendors tells RediSearch the field to look at and 5 and infinite in square brackets to find the range of values to search for. 
 ![alt RedisJSON_Explained_20](img/RedisJSON_Explained_20.JPG)
 
