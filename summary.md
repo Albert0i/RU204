@@ -396,7 +396,7 @@ Redis returns:
 2) "[\"Odyssey One\"]"
 ```
 
-Note that key order is preserved in the response, so "Obsidian" is the title of the book whose key is **ru204:book:18161** and "Odyssey One" is the title of the book whose key is **ru204:book:684**.
+*Note that key order is preserved in the response*, so "Obsidian" is the title of the book whose key is **ru204:book:18161** and "Odyssey One" is the title of the book whose key is **ru204:book:684**.
 
 Let's collect the genres arrays for both book documents:
 ```
