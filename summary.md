@@ -874,9 +874,167 @@ We'll begin by working with a popular Redis client for each language:
 
 Having seen how to manage JSON documents in Redis using these clients and the RedisJSON commands, we'll move on to explore the Redis OM family of clients. These clients operate at a higher level of abstraction, shielding the developer from the underlying RedisJSON commands. Here you'll see how to model and manage document data in each of our four programming languages. In later sections, we'll build on this foundation and introduce powerful searching and secondary indexing capabilities.
 
-##### 2. 
-##### 3. 
-##### 4. 
+##### 2. Working with JSON Documents in Code
+
+In this unit, we'll demonstrate how to use popular Redis Clients to store and manipulate JSON documents in Redis.
+
+You'll see how to initialize each client, connect to Redis and work with RedisJSON commands. We'll use the same example in all four programming languages. You don't need to read and understand all four - focus on the language(s) that are relevant to your application development needs.
+
+- Getting the Code
+
+The code is located in the src folder in the [course GitHub repository](https://github.com/redislabs-training/ru204/). You should have already cloned this repository to your machine as part of the initial course setup step.
+
+- Example Data
+
+The example code creates a new JSON document in Redis that models a book called "Up and running with RedisJSON". The book will be stored in a key named ru204:book:99999 and the document initially looks like this:
+```
+{
+  "author": "Redis University",
+  "id": 99999,
+  "description": "This is a fictional book used to demonstrate RedisJSON!",
+  "editions": [
+    "english",
+    "french"
+  ],
+  "genres": [
+    "education",
+    "technology"
+  ],
+  "inventory": [
+    {
+      "status": "available",
+      "stock_id": "99999_1"
+    },
+    {
+      "status": "on_loan",
+      "stock_id": "99999_2"
+    }
+  ],
+  "metrics": {
+    "rating_votes": 12,
+    "score": 2.3
+  },
+  "pages": 1000,
+  "title": "Up and Running with RedisJSON",
+  "url": "https://university.redis.com/courses/ru204/",
+  "year_published": 2022
+}   
+```
+
+- RedisJSON Commands Used in the Example Code
+
+Each example program uses the following RedisJSON commands to store and manipulate the book data:
+
+[JSON.SET](https://redis.io/commands/json.set/) to create the document at key **ru204:book:99999** in Redis.
+[JSON.GET](https://redis.io/commands/json.get/) to retrieve data from the document using JSONPath expressions.
+[JSON.NUMINCRBY](https://redis.io/commands/json.numincrby/) to atomically update numeric data in the document.
+[JSON.ARRAPPEND](https://redis.io/commands/json.arrappend/) to add extra entries to an array in the document.
+
+- Running the Code
+
+In the modules that follow this one, we'll walk you through how the code works and how you can run it on your machine to add data to your Redis instance. While you don't have to run the code, we'd strongly recommend that you try it with at least one of the languages.
+
+Let's begin with Node.js...
+
+##### 3. Using RedisJSON in a Node.js Application
+
+We've provided you with a small example program that uses the [node-redis](https://github.com/redis/node-redis/) client for Node.js to store and manipulate a new book object in Redis.
+
+The code is located in the [src/nodejs/node_redis_example](https://github.com/redislabs-training/ru204/tree/main/src/nodejs/node_redis_example) folder in the course GitHub repository. You should have already cloned this repository to your machine as part of the initial course setup step.
+
+Follow the instructions in the [README.md]() file if you'd like to run the code in your local environment.
+
+- Code Walkthrough
+
+The code is contained in a single file, json_example.js. [Click here to open this file in GitHub](https://github.com/redislabs-training/ru204/blob/main/src/nodejs/node_redis_example/json_example.js) - you will need to refer to it throughout this module.
+
+Let's take a look at the code that stores and updates JSON documents.
+
+First, notice that our book document is represented in JavaScript as a regular JavaScript object:
+```
+const BOOK = {
+  author: 'Redis University',
+  id: 99999,
+  description: 'This is a fictional book used to demonstrate RedisJSON!',
+  editions: [
+    'english',
+    'french'
+  ],
+  genres: [
+    'education',
+    'technology'
+  ],
+  inventory: [
+    {
+      status: 'available',
+      stock_id: '99999_1'
+    },
+    {
+      status: 'on_loan',
+      stock_id: '99999_2'
+    }
+  ],
+  metrics: {
+    rating_votes: 12,
+    score: 2.3
+  },
+  pages: 1000,
+  title: 'Up and Running with RedisJSON',
+  url: 'https://university.redis.com/courses/ru204/',
+  year_published: 2022
+};  
+```
+
+- Storing a JSON Document in Redis
+
+To store this object as a JSON document in Redis, we use the Redis [JSON.SET](https://redis.io/commands/json.set/) command, which looks like this when working with node-redis:
+```
+let response = await r.json.set(BOOK_KEY, '$', BOOK);
+```
+
+Here, **BOOK_KEY** is the name of the key to store the document at, '$' is the JSONPath (recall that we should always use '**$**' meaning root when creating new documents) and BOOK is the JavaScript object containing the book data.
+
+This function returns OK if the data was stored successfully in Redis.
+
+- Retrieving Parts of a Stored JSON Document
+
+Let's retrieve the author and score properties for our book. The author property is at the root level of the document, and the score property is inside an object named metrics. With node-redis we retrieve these using the [JSON.GET](https://redis.io/commands/json.get/) command, providing the key name and an array of two JSONPaths:
+```
+response = await r.json.get(BOOK_KEY, {
+  path: [
+    '$.author',
+    '$.metrics.score'
+  ]
+});
+```
+
+The value of response will be a JavaScript object that looks like this:
+```
+{ '$.metrics.score': [ 2.3 ], '$.author': [ 'Redis University' ] }
+```
+
+- Modifying a Stored JSON Document
+
+We can add 1 to the value stored at $.metrics.rating_votes using [JSON.NUMINCRBY](https://redis.io/commands/json.numincrby/):
+```
+response = await r.json.numIncrBy(BOOK_KEY, '$.metrics.rating_votes', 1);
+The value of response will be 13: the new value of $.metrics.rating_votes.
+```
+
+To add a new copy of the book to the inventory array, we use [JSON.ARRAPPEND](https://redis.io/commands/json.arrappend/):
+```
+response = await r.json.arrAppend(BOOK_KEY, '$.inventory', {
+  status: 'available',
+  stock_id: '99999_3'
+});
+```
+
+The value of response will be 3: the new length of the array in the JSON document stored in Redis.
+
+##### 4. Hands-On Exercise
+
+
+
 ##### 5. 
 ##### 6. 
 
