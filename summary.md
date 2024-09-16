@@ -161,12 +161,14 @@ Events also need to take place at a location. Fortunately, we have JSON document
 ![alt RedisJSON_Explained_12](img/RedisJSON_Explained_12.JPG)
 
 
-Redis JSON has no problem storing embedded objects-- a vast improvement over storing data as traditional flat hashes. Now, each event must have a location, so I'll insert the location ID into the event JSON with JSON.SET, event:11, $.location_id. 
+Redis JSON has no problem storing embedded objects-- a vast improvement over storing data as traditional flat hashes. Now, each event must have a location, so I'll insert the location ID into the event JSON with `JSON.SET`, event:11, $.location_id. 
 ![alt RedisJSON_Explained_13](img/RedisJSON_Explained_13.JPG)
 
-I've shown you how to create and manipulate JSON documents in Redis with the newest version of Redis JSON. But did you know you can also index and query your JSON data? RediSearch, another component of Redis Stack, allows us to index data within our JSON documents and perform queries over a collection of documents. I'll show you how to do just that. 
+I've shown you how to create and manipulate JSON documents in Redis with the newest version of Redis JSON. But did you know you can also index and query your JSON data? [RediSearch](https://redis.io/search/), another component of Redis Stack, allows us to index data within our JSON documents and perform queries over a collection of documents. I'll show you how to do just that. 
 
-I'm using Redis Stack, so RediSearch is already installed and ready to go. I'm going to create an index on a few select fields within my JSON data structure. This means I search using terms that I would expect to find within these fields. I want to search for a vendor's name, a particular cuisine, locations of events near me, or maybe events that have more than five food trucks, so we can enjoy some culinary variety. 
+I'm using Redis Stack, so RediSearch is already installed and ready to go. I'm going to create an index on a few select fields within my JSON data structure. This means I search using terms that I would expect to find within these fields. 
+
+I want to search for a vendor's name, a particular cuisine, locations of events near me, or maybe events that have more than five food trucks, so we can enjoy some culinary variety. 
 ![alt RedisJSON_Explained_14](img/RedisJSON_Explained_14.JPG)
 
 To do this, we'll want to create search indexes on the vendor and event documents. 
