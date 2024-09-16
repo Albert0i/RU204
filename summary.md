@@ -178,7 +178,7 @@ To do this, we'll want to create search indexes on the vendor and event document
 FT.CREATE idx:truck 
 ON JSON PREFIX 1 "truck:" 
 SCHEMA $.name AS name TEXT SORTABLE 
-       $cuisines[*] AS cuisines TAG 
+       $.cuisines[*] AS cuisines TAG 
 ```
 
 I'll start with the vendors. To create an index on all food trucks, I'll call `FT.CREATE` followed by a name. I'll call it idx:truck. `ON JSON` tells RediSearch that will be indexing and searching through JSON documents. `PREFIX 1` truck colon instructs RediSearch to look inside all documents of the key prefix truck colon. This means that all subsequent vendor documents should also have the truck colon key prefix. `SCHEMA` tells RediSearch to create indexes with ensuing property and search type pairs. $.name AS name `TEXT` allows us to search the name properties as text under the search field name. `SORTABLE` means we'll receive the return search results in a sortable list. 
