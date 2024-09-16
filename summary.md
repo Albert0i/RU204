@@ -471,7 +471,7 @@ Redis returns the stock_id value:
 "[\"206_2\"]"
 ```
 
-Retrieving Multiple Elements
+- Retrieving Multiple Elements
 
 6.1. Recursive scanning for properties
 
