@@ -1194,9 +1194,10 @@ We've shown you the basics of JSON data modeling with the four Redis OM clients,
 
 If you're not a coder, don't worry - this is an ungraded exercise!
 
-Coding Exercise
-Imagine we're operating a video rental store. We've decided to represent each of the movies in our inventory using JSON documents that have the following structure:
+- Coding Exercise
 
+Imagine we're operating a video rental store. We've decided to represent each of the movies in our inventory using JSON documents that have the following structure:
+```
 {
   "title": "The Matrix",
   "released": 1999,
@@ -1208,21 +1209,26 @@ Imagine we're operating a video rental store. We've decided to represent each of
   ],
   "Summary": "A stranger leads computer hacker Neo to a forbidding underworld, he discovers the truth: the life he knows is the elaborate deception of an evil cyber-intelligence."
 } 
+```
+
 Using the sample code from the previous modules as a template, write code in your preferred language that uses the Redis OM client to:
 
-Model the JSON structure above as an entity of class Movie.
-Create some Movie instances for 2-3 of your favorite movies (look them up on IMDB!)
-Persist them to Redis, and verify that the correct JSON structure is stored in Redis for each document.
-Don't forget that you'll need to have your Redis Stack instance up and running with the course sample data loaded. If you need help with this, please consult the README in the course GitHub repository.
+- Model the JSON structure above as an entity of class **Movie**.
+- Create some Movie instances for 2-3 of your favorite movies ([look them up on IMDB!](https://www.imdb.com/))
+- Persist them to Redis, and verify that the correct JSON structure is stored in Redis for each document.
+
+Don't forget that you'll need to have your Redis Stack instance up and running with the course sample data loaded. If you need help with this, please consult the [README](https://github.com/redislabs-training/ru204/) in the course GitHub repository.
 
 Check that your code worked by using RedisInsight or the redis-cli to view the contents of the database.
 
-Should you need help or would like to share your success with Redis staff and your fellow students, reach out to us on the course Discord channel.
+Should you need help or would like to share your success with Redis staff and your fellow students, reach out to us on the [course Discord channel](https://discord.gg/46upnugY5B).
 
 Best of luck!
 
 
 #### III. Indexing and Searching JSON Documents
+
+Welcome to Section 3. Here, you'll learn how to use the powerful RediSearch secondary indexing and full text query capabilities to search collections of JSON documents and extract statistics from them using aggregate queries. In this section, you'll work with RediSearch at the Redis CLI or add RedisInsight. Once you've mastered the commands here, we'll move on to show you how to include these capabilities in your application code. Let's go.
 
 ##### 1. 
 ##### 2. 
