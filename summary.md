@@ -1822,7 +1822,7 @@ RediSearch supports a wide variety of query options to search throughout the ind
 10. Geo radius matches on geo fields with the syntax @field:[{lon} {lat} {radius} {m|km|mi|ft}].
 11. Tag field filters with the syntax @field:{tag | tag | ...}.
 12. Optional terms or clauses: foo ~bar means bar is optional but documents with bar in them will rank higher.
-13. Fuzzy matching on terms: %hello% means all terms with [Levenshtein distance] of 1 from "hello".
+13. Fuzzy matching on terms: %hello% means all terms with [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) of 1 from "hello".
 14. An expression in a query can be wrapped in parentheses to disambiguate, e.g. (hello|hella) (world|werld).
 15. Query attributes can be applied to individual clauses, e.g. (foo bar) => { $weight: 2.0; $slop: 1; $inorder: false; }.
 16. Combinations of the above can be used together, e.g hello (world|foo) "bar baz" bbbb.
