@@ -1831,17 +1831,21 @@ The full RediSearch query syntax documentation can be found [here](https://redis
 
 ##### 4. Hands-On Exercise
 
-In this hands-on exercise we'll be performing Text, Numeric, and Tag queries against our index:bookdemo index. We'll also create a simple index for GEO data and perform a few georadius queries as well. Understanding this section is crucial to successfully navigating the next section. If you have any questions or need assistance, please reach out to us on Discord.
+In this hands-on exercise we'll be performing Text, Numeric, and Tag queries against our index:bookdemo index. We'll also create a simple index for GEO data and perform a few georadius queries as well. Understanding this section is crucial to successfully navigating the next section. If you have any questions or need assistance, please [reach out to us on Discord](https://discord.gg/46upnugY5B).
 
-Search by Text
-In this part we'll be performing query on Text search fields. To keep this document manageable, where relevant we've included the NOCONTENT clause in our queries so that we only receive the document keys instead of the entire document.
+- Search by Text
+
+In this part we'll be performing query on Text search fields. To keep this document manageable, where relevant we've included the `NOCONTENT` clause in our queries so that we only receive the document keys instead of the entire document.
 
 1. Simple Text search
-The following query searches for any document with the author field populated with "Margaret Peterson Haddix". The NOCONTENT clause flags that no documents should be returned, only the number of total documents found and the default first ten matching document keys.
 
+The following query searches for any document with the author field populated with "Margaret Peterson Haddix". The `NOCONTENT` clause flags that no documents should be returned, only the number of total documents found and the default first ten matching document keys.
+```
 FT.SEARCH index:bookdemo "@author: Margaret Peterson Haddix" NOCONTENT
+```
+
 Redis returns the total number of documents that contain "Margaret Peterson Haddix" as the author plus ten document keys that successfully matched:
-
+```
 1) "16"
 2) "ru204:book:768"
 3) "ru204:book:1288"
@@ -1853,12 +1857,17 @@ Redis returns the total number of documents that contain "Margaret Peterson Hadd
 9) "ru204:book:1438"
 10) "ru204:book:1538"
 11) "ru204:book:602"
+```
+
 2. Search across multiple fields
+
 Let's find all books written by the author "Margaret Peterson Haddix" with the genre TAG "realistic fiction". First let's find all of her books:
-
+```
 FT.SEARCH index:bookdemo "@author: Margaret Peterson Haddix" NOCONTENT
-Redis reports that there are 16 books written by Margaret Peterson Haddix:
+```
 
+Redis reports that there are 16 books written by Margaret Peterson Haddix:
+```
 1) "16"
 2) "ru204:book:768"
 3) "ru204:book:1288"
@@ -1870,34 +1879,49 @@ Redis reports that there are 16 books written by Margaret Peterson Haddix:
 9) "ru204:book:1438"
 10) "ru204:book:1538"
 11) "ru204:book:602"
+```
+
 Let's build on this query and add a search for "realistic fiction" within the @genres field:
-
+```
 FT.SEARCH index:bookdemo "@author: Margaret Peterson Haddix @genres:{realistic fiction}"
-Redis returns one book written by Margaret Peterson Haddix with the genre tag "realistic fiction":
+```
 
+Redis returns one book written by Margaret Peterson Haddix with the genre tag "realistic fiction":
+```
 1) "1"
 2) "ru204:book:1538"
 3) 1) "$"
    2) "{\"author\":\"Margaret Peterson Haddix\",\"id\":\"1538\",\"description\":\"Jessie lives with her family in the frontier village of Clifton, Indiana. When diphtheria strikes the village and the children of Clifton start dying, Jessie's mother sends her on a dangerous mission to bring back help. But beyond the walls of Clifton, Jessie discovers a world even more alien and threatening than she could have imagined, and soon she finds her own life in jeopardy. Can she get help before the children of Clifton, and Jessie herself, run out of time?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adventure\",\"childrens\",\"childrens (middle grade)\",\"fiction\",\"historical (historical fiction)\",\"mystery\",\"realistic fiction\",\"science fiction\",\"science fiction (dystopia)\",\"young adult\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"1538_1\"},{\"status\":\"available\",\"stock_id\":\"1538_2\"},{\"status\":\"maintenance\",\"stock_id\":\"1538_3\"}],\"metrics\":{\"rating_votes\":23387,\"score\":3.99},\"pages\":544,\"title\":\"Running Out of Time\",\"url\":\"https://www.goodreads.com/book/show/227658.Running_Out_of_Time\",\"year_published\":1995}"
-Multiple Field Search, continued
+```
+
+- Multiple Field Search, continued
+
 Stephen King is considered a prolific writer. He has written over 90 novels and collections of short stories in his career! Let's try to search for a single book written by him that has the word "Tower" in it. We'll search for "Stephen King" as the author and add the title fragment "Tower" to the query.
-
+```
 FT.SEARCH index:bookdemo "@author: Stephen King @genres:{horror} @title: Tower" RETURN 1 title
-It looks like Redis found a match! The book we may be looking for is called "The Dark Tower":
+```
 
+It looks like Redis found a match! The book we may be looking for is called "The Dark Tower":
+```
 1) "1"
 2) "ru204:book:5888"
 3) 1) "title"
    2) "The Dark Tower"
-Numeric Search
+```
+
+- Numeric Search
+
 In this section we'll be looking at Numeric queries. Make sure to read through the syntax documentation for Numeric queries if you are stuck.
 
 1. Search with Text and Numbers
+
 Stephen King is also known for writing books that are quite long. Let's find out if he has any books below 350 pages:
-
+```
 FT.SEARCH index:bookdemo "@author: Stephen King @pages:[-inf (350]" RETURN 2 title pages
-Notice the parenthesis directly before the 350 in the query. This denotes an exlusive bound or "less than" the number direclty after it. That way we are looking for page numbers below 350, but not actually 350. Redis returns 3 documents:
+```
 
+Notice the parenthesis directly before the 350 in the query. This denotes an exlusive bound or "less than" the number direclty after it. That way we are looking for page numbers below 350, but not actually 350. Redis returns 3 documents:
+```
 1) "3"
 2) "ru204:book:2679"
 3) 1) "title"
@@ -1914,12 +1938,17 @@ Notice the parenthesis directly before the 350 in the query. This denotes an exl
    2) "Wolves of the Calla"
    3) "pages"
    4) "203"
+```
+   
 2. Search with multiple Number queries
+
 Let's build out the previous query to find all of Stephen King's books less than 350 pages or more than 1000 pages. This will use the pipe operator (|) between two @pages queries:
-
+```
 FT.SEARCH index:bookdemo "@author: Stephen King @pages:[-inf (350] | @pages:[(1000 +inf]" RETURN 2 title pages
-The two @page queries capture all books by Stephen King that are either less than 350 pages, or greater than 1000. The parenthesis next to the 1000 also denotes an exclusive min/max, so we are capturing all documents with greater than 1000 pages:
+```
 
+The two @page queries capture all books by Stephen King that are either less than 350 pages, or greater than 1000. The parenthesis next to the 1000 also denotes an exclusive min/max, so we are capturing all documents with greater than 1000 pages:
+```
 1) "6"
 2) "ru204:book:7986"
 3) 1) "title"
@@ -1951,14 +1980,19 @@ The two @page queries capture all books by Stephen King that are either less tha
    2) "11/22/63"
    3) "pages"
    4) "1073"
-Search by Tag
+```
+
+- Search by Tag
+
 Let's explore searching by tag words. By adding multiple tags to a single search, we can either expand or refine our search, depending on their usage. If we wanted to find books with the genres Young Adult OR Adventure (survival), we'll receive more results than if we were looking for books with the genres Young Adult AND Adventure (survival).
 
 Let's search for books with either the Young Adult tag or the Adventure (survival) tag:
-
+```
 FT.SEARCH index:bookdemo "@genres:{Young Adult | Adventure \\(survival\\)" NOCONTENT
-Redis returns 588 documents that will have at least one of these tags in their genres array:
+```
 
+Redis returns 588 documents that will have at least one of these tags in their genres array:
+```
 1) "588"
 2) "ru204:book:9847"
 3) "ru204:book:436"
@@ -1970,11 +2004,15 @@ Redis returns 588 documents that will have at least one of these tags in their g
 9) "ru204:book:3315"
 10) "ru204:book:2006"
 11) "ru204:book:18987"
+```
+
 Now let's find all the books that have both tag words Young Adult and Adventure (survival) in their genres array. This will refine the search down as not all books will have both tags:
-
+```
 FT.SEARCH index:bookdemo "@genres:{Young Adult} @genres:{Adventure \\(survival\\)" NOCONTENT
-Redis has found 41 books that have both tags:
+```
 
+Redis has found 41 books that have both tags:
+```
 1) "41"
 2) "ru204:book:9847"
 3) "ru204:book:436"
@@ -1986,11 +2024,15 @@ Redis has found 41 books that have both tags:
 9) "ru204:book:18987"
 10) "ru204:book:306"
 11) "ru204:book:1647"
+```
+
 Finally, let's explore the usage of negation in queries. We can intentionally remove certain query matches of documents we don't want as results. This can be used with all search fields. Let's add a negated query to our search for books that have Young Adult and Adventure (survival) tag words: no horror! We'll simply add this as another @genres query only with a minus (-) at the beginning of the field name:
-
+```
 FT.SEARCH index:bookdemo "@genres:{Young Adult} @genres:{Adventure \\(survival\\) -@genres:{horror}" NOCONTENT
-Redis has found 28 matches now. Not too scary but plenty of adventure for young adults:
+```
 
+Redis has found 28 matches now. Not too scary but plenty of adventure for young adults:
+```
 1) "28"
 2) "ru204:book:9847"
 3) "ru204:book:436"
@@ -2002,28 +2044,44 @@ Redis has found 28 matches now. Not too scary but plenty of adventure for young 
 9) "ru204:book:1647"
 10) "ru204:book:544"
 11) "ru204:book:1860"
-Search by GEO
+```
+
+- Search by GEO
+
 For GEO data types, we can create a temporary index with a number of JSON documents to demonstrate the capabilities of querying geo data types.
 
 Let's create a few JSON objects representing libraries that contain their name, address, geolocation coordinates, and a list of facilities and capabilities for their members. Execute the following lines to your redis-cli or RedisInsight:
-
+```
 JSON.SET hands-on_3.2:library:1 $ '{"name": "Chatham Square Library",  "address": {"street": "33 East Broadway", "city":"New York",  "state":"NY", "zip": "10002"},"coordinates": "-73.9986848, 40.7133381","facilities": ["wifi", "desks", "laptops", "printers", "photocopier", "viewing rooms"]}'
+
 JSON.SET hands-on_3.2:library:2 $ '{"name": "Bloomingdale Library", "address": {"street": "150 West 100th Street","city":"New York","state":"NY", "zip": "10025"}, "coordinates": "-73.9698101, 40.795855", "facilities": ["desks", "printers", "viewing rooms"]}'
+
 JSON.SET hands-on_3.2:library:3 $ '{"name": "Aguilar Library", "address": {"street": "174 East 110th Street","city":"New York", "state":"NY", "zip": "10029"}, "coordinates": "-73.9456247, 40.7942365", "facilities": ["wifi", "laptops", "photocopier"]}'
+
 JSON.SET hands-on_3.2:library:4 $ '{"name": "Tottenville Library", "address": {"street": "7430 Amboy Road","city":"Staten Island","state":"NY", "zip": "10307"}, "coordinates": "-74.246326, 40.5095237", "facilities": ["wifi", "desks", "laptops", "printers"]}'
+
 JSON.SET hands-on_3.2:library:5 $ '{"name": "Tremont Library", "address": {"street": "1866 Washington Avenue","city": "Bronx","state":"NY", "zip": "10457"}, "coordinates": "-73.9005287, 40.846046","facilities": ["laptops", "printers", "photocopier", "viewing rooms"]}'
+
 JSON.SET hands-on_3.2:library:6 $ '{"name": "Mariners Harbor Library", "address": {"street": "206 South Ave","city": "Staten Island","state":"NY", "zip": "10303"}, "coordinates": "-73.9005287, 40.846046", "facilities": ["laptops", "printers", "photocopier"]}'
+
 JSON.SET hands-on_3.2:library:7 $ '{"name": "City Island Library", "address": {"street": "320 City Island Avenue","city": "Bronx","state":"NY", "zip": "10464"}, "coordinates": "-73.9005287, 40.846046", "facilities": ["laptops", "printers", "photocopier"]}'
+
 JSON.SET hands-on_3.2:library:8 $ '{"name": "Throg\'s Neck Library", "address": {"street": "3025 Cross Bronx Expressway","city": "Bronx","state":"NY", "zip": "10465"}, "coordinates": "-73.9005287, 40.846046", "facilities": ["desks", "viewing rooms", "wifi", "laptops"]}'
+
 FT.CREATE index:library ON JSON PREFIX 1 "hands-on_3.2:library:" SCHEMA $.name AS name TEXT $.address.street AS street_address TEXT $.address.zip AS zip TAG $.address.city AS city TAG $.coordinates AS coordinates GEO $.facilities[*] AS facilities TAG
+```
+
 We should now have a small index of 8 JSON documents representing various libraries in New York City. Let's run some queries!
 
 1. GEO search
+
 Let's find the nearest library from a specific location, say -73.9616473° longitude and 40.772253° latitude. Let's see if there are any available within three kilometers:
-
+```
 FT.SEARCH index:library "@coordinates:[-73.9616473 40.772253 3 km]"
-Redis returns two documents that are within the 3 kilometer radius based on their geo coordinates:
+```
 
+Redis returns two documents that are within the 3 kilometer radius based on their geo coordinates:
+```
 1) "2"
 2) "hands-on_3.2:library:2"
 3) 1) "$"
@@ -2031,20 +2089,30 @@ Redis returns two documents that are within the 3 kilometer radius based on thei
 4) "hands-on_3.2:library:3"
 5) 1) "$"
    2) "{\"name\":\"Aguilar Library\",\"address\":{\"street\":\"174 East 110th Street\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10029\"},\"coordinates\":\"-73.9456247, 40.7942365\",\"facilities\":[\"wifi\",\"laptops\",\"photocopier\"]}"
+```
+
 3. GEO Search with Tag queries
+
 Let's find any library around the same location within three kilometers that have wifi facilities:
-
+```
 FT.SEARCH index:library "@coordinates:[-73.9616473 40.772253 3 km] @facilities:{wifi}"
-Redis returns one document for Aguilar Library that is within our georadius AND has wifi facilities:
+```
 
+Redis returns one document for Aguilar Library that is within our georadius AND has wifi facilities:
+```
 1) "1"
 2) "hands-on_3.2:library:3"
 3) 1) "$"
    2) "{\"name\":\"Aguilar Library\",\"address\":{\"street\":\"174 East 110th Street\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10029\"},\"coordinates\":\"-73.9456247, 40.7942365\",\"facilities\":[\"wifi\",\"laptops\",\"photocopier\"]}"
-Index Clean-up
-Before finishing this hands-on exercise, make sure to delete this small index to make room for more exercises and Units. Run the FT.DROPINDEX command followed by the index name to ensure it is deleted:
+```
 
+- Index Clean-up
+
+Before finishing this hands-on exercise, make sure to delete this small index to make room for more exercises and Units. Run the [FT.DROPINDEX](https://redis.io/commands/ft.dropindex/) command followed by the index name to ensure it is deleted:
+```
 FT.DROPINDEX index:library
+```
+
 Redis should return an "OK" to indicate successful deletion.
 
 Now that we're comfortable querying our index, let's explore ways to tailor the return values with JSONPath projections in the next module.
