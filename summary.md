@@ -3026,27 +3026,4 @@ Redis returns the 5 lowest scoring books of 2015:
 ```
 
 
-#### IV. Indexing and Searching in Your Application
-
-##### 1. 
-##### 2. 
-##### 3. 
-##### 4. 
-##### 5. 
-##### 6. 
-
-
-#### V. Advanced Topics
-
-##### 1. 
-##### 2. 
-##### 3. 
-##### 4. 
-##### 5. 
-##### 6. 
-
-
-#### Epilogue 
-
-
-### EOF (2024/09/27) 
+[Continue to Part 2](summary-cont.md)
