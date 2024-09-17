@@ -2122,19 +2122,25 @@ Now that we're comfortable querying our index, let's explore ways to tailor the 
 The results of a query don't have to be limited to either the entire document or just one or more of the indexed fields. RediSearch supports JSONPath projections so that you can specify which fields from the matching documents to return, even if those fields are not indexed.
 
 Let's consider a typical search result for Adrian Tchaikovsky's book "Children of Time". We'll search by the author's name AND the book title to receive a single document:
-
+```
 FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky @title:Children of Time"
-Because we provided clauses to match both the author and title fields, both of these must be satisfied in order for there to be a match. Here is the resulting book:
+```
 
+Because we provided clauses to match both the author and title fields, both of these must be satisfied in order for there to be a match. Here is the resulting book:
+```
 1) "1"
 2) "ru204:book:6301"
 3) 1) "$"
     2) "{\"author\":\"Adrian Tchaikovsky\",\"id\":\"6301\",\"description\":\"A race for survival among the stars... Humanity's last survivors escaped earth's ruins to find a new home. But when they find it, can their desperation overcome its dangers?WHO WILL INHERIT THIS NEW EARTH?The last remnants of the human race left a dying Earth, desperate to find a new home among the stars. Following in the footsteps of their ancestors, they discover the greatest treasure of the past age\xe2\x80\x94a world terraformed and prepared for human life.But all is not right in this new Eden. In the long years since the planet was abandoned, the work of its architects has borne disastrous fruit. The planet is not waiting for them, pristine and unoccupied. New masters have turned it from a refuge into mankind's worst nightmare.Now two civilizations are on a collision course, both testing the boundaries of what they will do to survive. As the fate of humanity hangs in the balance, who are the true heirs of this new Earth?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adult\",\"apocalyptic (post apocalyptic)\",\"audiobook\",\"fantasy\",\"fiction\",\"science fiction\",\"science fiction (dystopia)\",\"science fiction fantasy\",\"space\",\"space (space opera)\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"6301_1\"},{\"status\":\"on_loan\",\"stock_id\":\"6301_2\"},{\"status\":\"on_loan\",\"stock_id\":\"6301_3\"},{\"status\":\"maintenance\",\"stock_id\":\"6301_4\"},{\"status\":\"maintenance\",\"stock_id\":\"6301_5\"}],\"metrics\":{\"rating_votes\":63766,\"score\":4.27},\"pages\":552,\"title\":\"Children of Time\",\"url\":\"https://www.goodreads.com/book/show/25499718-children-of-time\",\"year_published\":2015}"    
-With JSONPath projections added to the optional RETURN argument, we can choose which fields of the document to receive. If we only wanted the title and description, we could use the standard search field title and the JSONPath $.description. We could also include the URL with $.url. Let's request all three in the following query:
+```
 
+With JSONPath projections added to the optional RETURN argument, we can choose which fields of the document to receive. If we only wanted the title and description, we could use the standard search field **title** and the JSONPath **$.description**. We could also include the URL with **$.url**. Let's request all three in the following query:
+```
 FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky @title:Children of Time" RETURN 3 title $.description $.url
-The return value is now smaller, thus reducing memory and network overheads, plus it only provides the information requested:
+```
 
+The return value is now smaller, thus reducing memory and network overheads, plus it only provides the information requested:
+```
 1) "1"
 2) "ru204:book:6301"
 3) 1) "title"
@@ -2143,11 +2149,15 @@ The return value is now smaller, thus reducing memory and network overheads, plu
     4) "A race for survival among the stars... Humanity's last survivors escaped earth's ruins to find a new home. But when they find it, can their desperation overcome its dangers?WHO WILL INHERIT THIS NEW EARTH?The last remnants of the human race left a dying Earth, desperate to find a new home among the stars. Following in the footsteps of their ancestors, they discover the greatest treasure of the past age\xe2\x80\x94a world terraformed and prepared for human life.But all is not right in this new Eden. In the long years since the planet was abandoned, the work of its architects has borne disastrous fruit. The planet is not waiting for them, pristine and unoccupied. New masters have turned it from a refuge into mankind's worst nightmare.Now two civilizations are on a collision course, both testing the boundaries of what they will do to survive. As the fate of humanity hangs in the balance, who are the true heirs of this new Earth?"
     5) "$.url"
     6) "https://www.goodreads.com/book/show/25499718-children-of-time" 
-Let's find all books by Adrian Tchaikovsky and view their title, description, and url; this time we'll convert the JSONPath projections to human-readable names with the AS argument for each field returned. Note that RETURN is followed by 9, which is the total number of argument strings after RETURN.
+```
 
+Let's find all books by Adrian Tchaikovsky and view their title, description, and url; this time we'll convert the JSONPath projections to human-readable names with the AS argument for each field returned. Note that `RETURN` is followed by 9, which is the total number of argument strings after `RETURN`.
+```
 FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky" RETURN 9 title AS book_title $.description AS book_description $.url AS book_url
-Redis returns a list of two matching documents with only the requested data for each:
+```
 
+Redis returns a list of two matching documents with only the requested data for each:
+```
 1) "2"
 2) "ru204:book:573"
 3) 1) "book_title"
@@ -2163,11 +2173,15 @@ Redis returns a list of two matching documents with only the requested data for 
    4) "A race for survival among the stars... Humanity's last survivors escaped earth's ruins to find a new home. But when they find it, can their desperation overcome its dangers?WHO WILL INHERIT THIS NEW EARTH?The last remnants of the human race left a dying Earth, desperate to find a new home among the stars. Following in the footsteps of their ancestors, they discover the greatest treasure of the past age\xe2\x80\x94a world terraformed and prepared for human life.But all is not right in this new Eden. In the long years since the planet was abandoned, the work of its architects has borne disastrous fruit. The planet is not waiting for them, pristine and unoccupied. New masters have turned it from a refuge into mankind's worst nightmare.Now two civilizations are on a collision course, both testing the boundaries of what they will do to survive. As the fate of humanity hangs in the balance, who are the true heirs of this new Earth?"
    5) "book_url"
    6) "https://www.goodreads.com/book/show/25499718-children-of-time"
-All of the standard JSONPath operators function in the RETURN projections. Let's retrieve all of Adrian Tchaikovsky's books and display the amount of rating votes each book received:
+```
 
+All of the standard JSONPath operators function in the `RETURN` projections. Let's retrieve all of Adrian Tchaikovsky's books and display the amount of rating votes each book received:
+```
 FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky" RETURN 3 $..rating_votes as rating_votes
-Redis returns the $.rating_votes value for each match:
+```
 
+Redis returns the $.rating_votes value for each match:
+```
 1) "2"
 2) "ru204:book:573"
 3) 1) "rating_votes"
@@ -2175,16 +2189,19 @@ Redis returns the $.rating_votes value for each match:
 4) "ru204:book:6301"
 5) 1) "rating_votes"
     2) "63766"    
+```
 
 ##### 6. Hands-On Exercise
 
 In this hands-on exercise we'll explore the capabilities of JSONPath projections when querying our index of book documents.
 
-Let's retrieve the title, description, and year_published of all books by the author Neil Gaiman. Let's rename description as about_the_book and year_published as release_year in our result set.
-
+Let's retrieve the **title**, **description**, and **year_published** of all books by the author Neil Gaiman. Let's rename description as **about_the_book** and **year_published** as **release_year** in our result set.
+```
 FT.SEARCH index:bookdemo "@author:Neil Gaiman" RETURN 7 title $.description AS about_the_book $.year_published AS release_year LIMIT 0 3
-Redis returns a result set containing ten books written by Neil Gaiman. Each result includes the book title, the description (as about_the_book) and year_published (as release_year). To keep the response short, we've paginated the result set using LIMIT 0 3:
+```
 
+Redis returns a result set containing ten books written by Neil Gaiman. Each result includes the book title, the **description** (as **about_the_book**) and **year_published** (as **release_year**). To keep the response short, we've paginated the result set using LIMIT 0 3:
+```
 1) "10"
 2) "ru204:book:625"
 3) 1) "title"
@@ -2207,20 +2224,28 @@ Redis returns a result set containing ten books written by Neil Gaiman. Each res
    4) "When Newbery Medal winner Neil Gaiman and Emmy Award winner Michael Reaves teamed up, they created the bestselling YA novel InterWorld.\xc2\xa0InterWorld tells the story of Joey Harker, a very average kid who discovers that his world is only one of a trillion alternate earths. Some of these earths are ruled by magic. Some are ruled by science. All are at war.\xc2\xa0Joey teams up with alternate versions of himself from an array of these worlds. Together, the army of Joeys must battle evil magicians Lord Dogknife and Lady Indigo to keep the balance of power between all the earths stable. Teens\xe2\x80\x94and tweens and adults\xe2\x80\x94who obsessively read the His Dark Materials and Harry Potter series will be riveted by InterWorld and its sequel, The Silver Dream."
    5) "release_year"
    6) "2007"
+```
+
 Let's look up the inventory of the book "The Dark Is Rising" by Susan Cooper. We should search for this exact title, as many books have the word Dark in the title. For an exact string search, use parenthesis around the title:
-
+```
 FT.SEARCH index:bookdemo "@title:(The Dark Is Rising)" RETURN 1 $.inventory
-Redis returns the entire array of inventory objects for the book.
+```
 
+Redis returns the entire array of inventory objects for the book.
+```
 1) "1"
 2) "ru204:book:2492"
 3) 1) "$.inventory"
    2) "[{\"status\":\"maintenance\",\"stock_id\":\"2492_1\"}]"
-Let's see all of the different editions of the books written by P J Manney. Let's also change the name of editions to languages_offered in our result set:
+```
 
+Let's see all of the different editions of the books written by P J Manney. Let's also change the name of editions to **languages_offered** in our result set:
+```
 FT.SEARCH index:bookdemo "@author:P J Manney" RETURN 5 author title $.editions AS languages_offered
-Redis returns 1 book "R)evolution" with an array named languages_offered:
+```
 
+Redis returns 1 book "R)evolution" with an array named languages_offered:
+```
 1) "1"
 2) "ru204:book:347"
 3) 1) "author"
@@ -2229,11 +2254,15 @@ Redis returns 1 book "R)evolution" with an array named languages_offered:
    4) "R)evolution"
    5) "languages_offered"
    6) "[\"english\",\"spanish\",\"french\"]"
+```
+
 Let's search for books with the tag "mystery (detective)" and "thriller" and display their title and rating scores:
-
+```
 FT.SEARCH index:bookdemo "@genres:{mystery \\(detective\\)} @genres:{thriller}" RETURN 4 title $..score AS rating
-We are using the recursive operator .. to access the field score inside the metrics subdocument. We're also using the implicit AND between to genres queries to look for both tags within the same document. Redis returns 3 documents that have both such tags:
+```
 
+We are using the recursive operator .. to access the field score inside the metrics subdocument. We're also using the implicit AND between to genres queries to look for both tags within the same document. Redis returns 3 documents that have both such tags:
+```
 1) "3"
 2) "ru204:book:1299"
 3) 1) "title"
@@ -2250,12 +2279,14 @@ We are using the recursive operator .. to access the field score inside the metr
    2) "Head On"
    3) "rating"
    4) "4"
+```
 
 ##### 7. Aggregate Queries
 
 RediSearch Aggregations allow you to process search results before Redis returns them to you. Counting the number of documents with a certain criteria, grouping documents with different shared values, and finding trends between multiple values are all examples of aggregations performed within Redis.
 
-Aggregation Example
+- Aggregation Example
+
 This aggregation displays the top ten years the most books were published in descending order:
 
 FT.AGGREGATE index:bookdemo * 
