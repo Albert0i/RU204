@@ -1291,10 +1291,10 @@ We use the [FT.SEARCH](https://redis.io/commands/ft.search/) command to query an
    2) "{\"entire_document\":\"This is the second entire document returned from the search query.\"}"  
 ```
 
-- The first line "1)" contains the number of documents that matched the query.
-- The second line "2)" contains the key name of the first document that matched the query.
-- The third line "3)" includes the actual document. The "$" indicates that that document is being returned from the "root" level.
-- The fourth line "4)" is the next matching document's key name, then followed by the document.
+1. The first line "1)" contains the number of documents that matched the query.
+2. The second line "2)" contains the key name of the first document that matched the query.
+3. The third line "3)" includes the actual document. The "$" indicates that that document is being returned from the "root" level.
+4. The fourth line "4)" is the next matching document's key name, then followed by the document.
 This pattern of key name and document repeats for every document match.
 
 Let's run a quick search for the book "Running Out of Time" to verify our documents were indexed properly. To search for the book with the title "Running Out of Time", run this [FT.SEARCH](https://redis.io/commands/ft.search/) command:
@@ -1316,61 +1316,1495 @@ In the hands-on exercise that follows, you'll get to create your own index and t
 
 ##### 2. Hands-On Exercise
 
-In this hands-on exercise you will create the secondary index from the previous module and verify search functionality by running queries. You should ensure that you have followed the instructions to load the book JSON data from the data loader in the instructions here. If at any time you have any difficulties or questions don't hesitate to contact us on our Discord.
+In this hands-on exercise you will create the secondary index from the previous module and verify search functionality by running queries. You should ensure that you have followed the instructions to load the book JSON data from the data loader in the instructions here. If at any time you have any difficulties or questions don't hesitate to [contact us on our Discord](https://discord.gg/46upnugY5B).
 
-To create an index, we'll use the FT.CREATE command. For a full breakdown of the command and its features, check the command page.
+To create an index, we'll use the **FT.CREATE** command. For a full breakdown of the command and its features, [check the command page](https://redis.io/commands/ft.create/).
 
-We'll be creating an index with the key name index:bookdemo. It will store the author, title, description fields as indexed text data types and pages and the score values within the metrics subdocument as the numeric sortable data types. Lastly, every string within each book's genres array will be indexed as a tag.
+We'll be creating an index with the key name **index:bookdemo**. It will store the author, title, description fields as indexed text data types and pages and the score values within the metrics subdocument as the numeric sortable data types. Lastly, every string within each book's genres array will be indexed as a tag.
 
 Start redis-cli or RedisInsight, connect to your Redis instance that contains the books data, enter the following command:
-
+```
 FT.CREATE index:bookdemo ON JSON PREFIX 1 "ru204:book:" SCHEMA $.author AS author TEXT $.title AS title TEXT $.description AS description TEXT $.pages AS pages NUMERIC SORTABLE $.year_published AS year_published NUMERIC SORTABLE $.metrics.score AS score NUMERIC SORTABLE $.genres[*] AS genres TAG
-Redis should return with:
+```
 
+Redis should return with:
+```
 "OK"
+```
+
 You have successfully created your first index!
 
 Now let's run a few basic queries to verify the book documents have been successfully indexed.
 
-Search by Text Values
+- Search by Text Values
+
 Let's search for a book by the author Sarah Graley. We'll need to search the @author field, a text field, for her name:
-
+```
 FT.SEARCH index:bookdemo "@author: Sarah Graley"
-Redis returns one matching document:
+```
 
+Redis returns one matching document:
+```
 1) "1"
 2) "ru204:book:128"
 3) 1) "$"
    2) "{\"author\":\"Sarah Graley\",\"id\":\"128\",\"description\":\"From comics rising star Sarah Graley, a fresh and funny middle-grade graphic novel featuring a girl who must save a virtual world... and her own!Izzy has an incredible secret -- she can enter the world of her new video game! She meets Rae, a robot who says Izzy is destined to save Dungeon City from the Big Boss. How is this possible?! And how can she fight for this virtual world when she's got a whole real life to keep up with: her family (though she could do without her mom's annoying cat), and her best friend, Eric. Things get even weirder when Izzy loses a life while inside the game, and she starts to worry about what might happen if she gets a Game Over for good. Meanwhile, Eric has been super upset with Izzy since she's been keeping secrets and bailing on their plans. Can Izzy survive Dungeon City and save their friendship?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adventure\",\"childrens\",\"childrens (middle grade)\",\"fantasy\",\"fiction\",\"graphic novels comics\",\"science fiction\",\"sequential art (comics)\",\"sequential art (graphic novels)\",\"young adult\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"128_1\"},{\"status\":\"on_loan\",\"stock_id\":\"128_2\"},{\"status\":\"maintenance\",\"stock_id\":\"128_3\"},{\"status\":\"available\",\"stock_id\":\"128_4\"},{\"status\":\"on_loan\",\"stock_id\":\"128_5\"},{\"status\":\"available\",\"stock_id\":\"128_6\"},{\"status\":\"available\",\"stock_id\":\"128_7\"},{\"status\":\"on_loan\",\"stock_id\":\"128_8\"}],\"metrics\":{\"rating_votes\":943,\"score\":3.89},\"pages\":1216,\"title\":\"Glitch\",\"url\":\"https://www.goodreads.com/book/show/41473811-glitch\",\"year_published\":2019}"
+```
+
 If you see the same result, we have success!
 
-The first line 1) "1" lets us know how many total documents we have in our query results.
-The second line 2) "ru204:book:128" gives us the document's key.
-The third line is the actual document stored in Redis.
-Querying Numeric values
+1. The first line 1) "1" lets us know how many total documents we have in our query results.
+2. The second line 2) "ru204:book:128" gives us the document's key.
+3. The third line is the actual document stored in Redis.
+
+- Querying Numeric values
+
 Now let's find an entry with a numeric value. Let's find out how many books are between 350 and 500 pages in length. To keep the return value short, we'll only ask for the number of documents found, not the content (we'll cover this in a later section):
-
+```
 FT.SEARCH index:bookdemo '@pages:[350 500]' LIMIT 0 0
-Redis should return this number:
+```
 
+Redis should return this number:
+```
 1) "182"
+```
+
 This means that Redis found 182 book documents that have anywhere between 350 and 500 pages.
 
-Querying Tag values
+- Querying Tag values
+
 Finally, let's search the genres arrays for the specific tag "speculative fiction":
-
+```
 FT.SEARCH index:bookdemo "@genres:{speculative fiction}" LIMIT 0 0
+```
 Redis should respond with the number 287:
-
+```
 1) "287"
+```
+
 This means we have 287 book documents that contain the "speculative fiction" tag in their genres array.
 
 If you have successfully executed the three queries above with the same results we have, you are ready to proceed with this section! Great work!
 
-##### 3. 
-##### 4. 
-##### 5. 
-##### 6. 
+##### 3. Querying JSON Documents
+
+Searching Text Fields
+Now that we have established a search index let's begin with a few queries against our book documents.
+
+Let's revisit our first search query for the book titled "Aftertime":
+
+FT.SEARCH index:bookdemo "@title:aftertime"
+The command FT.SEARCH requires an index to use - in this case, index:bookdemo - followed by the search query.
+
+The @ symbol followed by a field name, @title, indicates which field to search. The string "aftertime" is the value to be searched for.
+
+Redis returns the entire document that matches this query.
+
+1) "1"
+2) "ru204:book:425"
+3) 1) "$"
+    2) "{\"author\":\"Sophie Littlefield\",\"id\":\"425\",\"description\":\"Awakening in a bleak landscape as scarred as her body, Cass Dollar vaguely recalls surviving something terrible. Having no idea how many weeks have passed, she slowly realizes the horrifying truth: Ruthie has vanished.And with her, nearly all of civilization.Where once-lush hills carried cars and commerce, the roads today see only cannibalistic Beaters -- people turned hungry for human flesh by a government experiment gone wrong.In a broken, barren California, Cass will undergo a harrowing quest to get Ruthie back. Few people trust an outsider, let alone a woman who became a zombie and somehow turned back, but she finds help from an enigmatic outlaw, Smoke. Smoke is her savior, and her safety.For the Beaters are out there.And the humans grip at survival with their trigger fingers. Especially when they learn that she and Ruthie have become the most feared, and desired, of weapons in a brave new world\xe2\x80\xa6.\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"apocalyptic (post apocalyptic)\",\"fantasy (paranormal)\",\"fantasy (urban fantasy)\",\"futuristic\",\"horror\",\"horror (zombies)\",\"science fiction\",\"science fiction (apocalyptic)\",\"science fiction (dystopia)\",\"young adult\"],\"inventory\":[{\"status\":\"maintenance\",\"stock_id\":\"425_1\"},{\"status\":\"maintenance\",\"stock_id\":\"425_2\"},{\"status\":\"maintenance\",\"stock_id\":\"425_3\"},{\"status\":\"available\",\"stock_id\":\"425_4\"},{\"status\":\"on_loan\",\"stock_id\":\"425_5\"},{\"status\":\"available\",\"stock_id\":\"425_6\"},{\"status\":\"available\",\"stock_id\":\"425_7\"},{\"status\":\"available\",\"stock_id\":\"425_8\"},{\"status\":\"maintenance\",\"stock_id\":\"425_9\"},{\"status\":\"available\",\"stock_id\":\"425_10\"}],\"metrics\":{\"rating_votes\":3459,\"score\":3.54,\"popularity\":{\"<18\":20,\"18-25\":32,\"26-35\":48,\"36-45\":56,\"46-55\":64,\">55\":37}},\"pages\":738,\"title\":\"Aftertime\",\"url\":\"https://www.goodreads.com/book/show/9065272-aftertime\",\"year_published\":2011}"    
+If the search value is truncated from "aftertime" to "after", all of the documents with a title containing the string "after" in their "title" field will be returned.
+
+You may not always want Redis to return the whole document. Use the optional RETURN parameter to only receive fields that you specify. This approach saves compute time and memory in your application, on the Redis Server and also reduces network transfer time. Let's return just the title field:
+
+FT.SEARCH index:bookdemo "@title:after" RETURN 1 title
+Redis has found 10 search results with titles containing "After":
+
+1) "10"
+2) "ru204:book:1588"
+3) 1) "title"
+    2) "In the After"
+4) "ru204:book:6623"
+5) 1) "title"
+    2) "One Second After"
+6) "ru204:book:364"
+7) 1) "title"
+    2) "After the Apocalypse"
+8) "ru204:book:96"
+9) 1) "title"
+    2) "A Wish After Midnight"
+10) "ru204:book:419"
+11) 1) "title"
+    2) "After the Fall, Before the Fall, During the Fall"
+12) "ru204:book:438"
+13) 1) "title"
+    2) "After the Snow"
+14) "ru204:book:307"
+15) 1) "title"
+    2) "After Eden"
+16) "ru204:book:496"
+17) 1) "title"
+    2) "After Atlas"
+18) "ru204:book:24453"
+19) 1) "title"
+    2) "Life After Life"
+20) "ru204:book:106"
+21) 1) "title"
+    2) "The Day After Never"    
+RETURN must be followed by the number of properties requested then each property name.
+
+As an example, to search for books containing the word "shadow" and only receive the book title and author, the following command should be executed:
+
+FT.SEARCH index:bookdemo "@title:shadow" RETURN 2 title author
+Redis returns ten documents with only their title and author values:
+
+1) "10"
+2) "ru204:book:3750"
+3) 1) "title"
+    2) "The Shadow Rising"
+    3) "author"
+    4) "Robert Jordan"
+4) "ru204:book:1155"
+5) 1) "title"
+    2) "Alien: Out of the Shadows"
+    3) "author"
+    4) "Tim Lebbon"
+6) "ru204:book:5285"
+7) 1) "title"
+    2) "Ender's Shadow"
+    3) "author"
+    4) "Orson Scott Card"
+8) "ru204:book:293"
+9) 1) "title"
+    2) "King of Shadows"
+    3) "author"
+    4) "Susan Cooper"
+10) "ru204:book:1559"
+11) 1) "title"
+    2) "The Creeping Shadow"
+    3) "author"
+    4) "Jonathan Stroud"
+12) "ru204:book:5198"
+13) 1) "title"
+    2) "The Way of Shadows"
+    3) "author"
+    4) "Brent Weeks"
+14) "ru204:book:1120"
+15) 1) "title"
+    2) "Shadows"
+    3) "author"
+    4) "Ilsa J. Bick"
+16) "ru204:book:2255"
+17) 1) "title"
+    2) "Beyond the Shadows"
+    3) "author"
+    4) "Brent Weeks"
+18) "ru204:book:2057"
+19) 1) "title"
+    2) "Shadow's Edge"
+    3) "author"
+    4) "Brent Weeks"
+20) "ru204:book:63"
+21) 1) "title"
+    2) "Weighing Shadows"
+    3) "author"
+    4) "Lisa Goldstein"    
+To reduce the response size to only the number of matches and the keys of the matching documents, use the NOCONTENT option after the query:
+
+FT.SEARCH index:bookdemo "@title:cat" NOCONTENT
+Redis returns with only the number of matches and matching keys:
+
+1) "4"
+2) "ru204:book:697"
+3) "ru204:book:510"
+4) "ru204:book:11164"
+5) "ru204:book:743"
+Search by TAG
+Searching by the TAG search type allows the developer to efficiently search through arrays or strings of keywords within a document. In the book example, RediSearch indexes every element within the genres array as a TAG. This allows us to search for all documents that may have "Science Fiction" or "Fantasy" within their respective arrays.
+
+The following is an example of a genres array that will be indexed as 5 separate TAGS by RediSearch:
+
+["Science Fiction", "Dystopian Fiction", "Dark Fiction", "Fantasy", "Space Opera"]
+TAGS can also be assigned to string values that may have multiple keywords with separators or white space. Redis will parse these keywords out of the string when provided with an optional SEPARATOR argument and the separator character or white space. Here is an example of a string of 5 genres in one string separated commas.
+
+"science fiction (aliens), science fiction (dystopian), apocalyptic (post apocalyptic), fantasy, space opera"
+This is an example of creating an index with genres set as a string of keywords separated by a comma rather than an array of keywords:
+
+FT.CREATE index:bookdemo 
+  ON JSON 
+  PREFIX 1 "ru204:book:" 
+SCHEMA 
+  $.author AS author TEXT
+  $.title AS title TEXT
+  $.description AS description TEXT
+  $.pages AS pages NUMERIC SORTABLE
+  $.metrics.score AS score NUMERIC SORTABLE
+  $.genres AS genres TAG SEPARATOR ,
+Let's explore the usage of TAG values by searching for all books with the tag science fiction (dystopia):
+
+FT.SEARCH index:bookdemo "@genres:{science fiction \\(dystopia\\)}" nocontent
+Note that when searching tag fields, the key word(s) must be wrapped in curly brackets. Also, when a query for tags contains punctuation, the punctuation must be escaped with a backslash character "\\".
+
+Redis returns a response indicating that 521 results matched our tag phrase "science fiction (dystopia)"
+
+1) "521"
+2) "ru204:book:551"
+3) "ru204:book:676"
+4) "ru204:book:1070"
+5) "ru204:book:585"
+6) "ru204:book:548"
+7) "ru204:book:1950"
+8) "ru204:book:649"
+9) "ru204:book:718"
+10) "ru204:book:557"
+11) "ru204:book:897"    
+Multiple TAG keywords may also be used when searching for documents. Lets search for books that have either "science fiction (dystopia)" or "science fiction (apocalyptic)" as TAGs:
+
+FT.SEARCH index:bookdemo "@genres:{science fiction \\(dystopia\\) | science fiction \\(apocalyptic\\)}" nocontent
+Note the pipe operator | separating the two TAG values. This acts as an OR operator and will return documents that have either TAG.
+
+Redis returns 524 documents this time:
+
+1) "524"
+2) "ru204:book:557"
+3) "ru204:book:485"
+4) "ru204:book:6146"
+5) "ru204:book:844"
+6) "ru204:book:1340"
+7) "ru204:book:424"
+8) "ru204:book:646"
+9) "ru204:book:2006"
+10) "ru204:book:4234"
+11) "ru204:book:665"    
+To search for books that have BOTH TAG words, include the query once for each TAG entry:
+
+FT.SEARCH index:bookdemo "@genres:{science fiction \\(dystopia\\) @genres:{science fiction \\(apocalyptic\\)}" nocontent
+Note that there are two distinct queries that must be matched before a document is considered a match. This is the equivalent of an AND operator.
+
+Redis returns 111 distinct documents that match both TAG searches:
+
+1) "111"
+2) "ru204:book:557"
+3) "ru204:book:485"
+4) "ru204:book:6146"
+5) "ru204:book:844"
+6) "ru204:book:1340"
+7) "ru204:book:424"
+8) "ru204:book:646"
+9) "ru204:book:2006"
+10) "ru204:book:4234"
+11) "ru204:book:665"    
+Full documentation on the TAG field type in RediSearch can be found here.
+
+Searching Numeric Fields
+Use the NUMERIC search type when you want to search numeric data by exact value or a range of values.
+
+Let's look for books that have exactly 1000 pages. It should be noted that numeric queries require two number values, the upper and lower bounds for a range. If we are searching for one specific value, use that value as the upper and lower bound. Numeric queries also require square brackets surrounding the two values. Here is the full query for books that contain exactly 1000 pages:
+
+FT.SEARCH index:bookdemo "@pages:[1000 1000]" RETURN 1 title
+Redis returns 2 matches for books with exactly 1000 pages:
+
+1) "2"
+2) "ru204:book:266"
+3) 1) "title"
+    2) "Revolutionary War on Wednesday"
+4) "ru204:book:497"
+5) 1) "title"
+    2) "How to Invent Everything: A Survival Guide for the Stranded Time Traveler"    
+Let's find books that are between 100 and 350 pages in length. Our lower bound is 100 and our upper bound is 350, inclusively.
+
+Our search query would be:
+
+FT.SEARCH index:bookdemo "@pages:[100 350]" return 2 title pages
+We'll get a count of the number of matching documents back plus the first 10 matches. Redis returns 10 documents by default - later we'll see how to paginate through the entire result set​​:
+
+1) "192"
+2) "ru204:book:32"
+3) 1) "title"
+    2) "Can I Build Another Me"
+    3) "pages"
+    4) "256"
+4) "ru204:book:594"
+5) 1) "title"
+    2) "House of Stairs"
+    3) "pages"
+    4) "311"
+6) "ru204:book:664"
+7) 1) "title"
+    2) "The Cyberiad"
+    3) "pages"
+    4) "246"
+8) "ru204:book:2900"
+9) 1) "title"
+    2) "Red Clocks"
+    3) "pages"
+    4) "207"
+10) "ru204:book:7300"
+11) 1) "title"
+    2) "Sleeping Beauties"
+    3) "pages"
+    4) "205"
+12) "ru204:book:2006"
+13) 1) "title"
+    2) "Earth Abides"
+    3) "pages"
+    4) "226"
+14) "ru204:book:6364"
+15) 1) "title"
+    2) "A God in Ruins"
+    3) "pages"
+    4) "284"
+16) "ru204:book:19551"
+17) 1) "title"
+    2) "The Passage"
+    3) "pages"
+    4) "239"
+18) "ru204:book:8851"
+19) 1) "title"
+    2) "Rivers of London"
+    3) "pages"
+    4) "321"
+20) "ru204:book:955"
+21) 1) "title"
+    2) "A Dead Djinn in Cairo"
+    3) "pages"
+    4) "288"    
+Now let's search for books that have a ratings score higher than 4.5. To represent boundless range limits, Redis uses the special "numbers" -inf, inf and +inf. We'll also want to search for all scores greater than 4.5 - this can be represented by a parenthesis to the left of 4.5: "(4.5". Here is the full query:
+
+FT.SEARCH index:bookdemo "@score:[(4.5 +inf]" return 1 score
+Redis has returned 17 matches of books with scores higher than 4.5:
+
+1) "17"
+2) "ru204:book:10640"
+3) 1) "score"
+    2) "4.53"
+4) "ru204:book:1559"
+5) 1) "score"
+    2) "4.51"
+6) "ru204:book:10542"
+7) 1) "score"
+    2) "4.51"
+8) "ru204:book:458"
+9) 1) "score"
+    2) "4.53"
+10) "ru204:book:302"
+11) 1) "score"
+    2) "4.52"
+12) "ru204:book:365"
+13) 1) "score"
+    2) "4.55"
+14) "ru204:book:1600"
+15) 1) "score"
+    2) "4.6"
+16) "ru204:book:422"
+17) 1) "score"
+    2) "4.55"
+18) "ru204:book:22369"
+19) 1) "score"
+    2) "4.53"
+20) "ru204:book:384"
+21) 1) "score"
+    2) "4.56"    
+Querying Timestamp Values
+Timestamps may be queried by converting them to the UNIX timestamp format. Lets search for book documents that were entered into the system within the last seven days of the current timestamp (1660521906). This would create a query with the lower bound being the current time (1660521906) minutes 7 weeks of seconds (604800), resulting in 1659917106:
+
+FT.SEARCH index:bookdemo "@date_created:[1659917106 1660521906]"
+This would return all documents with UNIX timestamps from the current time to 1 week ago. Note that the documents in index:bookdemo do not have a numeric timestamp field, but we could include one in our FT.CREATE command like so:
+
+FT.CREATE index:bookdemo
+...
+$.date_created AS date_created NUMERIC SORTABLE
+...   
+Geographic Searches
+Values for the GEO search type must be formatted as a string containing a longitude (first) and latitude separated by a comma. Let's take a look at the longitude and latitude of the Golden Gate Bridge in San Francisco, California:
+
+Longitude: -122.4783
+Latitude: 37.8199
+If we were making a document storing GEO data on attractions to visit, we might store this data like so:
+
+{
+    "name": "Golden Gate Bridge",
+    "type": "infrastructure",
+    "description": "The Golden Gate Bridge is a suspension bridge spanning the Golden Gate, the one-mile-wide (1.6 km) strait connecting San Francisco Bay and the Pacific Ocean. The structure links the U.S. city of San Francisco, California—the northern tip of the San Francisco Peninsula—to Marin County, carrying both U.S. Route 101 and California State Route 1 across the strait.",
+    "location": "-122.4783, 37.8199"
+}      
+To create an index for this attraction document, we would use the FT.CREATE command to assign a GEO type to the JSONPath for the location field:
+
+FT.CREATE index:bookdemo 
+...
+    $.location AS location GEO SORTABLE
+...   
+Geosearches can now be performed on locations to find documents with location coordinates that are within a given radius measured in kilometers, miles, meters, or feet of a supplied longitude / latitude point.
+
+The query format is as follows:
+
+@location:[{lon} {lat} {radius} {m|km|mi|ft}]
+Querying for a location that would return the Golden Gate Bridge as a result would look like this:
+
+FT.SEARCH index:geotest "@location:[-122.4783 37.8175 50 km]"
+The query provides a longitude, latitude, a radius length, and a unit of measurement. Redis searches all documents for GEO coordinates that would match that query:
+
+1) "1"
+2) "attractions:1"
+3) 1) "$"
+    2) "{\"name\":\"Golden Gate Bridge\",\"type\":\"infrastructure\",\"description\":\"The Golden Gate Bridge is a suspension bridge spanning the Golden Gate, the one-mile-wide (1.6 km) strait connecting San Francisco Bay and the Pacific Ocean. The structure links the U.S. city of San Francisco, California\xe2\x80\x94the northern tip of the San Francisco Peninsula\xe2\x80\x94to Marin County, carrying both U.S. Route 101 and California State Route 1 across the strait.\",\"location\":\"-122.4783, 37.8199\"}"
+Query Syntax
+RediSearch supports a wide variety of query options to search throughout the indexes in an efficient manner. Here is a summary of the query syntax (for an in depth dive into the search syntax, we recommend the Redis University RU203 course):
+
+Multi-word phrases simply a list of tokens, e.g. foo bar baz, implies intersection (AND) of the terms.
+Exact phrases are wrapped in quotes, e.g "hello world".
+OR Unions (i.e word1 OR word2), are expressed with a pipe (|), e.g. hello|hallo|shalom|hola.
+NOT negation using - (i.e. word1 NOT word2) of expressions or sub-queries. e.g. hello -world. As of version 0.19.3, purely negative queries (i.e. -foo or -@title:(foo|bar)) are supported.
+Prefix/Infix/Suffix matches (all terms starting/containing/ending with a term) are expressed with a *. For performance reasons, a minimum term length is enforced (2 by default, but is configurable).
+Wildcard pattern matches: w'foo*bar?'.
+A special "wildcard query" that returns all results in the index - * (cannot be combined with anything else).
+Selection of specific fields using the @{field name}: syntax: hello @field:world.
+Numeric Range matches on numeric fields with the syntax @field:[{min} {max}].
+Geo radius matches on geo fields with the syntax @field:[{lon} {lat} {radius} {m|km|mi|ft}].
+Tag field filters with the syntax @field:{tag | tag | ...}.
+Optional terms or clauses: foo ~bar means bar is optional but documents with bar in them will rank higher.
+Fuzzy matching on terms: %hello% means all terms with Levenshtein distance of 1 from "hello".
+An expression in a query can be wrapped in parentheses to disambiguate, e.g. (hello|hella) (world|werld).
+Query attributes can be applied to individual clauses, e.g. (foo bar) => { $weight: 2.0; $slop: 1; $inorder: false; }.
+Combinations of the above can be used together, e.g hello (world|foo) "bar baz" bbbb.
+The full RediSearch query syntax documentation can be found here.
+
+##### 4. Hands-On Exercise
+
+In this hands-on exercise we'll be performing Text, Numeric, and Tag queries against our index:bookdemo index. We'll also create a simple index for GEO data and perform a few georadius queries as well. Understanding this section is crucial to successfully navigating the next section. If you have any questions or need assistance, please reach out to us on Discord.
+
+Search by Text
+In this part we'll be performing query on Text search fields. To keep this document manageable, where relevant we've included the NOCONTENT clause in our queries so that we only receive the document keys instead of the entire document.
+
+1. Simple Text search
+The following query searches for any document with the author field populated with "Margaret Peterson Haddix". The NOCONTENT clause flags that no documents should be returned, only the number of total documents found and the default first ten matching document keys.
+
+FT.SEARCH index:bookdemo "@author: Margaret Peterson Haddix" NOCONTENT
+Redis returns the total number of documents that contain "Margaret Peterson Haddix" as the author plus ten document keys that successfully matched:
+
+1) "16"
+2) "ru204:book:768"
+3) "ru204:book:1288"
+4) "ru204:book:300"
+5) "ru204:book:3869"
+6) "ru204:book:1103"
+7) "ru204:book:414"
+8) "ru204:book:443"
+9) "ru204:book:1438"
+10) "ru204:book:1538"
+11) "ru204:book:602"
+2. Search across multiple fields
+Let's find all books written by the author "Margaret Peterson Haddix" with the genre TAG "realistic fiction". First let's find all of her books:
+
+FT.SEARCH index:bookdemo "@author: Margaret Peterson Haddix" NOCONTENT
+Redis reports that there are 16 books written by Margaret Peterson Haddix:
+
+1) "16"
+2) "ru204:book:768"
+3) "ru204:book:1288"
+4) "ru204:book:300"
+5) "ru204:book:3869"
+6) "ru204:book:1103"
+7) "ru204:book:414"
+8) "ru204:book:443"
+9) "ru204:book:1438"
+10) "ru204:book:1538"
+11) "ru204:book:602"
+Let's build on this query and add a search for "realistic fiction" within the @genres field:
+
+FT.SEARCH index:bookdemo "@author: Margaret Peterson Haddix @genres:{realistic fiction}"
+Redis returns one book written by Margaret Peterson Haddix with the genre tag "realistic fiction":
+
+1) "1"
+2) "ru204:book:1538"
+3) 1) "$"
+   2) "{\"author\":\"Margaret Peterson Haddix\",\"id\":\"1538\",\"description\":\"Jessie lives with her family in the frontier village of Clifton, Indiana. When diphtheria strikes the village and the children of Clifton start dying, Jessie's mother sends her on a dangerous mission to bring back help. But beyond the walls of Clifton, Jessie discovers a world even more alien and threatening than she could have imagined, and soon she finds her own life in jeopardy. Can she get help before the children of Clifton, and Jessie herself, run out of time?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adventure\",\"childrens\",\"childrens (middle grade)\",\"fiction\",\"historical (historical fiction)\",\"mystery\",\"realistic fiction\",\"science fiction\",\"science fiction (dystopia)\",\"young adult\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"1538_1\"},{\"status\":\"available\",\"stock_id\":\"1538_2\"},{\"status\":\"maintenance\",\"stock_id\":\"1538_3\"}],\"metrics\":{\"rating_votes\":23387,\"score\":3.99},\"pages\":544,\"title\":\"Running Out of Time\",\"url\":\"https://www.goodreads.com/book/show/227658.Running_Out_of_Time\",\"year_published\":1995}"
+Multiple Field Search, continued
+Stephen King is considered a prolific writer. He has written over 90 novels and collections of short stories in his career! Let's try to search for a single book written by him that has the word "Tower" in it. We'll search for "Stephen King" as the author and add the title fragment "Tower" to the query.
+
+FT.SEARCH index:bookdemo "@author: Stephen King @genres:{horror} @title: Tower" RETURN 1 title
+It looks like Redis found a match! The book we may be looking for is called "The Dark Tower":
+
+1) "1"
+2) "ru204:book:5888"
+3) 1) "title"
+   2) "The Dark Tower"
+Numeric Search
+In this section we'll be looking at Numeric queries. Make sure to read through the syntax documentation for Numeric queries if you are stuck.
+
+1. Search with Text and Numbers
+Stephen King is also known for writing books that are quite long. Let's find out if he has any books below 350 pages:
+
+FT.SEARCH index:bookdemo "@author: Stephen King @pages:[-inf (350]" RETURN 2 title pages
+Notice the parenthesis directly before the 350 in the query. This denotes an exlusive bound or "less than" the number direclty after it. That way we are looking for page numbers below 350, but not actually 350. Redis returns 3 documents:
+
+1) "3"
+2) "ru204:book:2679"
+3) 1) "title"
+   2) "Dreamcatcher"
+   3) "pages"
+   4) "293"
+4) "ru204:book:7300"
+5) 1) "title"
+   2) "Sleeping Beauties"
+   3) "pages"
+   4) "205"
+6) "ru204:book:4361"
+7) 1) "title"
+   2) "Wolves of the Calla"
+   3) "pages"
+   4) "203"
+2. Search with multiple Number queries
+Let's build out the previous query to find all of Stephen King's books less than 350 pages or more than 1000 pages. This will use the pipe operator (|) between two @pages queries:
+
+FT.SEARCH index:bookdemo "@author: Stephen King @pages:[-inf (350] | @pages:[(1000 +inf]" RETURN 2 title pages
+The two @page queries capture all books by Stephen King that are either less than 350 pages, or greater than 1000. The parenthesis next to the 1000 also denotes an exclusive min/max, so we are capturing all documents with greater than 1000 pages:
+
+1) "6"
+2) "ru204:book:7986"
+3) 1) "title"
+   2) "The Drawing of the Three"
+   3) "pages"
+   4) "1211"
+4) "ru204:book:2679"
+5) 1) "title"
+   2) "Dreamcatcher"
+   3) "pages"
+   4) "293"
+6) "ru204:book:7300"
+7) 1) "title"
+   2) "Sleeping Beauties"
+   3) "pages"
+   4) "205"
+8) "ru204:book:4361"
+9) 1) "title"
+   2) "Wolves of the Calla"
+   3) "pages"
+   4) "203"
+10) "ru204:book:6132"
+11) 1) "title"
+   2) "Wizard and Glass"
+   3) "pages"
+   4) "1315"
+12) "ru204:book:38801"
+13) 1) "title"
+   2) "11/22/63"
+   3) "pages"
+   4) "1073"
+Search by Tag
+Let's explore searching by tag words. By adding multiple tags to a single search, we can either expand or refine our search, depending on their usage. If we wanted to find books with the genres Young Adult OR Adventure (survival), we'll receive more results than if we were looking for books with the genres Young Adult AND Adventure (survival).
+
+Let's search for books with either the Young Adult tag or the Adventure (survival) tag:
+
+FT.SEARCH index:bookdemo "@genres:{Young Adult | Adventure \\(survival\\)" NOCONTENT
+Redis returns 588 documents that will have at least one of these tags in their genres array:
+
+1) "588"
+2) "ru204:book:9847"
+3) "ru204:book:436"
+4) "ru204:book:3059"
+5) "ru204:book:1102"
+6) "ru204:book:3368"
+7) "ru204:book:646"
+8) "ru204:book:600"
+9) "ru204:book:3315"
+10) "ru204:book:2006"
+11) "ru204:book:18987"
+Now let's find all the books that have both tag words Young Adult and Adventure (survival) in their genres array. This will refine the search down as not all books will have both tags:
+
+FT.SEARCH index:bookdemo "@genres:{Young Adult} @genres:{Adventure \\(survival\\)" NOCONTENT
+Redis has found 41 books that have both tags:
+
+1) "41"
+2) "ru204:book:9847"
+3) "ru204:book:436"
+4) "ru204:book:3059"
+5) "ru204:book:1102"
+6) "ru204:book:3368"
+7) "ru204:book:646"
+8) "ru204:book:600"
+9) "ru204:book:18987"
+10) "ru204:book:306"
+11) "ru204:book:1647"
+Finally, let's explore the usage of negation in queries. We can intentionally remove certain query matches of documents we don't want as results. This can be used with all search fields. Let's add a negated query to our search for books that have Young Adult and Adventure (survival) tag words: no horror! We'll simply add this as another @genres query only with a minus (-) at the beginning of the field name:
+
+FT.SEARCH index:bookdemo "@genres:{Young Adult} @genres:{Adventure \\(survival\\) -@genres:{horror}" NOCONTENT
+Redis has found 28 matches now. Not too scary but plenty of adventure for young adults:
+
+1) "28"
+2) "ru204:book:9847"
+3) "ru204:book:436"
+4) "ru204:book:3059"
+5) "ru204:book:3368"
+6) "ru204:book:646"
+7) "ru204:book:600"
+8) "ru204:book:306"
+9) "ru204:book:1647"
+10) "ru204:book:544"
+11) "ru204:book:1860"
+Search by GEO
+For GEO data types, we can create a temporary index with a number of JSON documents to demonstrate the capabilities of querying geo data types.
+
+Let's create a few JSON objects representing libraries that contain their name, address, geolocation coordinates, and a list of facilities and capabilities for their members. Execute the following lines to your redis-cli or RedisInsight:
+
+JSON.SET hands-on_3.2:library:1 $ '{"name": "Chatham Square Library",  "address": {"street": "33 East Broadway", "city":"New York",  "state":"NY", "zip": "10002"},"coordinates": "-73.9986848, 40.7133381","facilities": ["wifi", "desks", "laptops", "printers", "photocopier", "viewing rooms"]}'
+JSON.SET hands-on_3.2:library:2 $ '{"name": "Bloomingdale Library", "address": {"street": "150 West 100th Street","city":"New York","state":"NY", "zip": "10025"}, "coordinates": "-73.9698101, 40.795855", "facilities": ["desks", "printers", "viewing rooms"]}'
+JSON.SET hands-on_3.2:library:3 $ '{"name": "Aguilar Library", "address": {"street": "174 East 110th Street","city":"New York", "state":"NY", "zip": "10029"}, "coordinates": "-73.9456247, 40.7942365", "facilities": ["wifi", "laptops", "photocopier"]}'
+JSON.SET hands-on_3.2:library:4 $ '{"name": "Tottenville Library", "address": {"street": "7430 Amboy Road","city":"Staten Island","state":"NY", "zip": "10307"}, "coordinates": "-74.246326, 40.5095237", "facilities": ["wifi", "desks", "laptops", "printers"]}'
+JSON.SET hands-on_3.2:library:5 $ '{"name": "Tremont Library", "address": {"street": "1866 Washington Avenue","city": "Bronx","state":"NY", "zip": "10457"}, "coordinates": "-73.9005287, 40.846046","facilities": ["laptops", "printers", "photocopier", "viewing rooms"]}'
+JSON.SET hands-on_3.2:library:6 $ '{"name": "Mariners Harbor Library", "address": {"street": "206 South Ave","city": "Staten Island","state":"NY", "zip": "10303"}, "coordinates": "-73.9005287, 40.846046", "facilities": ["laptops", "printers", "photocopier"]}'
+JSON.SET hands-on_3.2:library:7 $ '{"name": "City Island Library", "address": {"street": "320 City Island Avenue","city": "Bronx","state":"NY", "zip": "10464"}, "coordinates": "-73.9005287, 40.846046", "facilities": ["laptops", "printers", "photocopier"]}'
+JSON.SET hands-on_3.2:library:8 $ '{"name": "Throg\'s Neck Library", "address": {"street": "3025 Cross Bronx Expressway","city": "Bronx","state":"NY", "zip": "10465"}, "coordinates": "-73.9005287, 40.846046", "facilities": ["desks", "viewing rooms", "wifi", "laptops"]}'
+FT.CREATE index:library ON JSON PREFIX 1 "hands-on_3.2:library:" SCHEMA $.name AS name TEXT $.address.street AS street_address TEXT $.address.zip AS zip TAG $.address.city AS city TAG $.coordinates AS coordinates GEO $.facilities[*] AS facilities TAG
+We should now have a small index of 8 JSON documents representing various libraries in New York City. Let's run some queries!
+
+1. GEO search
+Let's find the nearest library from a specific location, say -73.9616473° longitude and 40.772253° latitude. Let's see if there are any available within three kilometers:
+
+FT.SEARCH index:library "@coordinates:[-73.9616473 40.772253 3 km]"
+Redis returns two documents that are within the 3 kilometer radius based on their geo coordinates:
+
+1) "2"
+2) "hands-on_3.2:library:2"
+3) 1) "$"
+   2) "{\"name\":\"Bloomingdale Library\",\"address\":{\"street\":\"150 West 100th Street\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10025\"},\"coordinates\":\"-73.9698101, 40.795855\",\"facilities\":[\"desks\",\"printers\",\"viewing rooms\"]}"
+4) "hands-on_3.2:library:3"
+5) 1) "$"
+   2) "{\"name\":\"Aguilar Library\",\"address\":{\"street\":\"174 East 110th Street\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10029\"},\"coordinates\":\"-73.9456247, 40.7942365\",\"facilities\":[\"wifi\",\"laptops\",\"photocopier\"]}"
+3. GEO Search with Tag queries
+Let's find any library around the same location within three kilometers that have wifi facilities:
+
+FT.SEARCH index:library "@coordinates:[-73.9616473 40.772253 3 km] @facilities:{wifi}"
+Redis returns one document for Aguilar Library that is within our georadius AND has wifi facilities:
+
+1) "1"
+2) "hands-on_3.2:library:3"
+3) 1) "$"
+   2) "{\"name\":\"Aguilar Library\",\"address\":{\"street\":\"174 East 110th Street\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10029\"},\"coordinates\":\"-73.9456247, 40.7942365\",\"facilities\":[\"wifi\",\"laptops\",\"photocopier\"]}"
+Index Clean-up
+Before finishing this hands-on exercise, make sure to delete this small index to make room for more exercises and Units. Run the FT.DROPINDEX command followed by the index name to ensure it is deleted:
+
+FT.DROPINDEX index:library
+Redis should return an "OK" to indicate successful deletion.
+
+Now that we're comfortable querying our index, let's explore ways to tailor the return values with JSONPath projections in the next module.
+
+##### 5. Querying with JSONPath Expressions
+
+The results of a query don't have to be limited to either the entire document or just one or more of the indexed fields. RediSearch supports JSONPath projections so that you can specify which fields from the matching documents to return, even if those fields are not indexed.
+
+Let's consider a typical search result for Adrian Tchaikovsky's book "Children of Time". We'll search by the author's name AND the book title to receive a single document:
+
+FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky @title:Children of Time"
+Because we provided clauses to match both the author and title fields, both of these must be satisfied in order for there to be a match. Here is the resulting book:
+
+1) "1"
+2) "ru204:book:6301"
+3) 1) "$"
+    2) "{\"author\":\"Adrian Tchaikovsky\",\"id\":\"6301\",\"description\":\"A race for survival among the stars... Humanity's last survivors escaped earth's ruins to find a new home. But when they find it, can their desperation overcome its dangers?WHO WILL INHERIT THIS NEW EARTH?The last remnants of the human race left a dying Earth, desperate to find a new home among the stars. Following in the footsteps of their ancestors, they discover the greatest treasure of the past age\xe2\x80\x94a world terraformed and prepared for human life.But all is not right in this new Eden. In the long years since the planet was abandoned, the work of its architects has borne disastrous fruit. The planet is not waiting for them, pristine and unoccupied. New masters have turned it from a refuge into mankind's worst nightmare.Now two civilizations are on a collision course, both testing the boundaries of what they will do to survive. As the fate of humanity hangs in the balance, who are the true heirs of this new Earth?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adult\",\"apocalyptic (post apocalyptic)\",\"audiobook\",\"fantasy\",\"fiction\",\"science fiction\",\"science fiction (dystopia)\",\"science fiction fantasy\",\"space\",\"space (space opera)\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"6301_1\"},{\"status\":\"on_loan\",\"stock_id\":\"6301_2\"},{\"status\":\"on_loan\",\"stock_id\":\"6301_3\"},{\"status\":\"maintenance\",\"stock_id\":\"6301_4\"},{\"status\":\"maintenance\",\"stock_id\":\"6301_5\"}],\"metrics\":{\"rating_votes\":63766,\"score\":4.27},\"pages\":552,\"title\":\"Children of Time\",\"url\":\"https://www.goodreads.com/book/show/25499718-children-of-time\",\"year_published\":2015}"    
+With JSONPath projections added to the optional RETURN argument, we can choose which fields of the document to receive. If we only wanted the title and description, we could use the standard search field title and the JSONPath $.description. We could also include the URL with $.url. Let's request all three in the following query:
+
+FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky @title:Children of Time" RETURN 3 title $.description $.url
+The return value is now smaller, thus reducing memory and network overheads, plus it only provides the information requested:
+
+1) "1"
+2) "ru204:book:6301"
+3) 1) "title"
+    2) "Children of Time"
+    3) "$.description"
+    4) "A race for survival among the stars... Humanity's last survivors escaped earth's ruins to find a new home. But when they find it, can their desperation overcome its dangers?WHO WILL INHERIT THIS NEW EARTH?The last remnants of the human race left a dying Earth, desperate to find a new home among the stars. Following in the footsteps of their ancestors, they discover the greatest treasure of the past age\xe2\x80\x94a world terraformed and prepared for human life.But all is not right in this new Eden. In the long years since the planet was abandoned, the work of its architects has borne disastrous fruit. The planet is not waiting for them, pristine and unoccupied. New masters have turned it from a refuge into mankind's worst nightmare.Now two civilizations are on a collision course, both testing the boundaries of what they will do to survive. As the fate of humanity hangs in the balance, who are the true heirs of this new Earth?"
+    5) "$.url"
+    6) "https://www.goodreads.com/book/show/25499718-children-of-time" 
+Let's find all books by Adrian Tchaikovsky and view their title, description, and url; this time we'll convert the JSONPath projections to human-readable names with the AS argument for each field returned. Note that RETURN is followed by 9, which is the total number of argument strings after RETURN.
+
+FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky" RETURN 9 title AS book_title $.description AS book_description $.url AS book_url
+Redis returns a list of two matching documents with only the requested data for each:
+
+1) "2"
+2) "ru204:book:573"
+3) 1) "book_title"
+   2) "Dogs of War"
+   3) "book_description"
+   4) "My name is Rex. I am a good dog. Rex is also seven foot tall at the shoulder, bulletproof, bristling with heavy calibre weaponry and his voice resonates with subsonics especially designed to instil fear. With Dragon, Honey and Bees, he's part of a Multiform Assault Pack operating in the lawless anarchy of Campeche, south-eastern Mexico. Rex is a genetically engineered Bioform, a deadly weapon in a dirty war. He has the intelligence to carry out his orders and feedback implants to reward him when he does. All he wants to be is a Good Dog. And to do that he must do exactly what Master says and Master says he's got to kill a lot of enemies. But who, exactly, are the enemies? What happens when Master is tried as a war criminal? What rights does the Geneva Convention grant weapons? Do Rex and his fellow Bioforms even have a right to exist? And what happens when Rex slips his leash? "
+   5) "book_url"
+   6) "https://www.goodreads.com/book/show/35827220-dogs-of-war"
+4) "ru204:book:6301"
+5) 1) "book_title"
+   2) "Children of Time"
+   3) "book_description"
+   4) "A race for survival among the stars... Humanity's last survivors escaped earth's ruins to find a new home. But when they find it, can their desperation overcome its dangers?WHO WILL INHERIT THIS NEW EARTH?The last remnants of the human race left a dying Earth, desperate to find a new home among the stars. Following in the footsteps of their ancestors, they discover the greatest treasure of the past age\xe2\x80\x94a world terraformed and prepared for human life.But all is not right in this new Eden. In the long years since the planet was abandoned, the work of its architects has borne disastrous fruit. The planet is not waiting for them, pristine and unoccupied. New masters have turned it from a refuge into mankind's worst nightmare.Now two civilizations are on a collision course, both testing the boundaries of what they will do to survive. As the fate of humanity hangs in the balance, who are the true heirs of this new Earth?"
+   5) "book_url"
+   6) "https://www.goodreads.com/book/show/25499718-children-of-time"
+All of the standard JSONPath operators function in the RETURN projections. Let's retrieve all of Adrian Tchaikovsky's books and display the amount of rating votes each book received:
+
+FT.SEARCH index:bookdemo "@author:Adrian Tchaikovsky" RETURN 3 $..rating_votes as rating_votes
+Redis returns the $.rating_votes value for each match:
+
+1) "2"
+2) "ru204:book:573"
+3) 1) "rating_votes"
+    2) "4766"
+4) "ru204:book:6301"
+5) 1) "rating_votes"
+    2) "63766"    
+
+##### 6. Hands-On Exercise
+
+In this hands-on exercise we'll explore the capabilities of JSONPath projections when querying our index of book documents.
+
+Let's retrieve the title, description, and year_published of all books by the author Neil Gaiman. Let's rename description as about_the_book and year_published as release_year in our result set.
+
+FT.SEARCH index:bookdemo "@author:Neil Gaiman" RETURN 7 title $.description AS about_the_book $.year_published AS release_year LIMIT 0 3
+Redis returns a result set containing ten books written by Neil Gaiman. Each result includes the book title, the description (as about_the_book) and year_published (as release_year). To keep the response short, we've paginated the result set using LIMIT 0 3:
+
+1) "10"
+2) "ru204:book:625"
+3) 1) "title"
+   2) "A Study in Emerald"
+   3) "about_the_book"
+   4) "This supernatural mystery set in the world of Sherlock Holmes and Lovecraft's Cthulhu Mythos features a brilliant detective and his partner as they try to solve a horrific murder.The complex investigation takes the Baker Street investigators from the slums of Whitechapel all the way to the Queen's Palace as they attempt to find the answers to this bizarre murder of cosmic horror!From the Hugo, Bram Stoker, Locus, World Fantasy, Nebula award-winning, and New York Times bestselling writer Neil Gaiman comes this graphic novel adaptation with art by Eisner award winning artist Rafael Albuquerque!"
+   5) "release_year"
+   6) "2018"
+4) "ru204:book:182"
+5) 1) "title"
+   2) "Eternity's Wheel"
+   3) "about_the_book"
+   4) "The conclusion to the bestselling InterWorld series, from Neil Gaiman, Michael Reaves, and Mallory Reaves!Joey Harker never wanted to be a leader. But he\xe2\x80\x99s the one everyone is looking to now that FrostNight looms, and he\xe2\x80\x99ll have to step up if he has any hope of saving InterWorld, the Multiverse, and everything in between.Eternity\xe2\x80\x99s Wheel is the heart-pounding conclusion to the InterWorld series, full of time and space travel, magic, science, and the bravery of a young boy who must now face his destiny as a young man."
+   5) "release_year"
+   6) "2015"
+6) "ru204:book:2094"
+7) 1) "title"
+   2) "InterWorld"
+   3) "about_the_book"
+   4) "When Newbery Medal winner Neil Gaiman and Emmy Award winner Michael Reaves teamed up, they created the bestselling YA novel InterWorld.\xc2\xa0InterWorld tells the story of Joey Harker, a very average kid who discovers that his world is only one of a trillion alternate earths. Some of these earths are ruled by magic. Some are ruled by science. All are at war.\xc2\xa0Joey teams up with alternate versions of himself from an array of these worlds. Together, the army of Joeys must battle evil magicians Lord Dogknife and Lady Indigo to keep the balance of power between all the earths stable. Teens\xe2\x80\x94and tweens and adults\xe2\x80\x94who obsessively read the His Dark Materials and Harry Potter series will be riveted by InterWorld and its sequel, The Silver Dream."
+   5) "release_year"
+   6) "2007"
+Let's look up the inventory of the book "The Dark Is Rising" by Susan Cooper. We should search for this exact title, as many books have the word Dark in the title. For an exact string search, use parenthesis around the title:
+
+FT.SEARCH index:bookdemo "@title:(The Dark Is Rising)" RETURN 1 $.inventory
+Redis returns the entire array of inventory objects for the book.
+
+1) "1"
+2) "ru204:book:2492"
+3) 1) "$.inventory"
+   2) "[{\"status\":\"maintenance\",\"stock_id\":\"2492_1\"}]"
+Let's see all of the different editions of the books written by P J Manney. Let's also change the name of editions to languages_offered in our result set:
+
+FT.SEARCH index:bookdemo "@author:P J Manney" RETURN 5 author title $.editions AS languages_offered
+Redis returns 1 book "R)evolution" with an array named languages_offered:
+
+1) "1"
+2) "ru204:book:347"
+3) 1) "author"
+   2) "P.J. Manney"
+   3) "title"
+   4) "R)evolution"
+   5) "languages_offered"
+   6) "[\"english\",\"spanish\",\"french\"]"
+Let's search for books with the tag "mystery (detective)" and "thriller" and display their title and rating scores:
+
+FT.SEARCH index:bookdemo "@genres:{mystery \\(detective\\)} @genres:{thriller}" RETURN 4 title $..score AS rating
+We are using the recursive operator .. to access the field score inside the metrics subdocument. We're also using the implicit AND between to genres queries to look for both tags within the same document. Redis returns 3 documents that have both such tags:
+
+1) "3"
+2) "ru204:book:1299"
+3) 1) "title"
+   2) "World of Trouble"
+   3) "rating"
+   4) "4.04"
+4) "ru204:book:3308"
+5) 1) "title"
+   2) "The Last Policeman"
+   3) "rating"
+   4) "3.78"
+6) "ru204:book:1757"
+7) 1) "title"
+   2) "Head On"
+   3) "rating"
+   4) "4"
+
+##### 7. Aggregate Queries
+
+RediSearch Aggregations allow you to process search results before Redis returns them to you. Counting the number of documents with a certain criteria, grouping documents with different shared values, and finding trends between multiple values are all examples of aggregations performed within Redis.
+
+Aggregation Example
+This aggregation displays the top ten years the most books were published in descending order:
+
+FT.AGGREGATE index:bookdemo * 
+  GROUPBY 1 @year_published 
+    REDUCE COUNT 0 AS total_published 
+  SORTBY 2 @total_published DESC 
+  MAX 10
+Redis returns ten records of years_published and total_published in descending order:
+
+1) "106"
+2) 1) "year_published"
+   2) "2015"
+   3) "total_published"
+   4) "86"
+3) 1) "year_published"
+   2) "2013"
+   3) "total_published"
+   4) "85"
+4) 1) "year_published"
+   2) "2014"
+   3) "total_published"
+   4) "82"
+5) 1) "year_published"
+   2) "2012"
+   3) "total_published"
+   4) "74"
+6) 1) "year_published"
+   2) "2011"
+   3) "total_published"
+   4) "73"
+7) 1) "year_published"
+   2) "2016"
+   3) "total_published"
+   4) "70"
+8) 1) "year_published"
+   2) "2017"
+   3) "total_published"
+   4) "70"
+9) 1) "year_published"
+   2) "2010"
+   3) "total_published"
+   4) "59"
+10) 1) "year_published"
+   2) "2018"
+   3) "total_published"
+   4) "57"
+11) 1) "year_published"
+   2) "2007"
+   3) "total_published"
+   4) "52"
+Let's break down the aggregate command into its individual parts:
+
+FT.AGGREGATE index:bookdemo *: this line collects all documents indexed within index:bookdemo. You could also include a query to filter results, but since every document has a year_published value, we'll gather everything.
+GROUPBY 1 @year_published: this separates every document by year into individual groups. Only one field will be used to separate the documents: year_published.
+REDUCE: this declares an intent to transform the multiple records separated by year_published into one single record.
+COUNT 0 AS total_published: this function is executed by REDUCE and converts all of the documents within each grouping of year_published into a single number. That number is referred to as total_published.
+SORTBY 2 @total_published DESC: this sorts each year_published and total_published pair by total_published in descending order.
+MAX 10: a maximum of 10 results will be returned. Note that this MAX is different from the REDUCE function MAX.
+The number and arguments directly after GROUPBY, COUNT, and SORTBY are called parameter arguments. These are used with parameters that take a variable number of arguments. Think of these as a list, with the first argument being a number that specifies how many other arguments follow it. This allows RediSearch to avoid a parsing ambiguity in case one of the arguments has the name of another parameter. For example, to sort by first name, last name, and country, one would specify:
+
+SORTBY 6 firstName ASC lastName DESC country ASC
+Anatomy of an Aggregation
+An aggregation first identifies what documents to collect via a query or wildcard operator (*). It then performs actions upon the documents in a linear fashion; this is known as the pipeline. Here are the most common procedures one would need to perform typical aggregations:
+
+GROUPBY: Group the results in the pipeline based on one or more properties. Each group should have at least one reducer (see below), a function that handles the group entries, either counting them or performing multiple aggregate operations (see below).
+
+REDUCE: Reduce the matching results in each group into a single record, using a reduction function. For example, COUNT will count the number of records in the group.
+
+The reducers can have their own property names using the AS optional argument. If a name is not given, the resulting name will be the name of the reduce function and the group properties. For example, if a name is not given to COUNT_DISTINCT by property @foo, the resulting name will be count_distinct(@foo).
+
+SORTBY: Sort the pipeline up until the point of SORTBY, using a list of properties. By default, sorting is ascending, but ASC or DESC can be added for each property.
+
+MAX is used to optimize sorting, by sorting only for the n-largest elements.
+
+APPLY: Apply a 1-to-1 transformation on one or more properties, and either store the result as a new property down the pipeline, or replace any property using this transformation.
+
+LIMIT: Limit the number of results to return just num results starting at index offset (zero based). As mentioned above, it is much more efficient to use SORTBY ... MAX if we are interested in just limiting the output of a sort operation.
+
+FILTER: Filter the results using predicate expressions relating to values in each result. They are applied post-query and relate to the current state of the pipeline.
+
+Aggregation Example, continued
+Let's explore one more aggregation example. Let's find the top ten authors who have produced the most books in our document collection.
+
+FT.AGGREGATE index:bookdemo *
+  GROUPBY 1 @author 
+    REDUCE COUNT 0 AS published_works 
+  SORTBY 2 @published_works DESC
+  MAX 10
+Redis returns ten records showing each author with their published works, from the highest published_works value down to the lowest:
+
+1) "770"
+2) 1) "author"
+   2) "Terry Pratchett"
+   3) "published_works"
+   4) "26"
+3) 1) "author"
+   2) "Mary Pope Osborne"
+   3) "published_works"
+   4) "18"
+4) 1) "author"
+   2) "Brandon Sanderson"
+   3) "published_works"
+   4) "17"
+5) 1) "author"
+   2) "Margaret Peterson Haddix"
+   3) "published_works"
+   4) "16"
+6) 1) "author"
+   2) "Stephen King"
+   3) "published_works"
+   4) "15"
+7) 1) "author"
+   2) "Jodi Taylor"
+   3) "published_works"
+   4) "15"
+8) 1) "author"
+   2) "Brian K. Vaughan"
+   3) "published_works"
+   4) "14"
+9) 1) "author"
+   2) "Philip K. Dick"
+   3) "published_works"
+   4) "13"
+10) 1) "author"
+   2) "Isaac Asimov"
+   3) "published_works"
+   4) "13"
+11) 1) "author"
+   2) "James Dashner"
+   3) "published_works"
+   4) "12"
+
+##### 8. Hands-On Exercise
+
+This exercise will further examine the FT.AGGREGATE command and a few of the underlying functions.
+
+Let's start by observing the average page count, max page count, and min page count of books per year released since 2000 in ascending order by year. Make sure to apply a floor function to the average page count for readability. If we compile this into a bar chart will we notice a trend?
+
+FT.AGGREGATE index:bookdemo "@year_published:[2000 +inf]" GROUPBY 1 @year_published REDUCE AVG 1 @pages as average_pagecount REDUCE MAX 1 @pages as max_pagecount REDUCE MIN 1 @pages as min_pagecount APPLY floor(@average_pagecount) AS average_pagecount SORTBY 2 @year_published ASC LIMIT 0 21
+Redis returns 21 documents (1 per finished year since 2000) with the average page count, minimum page count, and maximum page count:
+
+1) "21"
+2) 1) "year_published"
+   2) "2000"
+   3) "average_pagecount"
+   4) "873"
+   5) "max_pagecount"
+   6) "1323"
+   7) "min_pagecount"
+   8) "238"
+3) 1) "year_published"
+   2) "2001"
+   3) "average_pagecount"
+   4) "824"
+   5) "max_pagecount"
+   6) "1311"
+   7) "min_pagecount"
+   8) "287"
+4) 1) "year_published"
+   2) "2002"
+   3) "average_pagecount"
+   4) "802"
+   5) "max_pagecount"
+   6) "1390"
+   7) "min_pagecount"
+   8) "291"
+5) 1) "year_published"
+   2) "2003"
+   3) "average_pagecount"
+   4) "795"
+   5) "max_pagecount"
+   6) "1391"
+   7) "min_pagecount"
+   8) "203"
+6) 1) "year_published"
+   2) "2004"
+   3) "average_pagecount"
+   4) "680"
+   5) "max_pagecount"
+   6) "1333"
+   7) "min_pagecount"
+   8) "256"
+7) 1) "year_published"
+   2) "2005"
+   3) "average_pagecount"
+   4) "765"
+   5) "max_pagecount"
+   6) "1342"
+   7) "min_pagecount"
+   8) "225"
+8) 1) "year_published"
+   2) "2006"
+   3) "average_pagecount"
+   4) "869"
+   5) "max_pagecount"
+   6) "1383"
+   7) "min_pagecount"
+   8) "210"
+9) 1) "year_published"
+   2) "2007"
+   3) "average_pagecount"
+   4) "825"
+   5) "max_pagecount"
+   6) "1364"
+   7) "min_pagecount"
+   8) "222"
+10) 1) "year_published"
+   2) "2008"
+   3) "average_pagecount"
+   4) "841"
+   5) "max_pagecount"
+   6) "1374"
+   7) "min_pagecount"
+   8) "207"
+11) 1) "year_published"
+   2) "2009"
+   3) "average_pagecount"
+   4) "754"
+   5) "max_pagecount"
+   6) "1352"
+   7) "min_pagecount"
+   8) "225"
+12) 1) "year_published"
+   2) "2010"
+   3) "average_pagecount"
+   4) "838"
+   5) "max_pagecount"
+   6) "1398"
+   7) "min_pagecount"
+   8) "215"
+13) 1) "year_published"
+   2) "2011"
+   3) "average_pagecount"
+   4) "831"
+   5) "max_pagecount"
+   6) "1396"
+   7) "min_pagecount"
+   8) "202"
+14) 1) "year_published"
+   2) "2012"
+   3) "average_pagecount"
+   4) "760"
+   5) "max_pagecount"
+   6) "1378"
+   7) "min_pagecount"
+   8) "231"
+15) 1) "year_published"
+   2) "2013"
+   3) "average_pagecount"
+   4) "782"
+   5) "max_pagecount"
+   6) "1397"
+   7) "min_pagecount"
+   8) "223"
+16) 1) "year_published"
+   2) "2014"
+   3) "average_pagecount"
+   4) "793"
+   5) "max_pagecount"
+   6) "1393"
+   7) "min_pagecount"
+   8) "225"
+17) 1) "year_published"
+   2) "2015"
+   3) "average_pagecount"
+   4) "777"
+   5) "max_pagecount"
+   6) "1399"
+   7) "min_pagecount"
+   8) "221"
+18) 1) "year_published"
+   2) "2016"
+   3) "average_pagecount"
+   4) "755"
+   5) "max_pagecount"
+   6) "1379"
+   7) "min_pagecount"
+   8) "233"
+19) 1) "year_published"
+   2) "2017"
+   3) "average_pagecount"
+   4) "800"
+   5) "max_pagecount"
+   6) "1391"
+   7) "min_pagecount"
+   8) "205"
+20) 1) "year_published"
+   2) "2018"
+   3) "average_pagecount"
+   4) "803"
+   5) "max_pagecount"
+   6) "1376"
+   7) "min_pagecount"
+   8) "206"
+21) 1) "year_published"
+   2) "2019"
+   3) "average_pagecount"
+   4) "853"
+   5) "max_pagecount"
+   6) "1302"
+   7) "min_pagecount"
+   8) "259"
+22) 1) "year_published"
+   2) "2020"
+   3) "average_pagecount"
+   4) "734"
+   5) "max_pagecount"
+   6) "1396"
+   7) "min_pagecount"
+   8) "229"
+Here's a bar chart made from the figures above:
+
+![alt Bar chart showing query results.](img/3.4.1_Hands-on_Graph.png)
+
+It appears that the page count for every year since 2000 has remained relatively consistent.
+
+##### 9. Sorting Results
+
+When querying an index, it is possible to sort the results by one of the indexed fields. Supported field types are TEXT and NUMERIC. They must be declared SORTABLE at the time the index is created with the FT.CREATE command. Note that sorting large TEXT fields can degrade search performance.
+
+To sort the results of a query, use the SORTBY option after the query expression. We'll specify which field to sort by in ASCending or DESCending order. If neither option is provided, results are returned in ascending order.
+
+Here is an example of a search for all books from 0 to 1000 pages sorted in ascending order. To keep things simple, we are only returning the key name and pages value.
+
+FT.SEARCH index:bookdemo "@pages:[0 1000]" SORTBY pages ASC RETURN 1 pages
+Redis returns 1001 documents with the smallest page count of 202 listed first:
+
+1) "1001"
+2) "ru204:book:61754"
+3) 1) "pages"
+   2) "202"
+4) "ru204:book:4361"
+5) 1) "pages"
+   2) "203"
+6) "ru204:book:66239"
+7) 1) "pages"
+   2) "204"
+8) "ru204:book:7300"
+9) 1) "pages"
+   2) "205"
+10) "ru204:book:1539"
+11) 1) "pages"
+   2) "205"
+12) "ru204:book:565"
+13) 1) "pages"
+   2) "206"
+14) "ru204:book:2900"
+15) 1) "pages"
+   2) "207"
+16) "ru204:book:645"
+17) 1) "pages"
+   2) "207"
+18) "ru204:book:1059"
+19) 1) "pages"
+   2) "208"
+20) "ru204:book:9208"
+21) 1) "pages"
+   2) "209"
+We can also find the highest rating scored books within our document collection. We'll want to search from the highest score possible (5) to the lowest score (0). Adding SORTBY score DESC returns documents with the highest scores first:
+
+FT.SEARCH index:bookdemo "@score:[0 5]" SORTBY score DESC RETURN 1 score
+By default, Redis returns the first ten documents of the search query. When sorted we see the highest rated book received a 4.66:
+
+1) "1487"
+2) "ru204:book:352"
+3) 1) "score"
+   2) "4.66"
+4) "ru204:book:21334"
+5) 1) "score"
+   2) "4.62"
+6) "ru204:book:1600"
+7) 1) "score"
+   2) "4.6"
+8) "ru204:book:116"
+9) 1) "score"
+   2) "4.59"
+10) "ru204:book:205"
+11) 1) "score"
+   2) "4.58"
+12) "ru204:book:2217"
+13) 1) "score"
+   2) "4.57"
+14) "ru204:book:384"
+15) 1) "score"
+   2) "4.56"
+16) "ru204:book:7"
+17) 1) "score"
+   2) "4.56"
+18) "ru204:book:365"
+19) 1) "score"
+   2) "4.55"
+20) "ru204:book:422"
+21) 1) "score"
+   2) "4.55"
+While this is helpful, it should be noted that only the first ten results are given. What if we wanted only the top 3 or 5? What if we wanted to display a list of more than ten results? Proceed to the next unit on LIMIT to explore paginating results.
+
+##### 10. Hands-On Exercise
+
+In this hands-on exercise we'll explore the sorting capabilities of RediSearch.
+
+Let's search for all books by Jodi Taylor and sort them from the book with the highest rating to the lowest returning only the title and score:
+
+FT.SEARCH index:bookdemo "@author:Jodi Taylor" SORTBY score DESC RETURN 2 title score
+Redis returns 15 books with the highest scores first:
+
+1) "15"
+2) "ru204:book:384"
+3) 1) "score"
+   2) "4.56"
+   3) "title"
+   4) "Hope for the Best"
+4) "ru204:book:458"
+5) 1) "score"
+   2) "4.53"
+   3) "title"
+   4) "An Argumentation of Historians"
+6) "ru204:book:121"
+7) 1) "score"
+   2) "4.48"
+   3) "title"
+   4) "Why Is Nothing Ever Simple"
+8) "ru204:book:490"
+9) 1) "score"
+   2) "4.44"
+   3) "title"
+   4) "And the Rest is History"
+10) "ru204:book:145"
+11) 1) "score"
+   2) "4.44"
+   3) "title"
+   4) "The Great St Mary's Day Out"
+12) "ru204:book:472"
+13) 1) "score"
+   2) "4.42"
+   3) "title"
+   4) "Lies, Damned Lies, and History"
+14) "ru204:book:457"
+15) 1) "score"
+   2) "4.42"
+   3) "title"
+   4) "What Could Possibly Go Wrong"
+16) "ru204:book:423"
+17) 1) "score"
+   2) "4.41"
+   3) "title"
+   4) "Doing Time"
+18) "ru204:book:174"
+19) 1) "score"
+   2) "4.38"
+   3) "title"
+   4) "And Now For Something Completely Different"
+20) "ru204:book:188"
+21) 1) "score"
+   2) "4.35"
+   3) "title"
+   4) "Christmas Present"
+Find all books rated 4.5 and above for books that have 350 pages or less in descending order:
+
+FT.SEARCH index:bookdemo "@score:[4.5 5] @pages:[0 350]" SORTBY score DESC RETURN 3 title score pages
+Redis returns 4 matching books with the in descending score order:
+
+1) "4"
+2) "ru204:book:384"
+3) 1) "score"
+   2) "4.56"
+   3) "title"
+   4) "Hope for the Best"
+   5) "pages"
+   6) "347"
+4) "ru204:book:365"
+5) 1) "score"
+   2) "4.55"
+   3) "title"
+   4) "Attack on Titan, Vol. 12"
+   5) "pages"
+   6) "320"
+6) "ru204:book:11835"
+7) 1) "score"
+   2) "4.5"
+   3) "title"
+   4) "The Lord of the Rings"
+   5) "pages"
+   6) "285"
+8) "ru204:book:24393"
+9) 1) "score"
+   2) "4.5"
+   3) "title"
+   4) "The Last Olympian"
+   5) "pages"
+   6) "310"
+Let's find the title and page count of every Terry Pratchett book from the smallest page count to the highest:
+
+FT.SEARCH index:bookdemo "@author:Terry Pratchett" SORTBY pages RETURN 2 title pages
+Redis returns the first ten books with the lowest page count first:
+
+1) "26"
+2) "ru204:book:2315"
+3) 1) "pages"
+   2) "220"
+   3) "title"
+   4) "I Shall Wear Midnight"
+4) "ru204:book:28376"
+5) 1) "pages"
+   2) "327"
+   3) "title"
+   4) "Good Omens: The Nice and Accurate Prophecies of Agnes Nutter, Witch"
+6) "ru204:book:4362"
+7) 1) "pages"
+   2) "336"
+   3) "title"
+   4) "Equal Rites"
+8) "ru204:book:1976"
+9) 1) "pages"
+   2) "392"
+   3) "title"
+   4) "Making Money"
+10) "ru204:book:2022"
+11) 1) "pages"
+   2) "427"
+   3) "title"
+   4) "Unseen Academicals"
+12) "ru204:book:2189"
+13) 1) "pages"
+   2) "490"
+   3) "title"
+   4) "Sourcery"
+14) "ru204:book:3693"
+15) 1) "pages"
+   2) "519"
+   3) "title"
+   4) "The Light Fantastic"
+16) "ru204:book:1436"
+17) 1) "pages"
+   2) "574"
+   3) "title"
+   4) "Maskerade"
+18) "ru204:book:531"
+19) 1) "pages"
+   2) "734"
+   3) "title"
+   4) "The Long Cosmos"
+20) "ru204:book:1890"
+21) 1) "pages"
+   2) "772"
+   3) "title"
+   4) "Eric"
+
+##### 11. Paginating Result Sets
+
+The FT.SEARCH command option LIMIT allows us to specify a start position in the result set to return results from, and how many results from that position to return. By default all queries have a LIMIT of 10 documents beginning with the first result (index 0). LIMIT allows for pagination by taking two parameters: the offset to start at and how many results should be returned from that point. Use LIMIT to paginate through large result sets in a resource efficient manner.
+
+Let's look at a previous query where we searched for the top scoring books. We'll add the extra clause LIMIT 0 5 to return only 5 documents starting at the beginning of the result set.
+
+FT.SEARCH index:bookdemo '@score:[0 5]' SORTBY score DESC RETURN 2 score title LIMIT 0 5
+This will give us the top five scoring books only:
+
+1) "1487"
+2) "ru204:book:352"
+3) 1) "score"
+   2) "4.66"
+   3) "title"
+   4) "Saga: Book Two"
+4) "ru204:book:21334"
+5) 1) "score"
+   2) "4.62"
+   3) "title"
+   4) "The Way of Kings"
+6) "ru204:book:1600"
+7) 1) "score"
+   2) "4.6"
+   3) "title"
+   4) "The Empty Grave"
+8) "ru204:book:116"
+9) 1) "score"
+   2) "4.59"
+   3) "title"
+   4) "The Wandering Inn: Volume 2"
+10) "ru204:book:205"
+11) 1) "score"
+   2) "4.58"
+   3) "title"
+   4) "The More Than Complete Hitchhiker's Guide"
+To receive the number of documents matched by a query without actually receiving the documents, use LIMIT with an offset of 0 and a number of documents of 0. Let's see how many books have the science fiction (robots) tag:
+
+FT.SEARCH index:bookdemo "@genres:{science fiction \\(robots\\)}" LIMIT 0 0
+Redis returns the number 45:
+
+1) "45"
+
+##### 12. Hands-On Exercise
+
+In this exercise we will examine how to manage the number of fields returned from each document that matched a query and how to enforce pagination to keep our queries efficient and fast.
+
+Let's find the top 5 highest rated book titles in 2015:
+
+FT.SEARCH index:bookdemo "@year_published:[2015 2015]" SORTBY score DESC RETURN 2 title score LIMIT 0 5
+Redis returns 5 books out of a possible 86 documents total:
+
+1) "86"
+2) "ru204:book:12596"
+3) 1) "score"
+   2) "4.44"
+   3) "title"
+   4) "Golden Son"
+4) "ru204:book:457"
+5) 1) "score"
+   2) "4.42"
+   3) "title"
+   4) "What Could Possibly Go Wrong"
+6) "ru204:book:244"
+7) 1) "score"
+   2) "4.39"
+   3) "title"
+   4) "Star Wars: Jedi Academy 3: The Phantom Bully"
+8) "ru204:book:1857"
+9) 1) "score"
+   2) "4.37"
+   3) "title"
+   4) "The Hollow Boy"
+10) "ru204:book:35"
+11) 1) "score"
+   2) "4.37"
+   3) "title"
+   4) "Johannes Cabal and the Blustery Day: And Other Tales of the Necromancer"
+Let's find the next 5 highest rated books in 2015:
+
+FT.SEARCH index:bookdemo "@year_published:[2015 2015]" SORTBY score DESC RETURN 2 title score LIMIT 5 5
+Redis returns the next five books in the descending list of highest rated books in 2015:
+
+1) "86"
+2) "ru204:book:2350"
+3) 1) "score"
+   2) "4.31"
+   3) "title"
+   4) "The Fate of Ten"
+4) "ru204:book:25"
+5) 1) "score"
+   2) "4.29"
+   3) "title"
+   4) "Ricky Ricotta's Mighty Robot vs. The Naughty Nightcrawlers From Neptune"
+6) "ru204:book:6301"
+7) 1) "score"
+   2) "4.27"
+   3) "title"
+   4) "Children of Time"
+8) "ru204:book:6050"
+9) 1) "score"
+   2) "4.27"
+   3) "title"
+   4) "Firefight"
+10) "ru204:book:789"
+11) 1) "score"
+   2) "4.25"
+   3) "title"
+   4) "Akarnae"
+Knowing that there are 86 books in total for 2015, let's find the lowest 5 scoring books without changing the sortby order. If we know the total number of documents in our results, we can subtract 5 from the total to calculate our offset then request the five total documents starting at that offset in our result set:
+
+FT.SEARCH index:bookdemo "@year_published:[2015 2015]" SORTBY score DESC RETURN 2 title score LIMIT 81 5
+Redis returns the 5 lowest scoring books of 2015:
+
+1) "86"
+2) "ru204:book:6473"
+3) 1) "score"
+   2) "3.38"
+   3) "title"
+   4) "The Heart Goes Last"
+4) "ru204:book:1342"
+5) 1) "score"
+   2) "3.3"
+   3) "title"
+   4) "Gold Fame Citrus"
+6) "ru204:book:3324"
+7) 1) "score"
+   2) "3.26"
+   3) "title"
+   4) "Aftermath"
+8) "ru204:book:63"
+9) 1) "score"
+   2) "2.93"
+   3) "title"
+   4) "Weighing Shadows"
+10) "ru204:book:28"
+11) 1) "score"
+   2) "2.92"
+   3) "title"
+   4) "In the Deep Dark Deep"
 
 
 #### IV. Indexing and Searching in Your Application
