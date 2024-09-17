@@ -1,3 +1,5 @@
+[Back to Part 1](summary.md)
+
 #### IV. Indexing and Searching in Your Application
 
 ##### 1. 
