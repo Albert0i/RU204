@@ -2091,7 +2091,7 @@ Redis returns two documents that are within the 3 kilometer radius based on thei
    2) "{\"name\":\"Aguilar Library\",\"address\":{\"street\":\"174 East 110th Street\",\"city\":\"New York\",\"state\":\"NY\",\"zip\":\"10029\"},\"coordinates\":\"-73.9456247, 40.7942365\",\"facilities\":[\"wifi\",\"laptops\",\"photocopier\"]}"
 ```
 
-3. GEO Search with Tag queries
+2. GEO Search with Tag queries
 
 Let's find any library around the same location within three kilometers that have wifi facilities:
 ```
