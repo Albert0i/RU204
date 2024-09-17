@@ -1230,7 +1230,10 @@ Best of luck!
 
 Welcome to Section 3. Here, you'll learn how to use the powerful RediSearch secondary indexing and full text query capabilities to search collections of JSON documents and extract statistics from them using aggregate queries. In this section, you'll work with RediSearch at the Redis CLI or add RedisInsight. Once you've mastered the commands here, we'll move on to show you how to include these capabilities in your application code. Let's go.
 
-##### 1. 
+##### 1. Indexing JSON Documents with RediSearch
+
+
+
 ##### 2. 
 ##### 3. 
 ##### 4. 
