@@ -1232,7 +1232,81 @@ Welcome to Section 3. Here, you'll learn how to use the powerful RediSearch seco
 
 ##### 1. Indexing JSON Documents with RediSearch
 
+Welcome to Section 3, where we start combining document storage from RedisJSON with search indexing and querying from RediSearch. For a strong foundational understanding of RediSearch, we recommend that you take [RU203: Querying, Indexing, and Full-Text Search](https://university.redis.com/courses/ru203/). That course is dedicated solely to RediSearch and its unique capabilities.
 
+With RediSearch, we are able to create and maintain indexes that constantly scan for new and updated documents for a fast search experience.
+
+There are four ways that RediSearch can index a field in a JSON document:
+
+- **TEXT**: Allows full-text search queries against the value in this attribute.
+- **TAG**: Allows exact-match queries, such as categories or primary keys, against the value in this attribute.
+- **NUMERIC**: Allows numeric range queries against the value in this attribute. Use **NUMERIC** fields containing UNIX timestamp values to store dates in a way that allows for querying by range.
+- **GEO**: Allows geographic range queries against the value in this attribute. The value of the attribute must be a string containing a longitude (first) and latitude separated by a comma.
+
+Let's explore the motivation behind indexing JSON documents. On their own, each document is only accessible by referencing its specific key name. This means that in order to access a specific document, we need to know its key name. There is no way to efficiently iterate through all of the documents to find text, numeric, or geographic values without building and maintaining secondary indexes using other Redis data structures. This approach adds a lot of complexity to developing and maintaining applications. RediSearch creates and automatically maintains a separate data structure (the index) that associates indexed fields with key names. RediSearch allows multiple properties to be indexed within a single document.
+
+To create an index, a few decisions must be made...
+
+It is highly recommended to establish a consistent schema shared between all of the stored documents. As an example, if documents were stored with user information, all "first name" fields should be named "first_name", "fname", or any other consistent convention. Note that this only matters for fields that you want to index - other parts of the document can still contain arbitrary JSON data in any valid form.
+
+There are limits to the number of fields RediSearch can include in a single index, but you are unlikely to encounter these in normal circumstances. See the [RediSearch documentation](https://redis.io/commands/ft.create/) for details. *It is also recommended to refrain from indexing all of the fields within a document, as that will consume considerable compute overhead and space, which is an antipattern of Redis*. For this course, the schema will include the title (text), author (text), description (text), pages (numeric), genres (tag), and ratings scores (numeric). These are the five properties of our documents that we will use to search.
+
+Keys should be consistently named to allow Redis to index any new documents created. Redis will automatically add any key with a specified prefix to the appropriate index. For this course, our key prefix will be **ru204:book**:
+
+All RediSearch commands are prefixed with **FT**. To create a search index for book documents in the redis-cli or RedisInsight, use the [FT.CREATE](https://redis.io/commands/ft.create/) command.
+```
+FT.CREATE index:bookdemo 
+    ON JSON 
+    PREFIX 1 "ru204:book:" 
+SCHEMA 
+    $.author AS author TEXT
+    $.title AS title TEXT
+    $.description AS description TEXT
+    $.year_published AS year_published NUMERIC SORTABLE
+    $.pages AS pages NUMERIC SORTABLE
+    $.metrics.score AS score NUMERIC SORTABLE
+    $.genres[*] AS genres TAG
+```
+
+Let's breakdown this command line by line:
+
+- FT.CREATE index:bookdemo - this declares that we will be creating an index named index:bookdemo.
+- ON JSON - this declares that the index will be searching through JSON documents.
+- PREFIX 1 "ru204:book:" - this tells RediSearch to only index JSON documents whose keys have the single prefix: ru204:book:. Indexes can include multiple prefixes which must all be declared here when the index is created.
+- SCHEMA - this declares the following patterns as schemas to apply to the search index. Think of this as a list that contains mappings between a JSONPath that points to the data that we want to index from each document, and the type of indexing to perform on that data.
+- $.author AS author TEXT - this selects the $.author value to be indexed. When running queries, the field will be referred to as author. TEXT denotes the value data type. This tells RediSearch to index the data in a way that allows for full-text searches.
+- $.pages AS pages NUMERIC SORTABLE - this selects $.pages as a NUMERIC value to index. When querying the index, $.pages can be referred to as simply pages. SORTABLE is an optional search option on NUMERIC value types that will be covered in a future section.
+- $.genres[*] AS genres TAG - this sets the search index to read every entry within the $.genres array of strings as TAG values. Use a TAG when you want to perform exact match searches on string data.
+
+RediSearch is extremely fast at indexing the data because the index and data are both kept in memory, so we don't have to wait a while for an indexing process to complete before we can start working with the newly created index.
+
+We use the FT.SEARCH command to query an index from the redis-cli or RedisInsight. Let's look at how Redis returns documents that match our search terms. Here's an example response to a search query that matches two documents:
+
+1) "2"
+2) "sample:document:264"
+3) 1) "$"
+   2) "{\"entire_document\":\"This is the first entire document returned from the search query.\"}"
+4) "sample:document:879"	
+5) 1) "$"
+   2) "{\"entire_document\":\"This is the second entire document returned from the search query.\"}"  
+The first line "1)" contains the number of documents that matched the query.
+The second line "2)" contains the key name of the first document that matched the query.
+The third line "3)" includes the actual document. The "$" indicates that that document is being returned from the "root" level.
+The fourth line "4)" is the next matching document's key name, then followed by the document.
+This pattern of key name and document repeats for every document match.
+
+Let's run a quick search for the book "Running Out of Time" to verify our documents were indexed properly. To search for the book with the title "Running Out of Time", run this FT.SEARCH command:
+
+FT.SEARCH index:bookdemo "@title:(Running Out of Time)"
+Redis returns a response with the number of results matching the search as the first entry. For every entry found, the document key is returned followed by the full document:
+
+1) "1"
+2) "ru204:book:1538"
+3) 1) "$"
+   2) "{\"author\":\"Margaret Peterson Haddix\",\"id\":\"1538\",\"description\":\"Jessie lives with her family in the frontier village of Clifton, Indiana. When diphtheria strikes the village and the children of Clifton start dying, Jessie's mother sends her on a dangerous mission to bring back help. But beyond the walls of Clifton, Jessie discovers a world even more alien and threatening than she could have imagined, and soon she finds her own life in jeopardy. Can she get help before the children of Clifton, and Jessie herself, run out of time?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adventure\",\"childrens\",\"childrens (middle grade)\",\"fiction\",\"historical (historical fiction)\",\"mystery\",\"realistic fiction\",\"science fiction\",\"science fiction (dystopia)\",\"young adult\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"1538_1\"},{\"status\":\"available\",\"stock_id\":\"1538_2\"},{\"status\":\"maintenance\",\"stock_id\":\"1538_3\"}],\"metrics\":{\"rating_votes\":23387,\"score\":3.99},\"pages\":544,\"title\":\"Running Out of Time\",\"url\":\"https://www.goodreads.com/book/show/227658.Running_Out_of_Time\",\"year_published\":1995}"
+This indicates that our index is up and running. RediSearch will now automatically track changes on indexed fields in JSON documents with the ru204:book: key prefix and update the index for us.
+
+In the hands-on exercise that follows, you'll get to create your own index and try some basic search queries.
 
 ##### 2. 
 ##### 3. 
