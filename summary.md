@@ -2,6 +2,7 @@
 
 
 #### Prologue 
+This course covers how to use RedisJSON and RediSearch to transform Redis into a powerful document database.
 
 
 #### I. Managing JSON Data in Redis
