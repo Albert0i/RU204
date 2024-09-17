@@ -1081,19 +1081,19 @@ To get a feel for how each client works, check out the video that follows before
 
 ##### 8. What are ULIDs?
 
-In the previous module, we said that one of the capabilities of Redis OM is ID generation. When creating and storing domain entities in a database, each entity requires some sort of unique or primary identifier. For key/value stores such as Redis, this identifier is the key name. For example, in our sample data set, we store the book "The Moon is a Harsh Mistress" by Robert Heinlein at key ru204:book:3903.
+In the previous module, we said that one of the capabilities of Redis OM is ID generation. When creating and storing domain entities in a database, each entity requires some sort of unique or primary identifier. For key/value stores such as Redis, this identifier is the key name. For example, in our sample data set, we store the book "The Moon is a Harsh Mistress" by Robert Heinlein at key **ru204:book:3903**.
 
-The Redis OM clients provide a mechanism for automatically generating unique IDs for you, and they use this ID as part of the key name when persisting your document data to Redis. These IDs are Universally Unique Lexicographically Sortable Identifiers - ULIDs for short. Think of a ULID as a sort of user-friendly, globally unique identifier that is also URL safe and reasonably human readable.
-
-
-A typical ULID looks like this: 01ARZ3NDEKTSV4RRFFQ69G5FAV.
+The Redis OM clients provide a mechanism for automatically generating unique IDs for you, and they use this ID as part of the key name when persisting your document data to Redis. These IDs are **Universally Unique Lexicographically Sortable Identifiers** - ULIDs for short. Think of a ULID as a sort of user-friendly, globally unique identifier that is also URL safe and reasonably human readable.
 
 
-The Redis OM clients allow you to specify your own key naming patterns, so you could for example persist book objects as ru204:book:<ulid> and author objects as ru204:author:<ulid>.
+A typical ULID looks like this: **01ARZ3NDEKTSV4RRFFQ69G5FAV**.
+
+
+The Redis OM clients allow you to specify your own key naming patterns, so you could for example persist book objects as **ru204:book:<ulid>** and author objects as **ru204:author:<ulid>**.
 
 One of the advantages of using these identifiers is that they can be generated in the client, and are guaranteed to be unique. This means that many client instances can concurrently create objects and persist them to Redis without having to have some sort of database managed unique identifier process in place.
 
-If you'd like to learn more about ULIDs, check out the official specification. Note that detailed knowledge of the specification is optional, and not required to be successful with this course!
+If you'd like to learn more about ULIDs, check out the [official specification](https://github.com/ulid/spec). Note that detailed knowledge of the specification is optional, and not required to be successful with this course!
 
 ##### 9. Document Modeling with Redis OM for Node.js
 
