@@ -1280,8 +1280,8 @@ Let's breakdown this command line by line:
 
 RediSearch is extremely fast at indexing the data because the index and data are both kept in memory, so we don't have to wait a while for an indexing process to complete before we can start working with the newly created index.
 
-We use the FT.SEARCH command to query an index from the redis-cli or RedisInsight. Let's look at how Redis returns documents that match our search terms. Here's an example response to a search query that matches two documents:
-
+We use the [FT.SEARCH](https://redis.io/commands/ft.search/) command to query an index from the redis-cli or RedisInsight. Let's look at how Redis returns documents that match our search terms. Here's an example response to a search query that matches two documents:
+```
 1) "2"
 2) "sample:document:264"
 3) 1) "$"
@@ -1289,21 +1289,27 @@ We use the FT.SEARCH command to query an index from the redis-cli or RedisInsigh
 4) "sample:document:879"	
 5) 1) "$"
    2) "{\"entire_document\":\"This is the second entire document returned from the search query.\"}"  
-The first line "1)" contains the number of documents that matched the query.
-The second line "2)" contains the key name of the first document that matched the query.
-The third line "3)" includes the actual document. The "$" indicates that that document is being returned from the "root" level.
-The fourth line "4)" is the next matching document's key name, then followed by the document.
+```
+
+- The first line "1)" contains the number of documents that matched the query.
+- The second line "2)" contains the key name of the first document that matched the query.
+- The third line "3)" includes the actual document. The "$" indicates that that document is being returned from the "root" level.
+- The fourth line "4)" is the next matching document's key name, then followed by the document.
 This pattern of key name and document repeats for every document match.
 
 Let's run a quick search for the book "Running Out of Time" to verify our documents were indexed properly. To search for the book with the title "Running Out of Time", run this FT.SEARCH command:
-
+```
 FT.SEARCH index:bookdemo "@title:(Running Out of Time)"
-Redis returns a response with the number of results matching the search as the first entry. For every entry found, the document key is returned followed by the full document:
+```
 
+Redis returns a response with the number of results matching the search as the first entry. For every entry found, the document key is returned followed by the full document:
+```
 1) "1"
 2) "ru204:book:1538"
 3) 1) "$"
    2) "{\"author\":\"Margaret Peterson Haddix\",\"id\":\"1538\",\"description\":\"Jessie lives with her family in the frontier village of Clifton, Indiana. When diphtheria strikes the village and the children of Clifton start dying, Jessie's mother sends her on a dangerous mission to bring back help. But beyond the walls of Clifton, Jessie discovers a world even more alien and threatening than she could have imagined, and soon she finds her own life in jeopardy. Can she get help before the children of Clifton, and Jessie herself, run out of time?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adventure\",\"childrens\",\"childrens (middle grade)\",\"fiction\",\"historical (historical fiction)\",\"mystery\",\"realistic fiction\",\"science fiction\",\"science fiction (dystopia)\",\"young adult\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"1538_1\"},{\"status\":\"available\",\"stock_id\":\"1538_2\"},{\"status\":\"maintenance\",\"stock_id\":\"1538_3\"}],\"metrics\":{\"rating_votes\":23387,\"score\":3.99},\"pages\":544,\"title\":\"Running Out of Time\",\"url\":\"https://www.goodreads.com/book/show/227658.Running_Out_of_Time\",\"year_published\":1995}"
+```
+
 This indicates that our index is up and running. RediSearch will now automatically track changes on indexed fields in JSON documents with the ru204:book: key prefix and update the index for us.
 
 In the hands-on exercise that follows, you'll get to create your own index and try some basic search queries.
