@@ -1270,13 +1270,13 @@ SCHEMA
 
 Let's breakdown this command line by line:
 
-- FT.CREATE index:bookdemo - this declares that we will be creating an index named index:bookdemo.
-- ON JSON - this declares that the index will be searching through JSON documents.
-- PREFIX 1 "ru204:book:" - this tells RediSearch to only index JSON documents whose keys have the single prefix: ru204:book:. Indexes can include multiple prefixes which must all be declared here when the index is created.
-- SCHEMA - this declares the following patterns as schemas to apply to the search index. Think of this as a list that contains mappings between a JSONPath that points to the data that we want to index from each document, and the type of indexing to perform on that data.
-- $.author AS author TEXT - this selects the $.author value to be indexed. When running queries, the field will be referred to as author. TEXT denotes the value data type. This tells RediSearch to index the data in a way that allows for full-text searches.
-- $.pages AS pages NUMERIC SORTABLE - this selects $.pages as a NUMERIC value to index. When querying the index, $.pages can be referred to as simply pages. SORTABLE is an optional search option on NUMERIC value types that will be covered in a future section.
-- $.genres[*] AS genres TAG - this sets the search index to read every entry within the $.genres array of strings as TAG values. Use a TAG when you want to perform exact match searches on string data.
+- **FT.CREATE index:bookdemo** - this declares that we will be creating an index named index:bookdemo.
+- **ON JSON** - this declares that the index will be searching through JSON documents.
+- **PREFIX 1 "ru204:book:"** - this tells RediSearch to only index JSON documents whose keys have the single prefix: ru204:book:. Indexes can include multiple prefixes which must all be declared here when the index is created.
+- **SCHEMA** - this declares the following patterns as schemas to apply to the search index. Think of this as a list that contains mappings between a JSONPath that points to the data that we want to index from each document, and the type of indexing to perform on that data.
+- **$.author AS author TEXT** - this selects the $.author value to be indexed. When running queries, the field will be referred to as author. TEXT denotes the value data type. This tells RediSearch to index the data in a way that allows for full-text searches.
+- **$.pages AS pages NUMERIC SORTABLE** - this selects $.pages as a NUMERIC value to index. When querying the index, $.pages can be referred to as simply pages. SORTABLE is an optional search option on NUMERIC value types that will be covered in a future section.
+- **$.genres[*] AS genres TAG** - this sets the search index to read every entry within the $.genres array of strings as TAG values. Use a TAG when you want to perform exact match searches on string data.
 
 RediSearch is extremely fast at indexing the data because the index and data are both kept in memory, so we don't have to wait a while for an indexing process to complete before we can start working with the newly created index.
 
@@ -1297,7 +1297,7 @@ We use the [FT.SEARCH](https://redis.io/commands/ft.search/) command to query an
 - The fourth line "4)" is the next matching document's key name, then followed by the document.
 This pattern of key name and document repeats for every document match.
 
-Let's run a quick search for the book "Running Out of Time" to verify our documents were indexed properly. To search for the book with the title "Running Out of Time", run this FT.SEARCH command:
+Let's run a quick search for the book "Running Out of Time" to verify our documents were indexed properly. To search for the book with the title "Running Out of Time", run this [FT.SEARCH](https://redis.io/commands/ft.search/) command:
 ```
 FT.SEARCH index:bookdemo "@title:(Running Out of Time)"
 ```
@@ -1314,7 +1314,59 @@ This indicates that our index is up and running. RediSearch will now automatical
 
 In the hands-on exercise that follows, you'll get to create your own index and try some basic search queries.
 
-##### 2. 
+##### 2. Hands-On Exercise
+
+In this hands-on exercise you will create the secondary index from the previous module and verify search functionality by running queries. You should ensure that you have followed the instructions to load the book JSON data from the data loader in the instructions here. If at any time you have any difficulties or questions don't hesitate to contact us on our Discord.
+
+To create an index, we'll use the FT.CREATE command. For a full breakdown of the command and its features, check the command page.
+
+We'll be creating an index with the key name index:bookdemo. It will store the author, title, description fields as indexed text data types and pages and the score values within the metrics subdocument as the numeric sortable data types. Lastly, every string within each book's genres array will be indexed as a tag.
+
+Start redis-cli or RedisInsight, connect to your Redis instance that contains the books data, enter the following command:
+
+FT.CREATE index:bookdemo ON JSON PREFIX 1 "ru204:book:" SCHEMA $.author AS author TEXT $.title AS title TEXT $.description AS description TEXT $.pages AS pages NUMERIC SORTABLE $.year_published AS year_published NUMERIC SORTABLE $.metrics.score AS score NUMERIC SORTABLE $.genres[*] AS genres TAG
+Redis should return with:
+
+"OK"
+You have successfully created your first index!
+
+Now let's run a few basic queries to verify the book documents have been successfully indexed.
+
+Search by Text Values
+Let's search for a book by the author Sarah Graley. We'll need to search the @author field, a text field, for her name:
+
+FT.SEARCH index:bookdemo "@author: Sarah Graley"
+Redis returns one matching document:
+
+1) "1"
+2) "ru204:book:128"
+3) 1) "$"
+   2) "{\"author\":\"Sarah Graley\",\"id\":\"128\",\"description\":\"From comics rising star Sarah Graley, a fresh and funny middle-grade graphic novel featuring a girl who must save a virtual world... and her own!Izzy has an incredible secret -- she can enter the world of her new video game! She meets Rae, a robot who says Izzy is destined to save Dungeon City from the Big Boss. How is this possible?! And how can she fight for this virtual world when she's got a whole real life to keep up with: her family (though she could do without her mom's annoying cat), and her best friend, Eric. Things get even weirder when Izzy loses a life while inside the game, and she starts to worry about what might happen if she gets a Game Over for good. Meanwhile, Eric has been super upset with Izzy since she's been keeping secrets and bailing on their plans. Can Izzy survive Dungeon City and save their friendship?\",\"editions\":[\"english\",\"spanish\",\"french\"],\"genres\":[\"adventure\",\"childrens\",\"childrens (middle grade)\",\"fantasy\",\"fiction\",\"graphic novels comics\",\"science fiction\",\"sequential art (comics)\",\"sequential art (graphic novels)\",\"young adult\"],\"inventory\":[{\"status\":\"on_loan\",\"stock_id\":\"128_1\"},{\"status\":\"on_loan\",\"stock_id\":\"128_2\"},{\"status\":\"maintenance\",\"stock_id\":\"128_3\"},{\"status\":\"available\",\"stock_id\":\"128_4\"},{\"status\":\"on_loan\",\"stock_id\":\"128_5\"},{\"status\":\"available\",\"stock_id\":\"128_6\"},{\"status\":\"available\",\"stock_id\":\"128_7\"},{\"status\":\"on_loan\",\"stock_id\":\"128_8\"}],\"metrics\":{\"rating_votes\":943,\"score\":3.89},\"pages\":1216,\"title\":\"Glitch\",\"url\":\"https://www.goodreads.com/book/show/41473811-glitch\",\"year_published\":2019}"
+If you see the same result, we have success!
+
+The first line 1) "1" lets us know how many total documents we have in our query results.
+The second line 2) "ru204:book:128" gives us the document's key.
+The third line is the actual document stored in Redis.
+Querying Numeric values
+Now let's find an entry with a numeric value. Let's find out how many books are between 350 and 500 pages in length. To keep the return value short, we'll only ask for the number of documents found, not the content (we'll cover this in a later section):
+
+FT.SEARCH index:bookdemo '@pages:[350 500]' LIMIT 0 0
+Redis should return this number:
+
+1) "182"
+This means that Redis found 182 book documents that have anywhere between 350 and 500 pages.
+
+Querying Tag values
+Finally, let's search the genres arrays for the specific tag "speculative fiction":
+
+FT.SEARCH index:bookdemo "@genres:{speculative fiction}" LIMIT 0 0
+Redis should respond with the number 287:
+
+1) "287"
+This means we have 287 book documents that contain the "speculative fiction" tag in their genres array.
+
+If you have successfully executed the three queries above with the same results we have, you are ready to proceed with this section! Great work!
+
 ##### 3. 
 ##### 4. 
 ##### 5. 
