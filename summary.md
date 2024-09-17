@@ -2288,14 +2288,16 @@ RediSearch Aggregations allow you to process search results before Redis returns
 - Aggregation Example
 
 This aggregation displays the top ten years the most books were published in descending order:
-
+```
 FT.AGGREGATE index:bookdemo * 
   GROUPBY 1 @year_published 
     REDUCE COUNT 0 AS total_published 
   SORTBY 2 @total_published DESC 
   MAX 10
-Redis returns ten records of years_published and total_published in descending order:
+```
 
+Redis returns ten records of years_published and total_published in descending order:
+```
 1) "106"
 2) 1) "year_published"
    2) "2015"
@@ -2337,46 +2339,54 @@ Redis returns ten records of years_published and total_published in descending o
    2) "2007"
    3) "total_published"
    4) "52"
+```
+
 Let's break down the aggregate command into its individual parts:
 
-FT.AGGREGATE index:bookdemo *: this line collects all documents indexed within index:bookdemo. You could also include a query to filter results, but since every document has a year_published value, we'll gather everything.
-GROUPBY 1 @year_published: this separates every document by year into individual groups. Only one field will be used to separate the documents: year_published.
-REDUCE: this declares an intent to transform the multiple records separated by year_published into one single record.
-COUNT 0 AS total_published: this function is executed by REDUCE and converts all of the documents within each grouping of year_published into a single number. That number is referred to as total_published.
-SORTBY 2 @total_published DESC: this sorts each year_published and total_published pair by total_published in descending order.
-MAX 10: a maximum of 10 results will be returned. Note that this MAX is different from the REDUCE function MAX.
-The number and arguments directly after GROUPBY, COUNT, and SORTBY are called parameter arguments. These are used with parameters that take a variable number of arguments. Think of these as a list, with the first argument being a number that specifies how many other arguments follow it. This allows RediSearch to avoid a parsing ambiguity in case one of the arguments has the name of another parameter. For example, to sort by first name, last name, and country, one would specify:
+1. **FT.AGGREGATE index:bookdemo ***: this line collects all documents indexed within index:bookdemo. You could also include a query to filter results, but since every document has a year_published value, we'll gather everything.
+2. **GROUPBY 1 @year_published**: this separates every document by year into individual groups. Only one field will be used to separate the documents: year_published.
+3. **REDUCE**: this declares an intent to transform the multiple records separated by year_published into one single record.
+4. **COUNT 0 AS total_published**: this function is executed by REDUCE and converts all of the documents within each grouping of year_published into a single number. That number is referred to as total_published.
+5. **SORTBY 2 @total_published DESC**: this sorts each year_published and total_published pair by total_published in descending order.
+6. **MAX 10**: a maximum of 10 results will be returned. Note that this MAX is different from the REDUCE function MAX.
 
+The number and arguments directly after `GROUPBY`, `COUNT`, and `SORTBY` are called parameter arguments. These are used with parameters that take a variable number of arguments. Think of these as a list, with the first argument being a number that specifies how many other arguments follow it. This allows RediSearch to avoid a parsing ambiguity in case one of the arguments has the name of another parameter. For example, to sort by first name, last name, and country, one would specify:
+```
 SORTBY 6 firstName ASC lastName DESC country ASC
-Anatomy of an Aggregation
+```
+
+- Anatomy of an Aggregation
 An aggregation first identifies what documents to collect via a query or wildcard operator (*). It then performs actions upon the documents in a linear fashion; this is known as the pipeline. Here are the most common procedures one would need to perform typical aggregations:
 
-GROUPBY: Group the results in the pipeline based on one or more properties. Each group should have at least one reducer (see below), a function that handles the group entries, either counting them or performing multiple aggregate operations (see below).
+`GROUPBY`: Group the results in the pipeline based on one or more properties. Each group should have at least one reducer (see below), a function that handles the group entries, either counting them or performing multiple aggregate operations (see below).
 
-REDUCE: Reduce the matching results in each group into a single record, using a reduction function. For example, COUNT will count the number of records in the group.
+`REDUCE`: Reduce the matching results in each group into a single record, using a reduction function. For example, COUNT will count the number of records in the group.
 
 The reducers can have their own property names using the AS optional argument. If a name is not given, the resulting name will be the name of the reduce function and the group properties. For example, if a name is not given to COUNT_DISTINCT by property @foo, the resulting name will be count_distinct(@foo).
 
-SORTBY: Sort the pipeline up until the point of SORTBY, using a list of properties. By default, sorting is ascending, but ASC or DESC can be added for each property.
+`SORTBY`: Sort the pipeline up until the point of SORTBY, using a list of properties. By default, sorting is ascending, but ASC or DESC can be added for each property.
 
-MAX is used to optimize sorting, by sorting only for the n-largest elements.
+`MAX` is used to optimize sorting, by sorting only for the n-largest elements.
 
-APPLY: Apply a 1-to-1 transformation on one or more properties, and either store the result as a new property down the pipeline, or replace any property using this transformation.
+`APPLY`: Apply a 1-to-1 transformation on one or more properties, and either store the result as a new property down the pipeline, or replace any property using this transformation.
 
-LIMIT: Limit the number of results to return just num results starting at index offset (zero based). As mentioned above, it is much more efficient to use SORTBY ... MAX if we are interested in just limiting the output of a sort operation.
+`LIMIT`: Limit the number of results to return just num results starting at index offset (zero based). As mentioned above, it is much more efficient to use SORTBY ... MAX if we are interested in just limiting the output of a sort operation.
 
-FILTER: Filter the results using predicate expressions relating to values in each result. They are applied post-query and relate to the current state of the pipeline.
+`FILTER`: Filter the results using predicate expressions relating to values in each result. They are applied post-query and relate to the current state of the pipeline.
 
-Aggregation Example, continued
+- Aggregation Example, continued
+
 Let's explore one more aggregation example. Let's find the top ten authors who have produced the most books in our document collection.
-
+```
 FT.AGGREGATE index:bookdemo *
   GROUPBY 1 @author 
     REDUCE COUNT 0 AS published_works 
   SORTBY 2 @published_works DESC
   MAX 10
-Redis returns ten records showing each author with their published works, from the highest published_works value down to the lowest:
+```
 
+Redis returns ten records showing each author with their published works, from the highest published_works value down to the lowest:
+```
 1) "770"
 2) 1) "author"
    2) "Terry Pratchett"
@@ -2418,16 +2428,19 @@ Redis returns ten records showing each author with their published works, from t
    2) "James Dashner"
    3) "published_works"
    4) "12"
+```
 
 ##### 8. Hands-On Exercise
 
-This exercise will further examine the FT.AGGREGATE command and a few of the underlying functions.
+This exercise will further examine the `FT.AGGREGATE` command and a few of the underlying functions.
 
 Let's start by observing the average page count, max page count, and min page count of books per year released since 2000 in ascending order by year. Make sure to apply a floor function to the average page count for readability. If we compile this into a bar chart will we notice a trend?
-
+```
 FT.AGGREGATE index:bookdemo "@year_published:[2000 +inf]" GROUPBY 1 @year_published REDUCE AVG 1 @pages as average_pagecount REDUCE MAX 1 @pages as max_pagecount REDUCE MIN 1 @pages as min_pagecount APPLY floor(@average_pagecount) AS average_pagecount SORTBY 2 @year_published ASC LIMIT 0 21
-Redis returns 21 documents (1 per finished year since 2000) with the average page count, minimum page count, and maximum page count:
+```
 
+Redis returns 21 documents (1 per finished year since 2000) with the average page count, minimum page count, and maximum page count:
+```
 1) "21"
 2) 1) "year_published"
    2) "2000"
@@ -2597,6 +2610,8 @@ Redis returns 21 documents (1 per finished year since 2000) with the average pag
    6) "1396"
    7) "min_pagecount"
    8) "229"
+```
+
 Here's a bar chart made from the figures above:
 
 ![alt Bar chart showing query results.](img/3.4.1_Hands-on_Graph.png)
@@ -2605,15 +2620,17 @@ It appears that the page count for every year since 2000 has remained relatively
 
 ##### 9. Sorting Results
 
-When querying an index, it is possible to sort the results by one of the indexed fields. Supported field types are TEXT and NUMERIC. They must be declared SORTABLE at the time the index is created with the FT.CREATE command. Note that sorting large TEXT fields can degrade search performance.
+When querying an index, it is possible to sort the results by one of the indexed fields. Supported field types are `TEXT` and `NUMERIC`. They must be declared SORTABLE at the time the index is created with the [FT.CREATE](https://redis.io/commands/ft.create/) command. Note that sorting large `TEXT` fields can degrade search performance.
 
-To sort the results of a query, use the SORTBY option after the query expression. We'll specify which field to sort by in ASCending or DESCending order. If neither option is provided, results are returned in ascending order.
+To sort the results of a query, use the `SORTBY` option after the query expression. We'll specify which field to sort by in **ASC**ending or **DESC**ending order. If neither option is provided, results are returned in ascending order.
 
 Here is an example of a search for all books from 0 to 1000 pages sorted in ascending order. To keep things simple, we are only returning the key name and pages value.
-
+```
 FT.SEARCH index:bookdemo "@pages:[0 1000]" SORTBY pages ASC RETURN 1 pages
-Redis returns 1001 documents with the smallest page count of 202 listed first:
+```
 
+Redis returns 1001 documents with the smallest page count of 202 listed first:
+```
 1) "1001"
 2) "ru204:book:61754"
 3) 1) "pages"
@@ -2645,11 +2662,15 @@ Redis returns 1001 documents with the smallest page count of 202 listed first:
 20) "ru204:book:9208"
 21) 1) "pages"
    2) "209"
+```
+
 We can also find the highest rating scored books within our document collection. We'll want to search from the highest score possible (5) to the lowest score (0). Adding SORTBY score DESC returns documents with the highest scores first:
-
+```
 FT.SEARCH index:bookdemo "@score:[0 5]" SORTBY score DESC RETURN 1 score
-By default, Redis returns the first ten documents of the search query. When sorted we see the highest rated book received a 4.66:
+```
 
+By default, Redis returns the first ten documents of the search query. When sorted we see the highest rated book received a 4.66:
+```
 1) "1487"
 2) "ru204:book:352"
 3) 1) "score"
@@ -2681,17 +2702,21 @@ By default, Redis returns the first ten documents of the search query. When sort
 20) "ru204:book:422"
 21) 1) "score"
    2) "4.55"
-While this is helpful, it should be noted that only the first ten results are given. What if we wanted only the top 3 or 5? What if we wanted to display a list of more than ten results? Proceed to the next unit on LIMIT to explore paginating results.
+```
+
+While this is helpful, it should be noted that only the first ten results are given. What if we wanted only the top 3 or 5? What if we wanted to display a list of more than ten results? Proceed to the next unit on `LIMIT` to explore paginating results.
 
 ##### 10. Hands-On Exercise
 
 In this hands-on exercise we'll explore the sorting capabilities of RediSearch.
 
 Let's search for all books by Jodi Taylor and sort them from the book with the highest rating to the lowest returning only the title and score:
-
+```
 FT.SEARCH index:bookdemo "@author:Jodi Taylor" SORTBY score DESC RETURN 2 title score
-Redis returns 15 books with the highest scores first:
+```
 
+Redis returns 15 books with the highest scores first:
+```
 1) "15"
 2) "ru204:book:384"
 3) 1) "score"
@@ -2743,11 +2768,15 @@ Redis returns 15 books with the highest scores first:
    2) "4.35"
    3) "title"
    4) "Christmas Present"
+```
+
 Find all books rated 4.5 and above for books that have 350 pages or less in descending order:
-
+```
 FT.SEARCH index:bookdemo "@score:[4.5 5] @pages:[0 350]" SORTBY score DESC RETURN 3 title score pages
-Redis returns 4 matching books with the in descending score order:
+```
 
+Redis returns 4 matching books with the in descending score order:
+```
 1) "4"
 2) "ru204:book:384"
 3) 1) "score"
@@ -2777,11 +2806,15 @@ Redis returns 4 matching books with the in descending score order:
    4) "The Last Olympian"
    5) "pages"
    6) "310"
+```
+
 Let's find the title and page count of every Terry Pratchett book from the smallest page count to the highest:
-
+```
 FT.SEARCH index:bookdemo "@author:Terry Pratchett" SORTBY pages RETURN 2 title pages
-Redis returns the first ten books with the lowest page count first:
+```
 
+Redis returns the first ten books with the lowest page count first:
+```
 1) "26"
 2) "ru204:book:2315"
 3) 1) "pages"
@@ -2833,16 +2866,19 @@ Redis returns the first ten books with the lowest page count first:
    2) "772"
    3) "title"
    4) "Eric"
+```
 
 ##### 11. Paginating Result Sets
 
-The FT.SEARCH command option LIMIT allows us to specify a start position in the result set to return results from, and how many results from that position to return. By default all queries have a LIMIT of 10 documents beginning with the first result (index 0). LIMIT allows for pagination by taking two parameters: the offset to start at and how many results should be returned from that point. Use LIMIT to paginate through large result sets in a resource efficient manner.
+The [FT.SEARCH](https://redis.io/commands/ft.search/) command option `LIMIT` allows us to specify a start position in the result set to return results from, and how many results from that position to return. By default all queries have a `LIMIT` of 10 documents beginning with the first result (index 0). `LIMIT` allows for pagination by taking two parameters: the offset to start at and how many results should be returned from that point. Use `LIMIT` to paginate through large result sets in a resource efficient manner.
 
-Let's look at a previous query where we searched for the top scoring books. We'll add the extra clause LIMIT 0 5 to return only 5 documents starting at the beginning of the result set.
-
+Let's look at a previous query where we searched for the top scoring books. We'll add the extra clause `LIMIT` 0 5 to return only 5 documents starting at the beginning of the result set.
+```
 FT.SEARCH index:bookdemo '@score:[0 5]' SORTBY score DESC RETURN 2 score title LIMIT 0 5
-This will give us the top five scoring books only:
+```
 
+This will give us the top five scoring books only:
+```
 1) "1487"
 2) "ru204:book:352"
 3) 1) "score"
@@ -2869,9 +2905,13 @@ This will give us the top five scoring books only:
    2) "4.58"
    3) "title"
    4) "The More Than Complete Hitchhiker's Guide"
-To receive the number of documents matched by a query without actually receiving the documents, use LIMIT with an offset of 0 and a number of documents of 0. Let's see how many books have the science fiction (robots) tag:
+```
 
+To receive the number of documents matched by a query without actually receiving the documents, use LIMIT with an offset of 0 and a number of documents of 0. Let's see how many books have the science fiction (robots) tag:
+```
 FT.SEARCH index:bookdemo "@genres:{science fiction \\(robots\\)}" LIMIT 0 0
+```
+
 Redis returns the number 45:
 
 1) "45"
@@ -2881,10 +2921,12 @@ Redis returns the number 45:
 In this exercise we will examine how to manage the number of fields returned from each document that matched a query and how to enforce pagination to keep our queries efficient and fast.
 
 Let's find the top 5 highest rated book titles in 2015:
-
+```
 FT.SEARCH index:bookdemo "@year_published:[2015 2015]" SORTBY score DESC RETURN 2 title score LIMIT 0 5
-Redis returns 5 books out of a possible 86 documents total:
+```
 
+Redis returns 5 books out of a possible 86 documents total:
+```
 1) "86"
 2) "ru204:book:12596"
 3) 1) "score"
@@ -2911,11 +2953,15 @@ Redis returns 5 books out of a possible 86 documents total:
    2) "4.37"
    3) "title"
    4) "Johannes Cabal and the Blustery Day: And Other Tales of the Necromancer"
+```
+
 Let's find the next 5 highest rated books in 2015:
-
+```
 FT.SEARCH index:bookdemo "@year_published:[2015 2015]" SORTBY score DESC RETURN 2 title score LIMIT 5 5
-Redis returns the next five books in the descending list of highest rated books in 2015:
+```
 
+Redis returns the next five books in the descending list of highest rated books in 2015:
+```
 1) "86"
 2) "ru204:book:2350"
 3) 1) "score"
@@ -2942,11 +2988,15 @@ Redis returns the next five books in the descending list of highest rated books 
    2) "4.25"
    3) "title"
    4) "Akarnae"
+```
+
 Knowing that there are 86 books in total for 2015, let's find the lowest 5 scoring books without changing the sortby order. If we know the total number of documents in our results, we can subtract 5 from the total to calculate our offset then request the five total documents starting at that offset in our result set:
-
+```
 FT.SEARCH index:bookdemo "@year_published:[2015 2015]" SORTBY score DESC RETURN 2 title score LIMIT 81 5
-Redis returns the 5 lowest scoring books of 2015:
+```
 
+Redis returns the 5 lowest scoring books of 2015:
+```
 1) "86"
 2) "ru204:book:6473"
 3) 1) "score"
@@ -2973,6 +3023,7 @@ Redis returns the 5 lowest scoring books of 2015:
    2) "2.92"
    3) "title"
    4) "In the Deep Dark Deep"
+```
 
 
 #### IV. Indexing and Searching in Your Application
