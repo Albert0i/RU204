@@ -3026,4 +3026,4 @@ Redis returns the 5 lowest scoring books of 2015:
 ```
 
 
-[Continue to Part 2](summary-cont.md)
+#### [Continue to Part 2](summary-cont.md)

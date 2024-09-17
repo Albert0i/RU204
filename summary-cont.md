@@ -1,4 +1,4 @@
-[Back to Part 1](summary.md)
+#### [Back to Part 1](summary.md)
 
 #### IV. Indexing and Searching in Your Application
 
