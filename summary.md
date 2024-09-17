@@ -1247,7 +1247,7 @@ Let's explore the motivation behind indexing JSON documents. On their own, each 
 
 To create an index, a few decisions must be made...
 
-It is highly recommended to establish a consistent schema shared between all of the stored documents. As an example, if documents were stored with user information, all "first name" fields should be named "first_name", "fname", or any other consistent convention. Note that this only matters for fields that you want to index - other parts of the document can still contain arbitrary JSON data in any valid form.
+*It is highly recommended to establish a consistent schema shared between all of the stored documents*. As an example, if documents were stored with user information, all "first name" fields should be named "first_name", "fname", or any other consistent convention. Note that this only matters for fields that you want to index - other parts of the document can still contain arbitrary JSON data in any valid form.
 
 There are limits to the number of fields RediSearch can include in a single index, but you are unlikely to encounter these in normal circumstances. See the [RediSearch documentation](https://redis.io/commands/ft.create/) for details. *It is also recommended to refrain from indexing all of the fields within a document, as that will consume considerable compute overhead and space, which is an antipattern of Redis*. For this course, the schema will include the title (text), author (text), description (text), pages (numeric), genres (tag), and ratings scores (numeric). These are the five properties of our documents that we will use to search.
 
