@@ -49,4 +49,5 @@ The access model in an RDBMS describes how data is accessed and manipulated by u
 
 This narrow understanding helps clarify the different roles each model plays in the functionality of an RDBMS. If you have further questions or need specific examples, feel free to ask!
 
-### EOF 
+
+## EOF (2024/09/23)
