@@ -1,4 +1,4 @@
-## design full database schemas for English primary school covering KS1 and KS2
+## Design full database schemas for English primary school covering KS1 and KS2
 
 Designing a database schema for an English primary school that covers Key Stage 1 (KS1) and Key Stage 2 (KS2) involves several entities to capture relevant information about students, subjects, classes, assessments, and more. Below is a suggested database schema with key tables and their relationships.
 
@@ -71,7 +71,7 @@ Designing a database schema for an English primary school that covers Key Stage 
 This schema provides a comprehensive structure for managing data related to students, classes, teachers, subjects, assessments, and attendance in an English primary school covering KS1 and KS2. Adjustments can be made based on specific requirements or additional features, such as extracurricular activities or parent information. If you need further details or modifications, feel free to ask!
 
 
-## database schemas for mysql8
+## Database schemas for MySQL 8
 
 Here’s a MySQL 8-compatible database schema for an English primary school covering Key Stage 1 (KS1) and Key Stage 2 (KS2). This schema includes SQL statements for creating the necessary tables with appropriate data types and constraints.
 
@@ -164,7 +164,7 @@ CREATE TABLE Attendance (
 This schema is designed to be efficient for querying and managing data related to an English primary school. You can further customize it based on specific needs or additional features. If you need help with queries or further modifications, feel free to ask!
 
 
-## and give me some sample data
+## And give me some sample data
 
 Here’s some sample data for the MySQL database schema of an English primary school. This data will populate each of the tables created in the previous schema.
 
