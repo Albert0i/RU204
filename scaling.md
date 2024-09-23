@@ -1,4 +1,4 @@
-## Scaling in comparing Oracle and Redis
+## Scaling in Oracle and Redis
 
 Here’s a comparison of **scaling** capabilities between **Oracle Database** and **Redis**, focusing on their approaches, methodologies, and best use cases.
 
