@@ -246,4 +246,67 @@ INSERT INTO Attendance (student_id, class_id, date, status) VALUES
 This sample data can be used to test queries and operations in your database. If you need further assistance or specific queries, let me know!
 
 
+## Some more data is needed
+
+-- Additional Data for Students Table
+INSERT INTO Students (first_name, last_name, date_of_birth, gender, enrollment_date, year_group) VALUES
+('Sophia', 'Miller', '2016-04-14', 'Female', '2021-09-01', 'Year 1'),
+('Ethan', 'Davis', '2015-05-22', 'Male', '2020-09-01', 'Year 2'),
+('Mia', 'Rodriguez', '2014-06-18', 'Female', '2019-09-01', 'Year 3'),
+('Lucas', 'Martinez', '2013-07-11', 'Male', '2018-09-01', 'Year 4'),
+('Charlotte', 'Hernandez', '2012-08-30', 'Female', '2017-09-01', 'Year 5'),
+('Aiden', 'Lopez', '2011-09-15', 'Male', '2016-09-01', 'Year 6');
+
+-- Additional Data for Teachers Table
+INSERT INTO Teachers (first_name, last_name, subject_specialty, hire_date) VALUES
+('Olivia', 'Wilson', 'Mathematics', '2018-01-20'),
+('James', 'Lee', 'History', '2019-02-25'),
+('Emily', 'Walker', 'Geography', '2020-03-30'),
+('Daniel', 'Hall', 'Physical Education', '2017-04-14');
+
+-- Additional Data for Classes Table
+INSERT INTO Classes (class_name, year_group, teacher_id) VALUES
+('Year 1B', 'Year 1', 1),
+('Year 2A', 'Year 2', 2),
+('Year 3B', 'Year 3', 3),
+('Year 4A', 'Year 4', 1),
+('Year 5B', 'Year 5', 2),
+('Year 6A', 'Year 6', 4);
+
+-- Additional Data for Subjects Table
+INSERT INTO Subjects (subject_name, key_stage) VALUES
+('Physical Education', 'KS1'),
+('History', 'KS2'),
+('Geography', 'KS2'),
+('Music', 'KS1');
+
+-- Additional Data for Enrollments Table
+INSERT INTO Enrollments (student_id, class_id, enrollment_date) VALUES
+(7, 7, '2021-09-01'),
+(8, 8, '2020-09-01'),
+(9, 9, '2019-09-01'),
+(10, 10, '2018-09-01'),
+(11, 11, '2017-09-01'),
+(12, 12, '2016-09-01');
+
+-- Additional Data for Assessments Table
+INSERT INTO Assessments (student_id, subject_id, assessment_date, score, comments) VALUES
+(7, 1, '2022-05-16', 82.00, 'Good effort in class.'),
+(8, 2, '2022-05-17', 76.50, 'Needs to focus more on history.'),
+(9, 3, '2022-05-18', 88.00, 'Strong performance in geography.'),
+(10, 4, '2022-05-19', 90.00, 'Excellent participation in PE.'),
+(11, 5, '2022-05-20', 85.50, 'Creative in art projects.'),
+(12, 6, '2022-05-21', 93.00, 'Outstanding performance in all subjects.');
+
+-- Additional Data for Attendance Table
+INSERT INTO Attendance (student_id, class_id, date, status) VALUES
+(7, 7, '2023-09-02', 'Present'),
+(7, 7, '2023-09-03', 'Absent'),
+(8, 8, '2023-09-02', 'Late'),
+(9, 9, '2023-09-02', 'Present'),
+(10, 10, '2023-09-02', 'Present'),
+(11, 11, '2023-09-02', 'Absent'),
+(12, 12, '2023-09-02', 'Present');
+
+
 ## EOF (2024/09/23)
