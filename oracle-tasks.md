@@ -1,4 +1,4 @@
-## oracle performs complicated memory management as well as disk management
+## Oracle performs complicated memory management as well as disk management
 
 Absolutely! Oracle Database employs sophisticated memory and disk management techniques to ensure efficient data storage, retrieval, and overall performance. Let’s break down both memory management and disk management in detail.
 
