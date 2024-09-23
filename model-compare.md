@@ -1,4 +1,4 @@
-## compare storage model and access model in Oracle and Redis
+## Compare storage model and access model in Oracle and Redis
 
 Here’s a detailed comparison of the **storage model** and **access model** in **Oracle Database** and **Redis**:
 
