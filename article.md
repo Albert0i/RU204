@@ -37,12 +37,12 @@ This type of data does not fall into traditional realm of business data processi
 
 #### Section 2 
 
-Storage Model, in a restricted and confined sense, focuses on storage of user data which strips off all unrelated meta data. Storage Model directly maps to table space, segment, extend and blocks on disk. Storage strictly means disk storage and disk space not regarding any accompanying overhead on specific reading or writing operations. 
+Storage Model, in a restricted and confined sense, focuses on storage of user data stripping off all unrelated meta data. Storage Model directly maps to table space, segment, extend and blocks on disk. Storage strictly means disk storage and disk space not regarding any accompanying overhead on specific reading or writing operations. 
 
 
 #### Section 3 
 
-Access Model is any overhead on disk or memory in order to enable some kind of access method on user data. 
+Access Model includes all static and dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. 
 
 
 ### EOF (2024/09/27)
