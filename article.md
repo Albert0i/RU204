@@ -37,7 +37,7 @@ This type of data does not fall into traditional realm of business data processi
 
 #### Section 2 
 
-Storage Model, in a restricted and confined sense, is the storage of pure user data, not includes meta-data. 
+Storage Model, in a restricted and confined sense, focuses on storage of user data which strips off all unrelated meta data. Storage Model directly maps to table space, segment, extend and blocks on disk. Storage strictly means disk storage and disk space not regarding any accompanying overhead on specific reading or writing operations. 
 
 
 #### Section 3 
