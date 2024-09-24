@@ -39,6 +39,43 @@ This type of data does not fall into traditional realm of business data processi
 
 Storage Model, in a restricted and confined sense, focuses on storage of user data stripping off all unrelated meta data. Storage Model directly maps to table space, segment, extend and blocks on disk. Storage strictly means disk storage and disk space not regarding any accompanying overhead on specific reading or writing operations. 
 
+```
+-- Create a new database
+CREATE DATABASE SampleDB;
+
+-- Use the new database
+USE SampleDB;
+
+-- Create a table for Customers
+CREATE TABLE Customers (
+    CustomerID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Email VARCHAR(100) UNIQUE NOT NULL,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create a table for Orders with a foreign key constraint referencing Customers
+CREATE TABLE Orders (
+    OrderID INT AUTO_INCREMENT PRIMARY KEY,
+    OrderDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CustomerID INT,
+    Amount DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (CustomerID) REFERENCES Customers(CustomerID)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- Insert sample data into Customers
+INSERT INTO Customers (Name, Email) VALUES
+('Alice Smith', 'alice@example.com'),
+('Bob Johnson', 'bob@example.com');
+
+-- Insert sample data into Orders
+INSERT INTO Orders (CustomerID, Amount) VALUES
+(1, 150.00),
+(1, 200.50),
+(2, 300.00);
+```
 
 #### Section 3 
 
