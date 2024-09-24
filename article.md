@@ -32,12 +32,12 @@ RDBMS is well known for it's unparalleled search and aggregation capability but 
 8. **Survey Responses**
    - Open-ended answers in surveys where respondents can provide free-text responses.
 
-This type of data does not fall into traditional realm of business data processing and even not exists when RDBMS was invented on late 70's of last century. It is the new application scenarios which bring about new forms of data... 
+This type of data does not fall into traditional realm of business data processing and not even exists when RDBMS was invented on late 70's of last century. It is the new application scenarios which bring about new forms of data... 
 
 
 #### Section 2 
 
-Storage Model, in a restricted and confined sense, is ... 
+Storage Model, in a restricted and confined sense, is the storage of pure user data, not includes meta-data. 
 
 
 #### Section 3 
