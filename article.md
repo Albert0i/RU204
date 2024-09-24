@@ -42,7 +42,7 @@ Storage Model, in a restricted and confined sense, focuses on storage of user da
 
 #### Section 3 
 
-Access Model ...
+Access Model is any overhead on disk or memory in order to enable some kind of access method on user data. 
 
 
 ### EOF (2024/09/27)
