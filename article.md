@@ -37,6 +37,12 @@ This type of data does not fall into traditional realm of business data processi
 
 #### Section 2 
 
+Storage Model, in a restricted and confined sense, is ... 
+
+
+#### Section 3 
+
+Access Model ...
 
 
 ### EOF (2024/09/27)
