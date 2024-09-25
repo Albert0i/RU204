@@ -90,9 +90,9 @@ In addition, indexes occupy disk space and CPU time to maintain. As Data size gr
 
 #### Section 3 
 
-Access Model includes all static/dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. RDBMS is resp;onsible for maintaining these data and everyone takes it for granted... 
+Access Model includes all static/dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. RDBMS is responsible for maintaining these data and we already take it for granted... 
 
-Under RDBMS, this cost is invisible but perceptible. A INSERT/UPDATE/DELETE runs significantly slower than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes. As far as i can test, around 3 times slower... 
+Under RDBMS, this cost is invisible but perceptible. A INSERT/UPDATE/DELETE runs significantly slower than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
 
 I'm furiously obstinate to separate storage and access model because very bit of resource should count on modern application system. 
 
