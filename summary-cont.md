@@ -133,16 +133,19 @@ First, pick a Redis OM client for your preferred programming language, and follo
 
 Note: if you choose to repeat this exercise in more than one of the supported languages, you must flush the Redis database and reload the data for each new language that you try, using the instructions provided at the links above.
 
-Verify the Data Set
+**Verify the Data Set**
+
 Next, use redis-cli or RedisInsight to verify that your data loaded correctly. Run the following command:
 
-DBSIZE
+`DBSIZE`
+
 Redis should return:
 
-Python: 1487
-Node.js: 1487
-.NET: 1486
-Java: 1487
+- Python: 1487
+- Node.js: 1487
+- .NET: 1486
+- Java: 1487
+
 The DBSIZE command returns the number of keys currently set in Redis. Some of the Redis OM clients use an additional key to store information about the state of the search index in Redis - this is why the output of DBSIZE varies depending on the language you're working with here.
 
 Take a moment to look at how the example queries are formed in each language, and how the results are output to the console. You may also want to refer to the documentation for the Redis OM client that you're working with:
