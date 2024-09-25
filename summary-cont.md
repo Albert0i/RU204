@@ -146,24 +146,26 @@ Redis should return:
 - .NET: 1486
 - Java: 1487
 
-The DBSIZE command returns the number of keys currently set in Redis. Some of the Redis OM clients use an additional key to store information about the state of the search index in Redis - this is why the output of DBSIZE varies depending on the language you're working with here.
+The [DBSIZE](https://redis.io/commands/dbsize/) command returns the number of keys currently set in Redis. Some of the Redis OM clients use an additional key to store information about the state of the search index in Redis - this is why the output of [DBSIZE](https://redis.io/commands/dbsize/) varies depending on the language you're working with here.
 
 Take a moment to look at how the example queries are formed in each language, and how the results are output to the console. You may also want to refer to the documentation for the Redis OM client that you're working with:
 
-Python
-Node.js
-.NET (C#)
-Java (Spring)
+- [Python](https://github.com/redis/redis-om-python)
+- [Node.js](https://github.com/redis/redis-om-node)
+- [.NET (C#)](https://github.com/redis/redis-om-dotnet)
+- [Java (Spring)](https://github.com/redis/redis-om-spring)
+
 Now, try adding 2-3 extra search queries of your own design. For example you might want to search for books that are between 500 and 1000 pages long, published between 1950 and 1999. Experiment with the different fields, search operators and sort capabilities.
 
-While running your queries, use the Redis MONITOR command to see the FT.SEARCH commands that Redis OM translates your code into.
+While running your queries, use the Redis [MONITOR](https://redis.io/commands/monitor/) command to see the [FT.SEARCH](https://redis.io/commands/ft.search/) commands that Redis OM translates your code into.
 
-To run MONITOR from redis-cli, open a new terminal window and start redis-cli, then simply enter the command:
+To run [MONITOR](https://redis.io/commands/monitor/) from redis-cli, open a new terminal window and start redis-cli, then simply enter the command:
 
-MONITOR
-To use MONITOR in RedisInsight, check out the Profiler documentation.
+`MONITOR`
 
-Should you need help or would like to share your success with Redis staff and your fellow students, reach out to us on the course Discord channel.
+To use [MONITOR](https://redis.io/commands/monitor/) in RedisInsight, [check out the Profiler documentation](https://docs.redis.com/latest/ri/using-redisinsight/profiler/).
+
+Should you need help or would like to share your success with Redis staff and your fellow students, reach out to us on the [course Discord channel](https://discord.gg/46upnugY5B).
 
 Best of luck!
 
