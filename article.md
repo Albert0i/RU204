@@ -97,4 +97,8 @@ Under RDBMS, this cost is invisible but perceptible. A INSERT/UPDATE/DELETE runs
 I'm furiously obstinate to separate storage and access model because very bit of resource should count on modern application system. 
 
 
+#### Section 4
+
+
+
 ### EOF (2024/09/27)
