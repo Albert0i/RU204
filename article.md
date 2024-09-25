@@ -79,7 +79,9 @@ INSERT INTO Orders (CustomerID, Amount) VALUES
 
 ![alt Customers Figure 1](img/Customers_1.JPG)
 
-On the upper part, you can see field type, size and encoding; on the lower part, you can see two [BTREE](https://en.wikipedia.org/wiki/B-tree) indexes, one for primary key access and the other for uniqueness email checking. Technically speaking, you can create table without index and is completely valid. Typical log, history and file for archiving purpose are supposed to be processed sequentially and thus no need index for random access on their own. In addition, indexes occupy disk space and CPU time to maintain. As Data size grow, indexes also grow... 
+On the upper part, you can see field type, size and encoding; on the lower part, you can see two [BTREE](https://en.wikipedia.org/wiki/B-tree) indexes, one for primary key access and the other for uniqueness email checking. 
+
+Technically speaking, you can create table without index and is completely valid. Typical log, history and file for archiving purpose are supposed to be processed sequentially and thus no need index for random access on their own. In addition, indexes occupy disk space and CPU time to maintain. As Data size grow, indexes also grow... 
 
 ![alt Customers Figure 2](img/Customers_2.JPG)
 
