@@ -94,7 +94,7 @@ Access Model includes all static/dynamic overhead on disk or memory in order to 
 
 Under RDBMS, this cost is invisible but perceptible. A INSERT/UPDATE/DELETE runs significantly slower than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
 
-I'm furiously obstinate to separate storage and access model because very bit of resource should count on modern application system. 
+I'm furiously obstinate to separate storage and access because very bit of resource should count on modern application system. 
 
 
 #### Section 4
