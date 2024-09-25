@@ -2,19 +2,22 @@
 
 #### IV. Indexing and Searching in Your Application
 
-You've reached Section 4 of the course. Now it's time to see how you can integrate the JSON search capabilities that were introduced in Section 3 into your application. We'll look at examples written in Python, .NET, Node.js, and Java. You'll learn how to query a collection of documents with the Redisson clients. Remember that to be successful in this course, you don't need to know all four programming languages. While we'd recommend that you read each unit that follows, feel free to focus on the languages that are relevant to your application development needs and personal experience. It's also important to note that you don't have to use the Redisson clients to leverage functionality from RediSearch in an application. The lower-level clients redis-py, Node Redis, and Jedis all include support for RediSearch commands. And StackExchange.Redis allows you to run these commands using the generic ExecuteAsync function to send arbitrary commands to Redis.
+You've reached Section 4 of the course. Now it's time to see how you can integrate the JSON search capabilities that were introduced in Section 3 into your application. We'll look at examples written in Python, .NET, Node.js, and Java. You'll learn how to query a collection of documents with the Redisson clients. Remember that to be successful in this course, you don't need to know all four programming languages. 
+
+While we'd recommend that you read each unit that follows, feel free to focus on the languages that are relevant to your application development needs and personal experience. It's also important to note that you don't have to use the Redisson clients to leverage functionality from RediSearch in an application. The lower-level clients redis-py, Node Redis, and Jedis all include support for RediSearch commands. And StackExchange.Redis allows you to run these commands using the generic ExecuteAsync function to send arbitrary commands to Redis.
 
 ##### 1. Querying JSON Documents with Redis OM for Node.js
 
-Let's see how Redis OM for Node.js allows us to store and query JSON documents in a more developer friendly way than using the lower level node-redis client and the FT.SEARCH command directly.
+Let's see how Redis OM for Node.js allows us to store and query JSON documents in a more developer friendly way than using the lower level [node-redis](https://github.com/redis/node-redis) client and the [FT.SEARCH](https://redis.io/commands/ft.search/) command directly.
 
-In this module, we'll refer to the source code contained in the src/nodejs/redis_om_search_example folder of the course GitHub repository. We suggest that you have this folder open in a separate browser tab, or your preferred IDE while studying this module.
+In this module, we'll refer to the source code contained in the [src/nodejs/redis_om_search_example](https://github.com/redislabs-training/ru204/tree/main/src/nodejs/redis_om_search_example) folder of the course GitHub repository. We suggest that you have this folder open in a separate browser tab, or your preferred IDE while studying this module.
 
-Data Model
+**Data Model**
+
 For this example, we'll continue using our Book data model that you saw in section 2 when we saw how to save JSON documents in Redis with Redis OM Node. It's now time to add indexing and search capabilities to this, so let's take a look at what's changed since section 2...
 
 The data model is defined in a schema in the file model.js. This is largely unchanged from section 2 and looks like this:
-
+```
 import { Entity, Schema } from 'redis-om';
 
 class Book extends Entity {};
@@ -37,20 +40,25 @@ export const bookSchema = new Schema(Book, {
 }, {
   prefix: 'ru204:redis-om-node:book'
 });"  
+```
+
 Note that we've changed the type for the description and title fields since section 2. These used to be of type string, now they're text. We'll see why next...
 
-Creating the Search Index
-Redis OM Node manages the creation of the RediSearch index for us, there's no need for us to use the FT.CREATE command directly or to know its syntax.
+**Creating the Search Index**
 
-Open the file load_data.js. Let's see how the index is created and documents added to it...
+Redis OM Node manages the creation of the RediSearch index for us, there's no need for us to use the [FT.CREATE](https://redis.io/commands/ft.create/) command directly or to know its syntax.
+
+Open the file [load_data.js](https://github.com/redislabs-training/ru204/blob/main/src/nodejs/redis_om_search_example/load_data.js). Let's see how the index is created and documents added to it...
 
 First, use the createIndex function that Redis OM Node provides on our book repository:
-
+```
 await bookRepository.createIndex();
+```
+
 And that's it... our index is created for us! Redis OM Node uses the model definition to determine how to index each field. Fields of type string become TAG fields in the index, fields of type text become TEXT (full-text search) fields, and fields of type number become NUMERIC fields. If we want to be able to sort a field, we declare it as sortable: true.
 
 Adding documents to the index is then as simple as creating new book instances and saving them in Redis. This process is the same as you saw in section 2, let's create a new book and save it:
-
+```
 const bookRepository = client.fetchRepository(bookSchema);
 const newBook = bookRepository.createEntity({
     'title': 'Redis: An Introduction',
@@ -59,39 +67,50 @@ const newBook = bookRepository.createEntity({
 );
 
 await bookRepository.save();  
+```
+
 RediSearch automatically adds the book to the search index for us, and keeps the index updated with any future changes to the book's JSON document in Redis.
 
 That's all there is to it!
 
-Querying the Index
-Redis OM for Node also provides us with a fluent querying interface. This operates at a higher level of abstraction than the underlying node-redis client, and doesn't require you to learn the query syntax for the FT.SEARCH command.
+**Querying the Index**
 
-Open the file search_om_example.js to follow along.
+Redis OM for Node also provides us with a fluent querying interface. This operates at a higher level of abstraction than the underlying [node-redis](https://github.com/redis/node-redis) client, and doesn't require you to learn the query syntax for the [FT.SEARCH](https://redis.io/commands/ft.search/) command.
+
+Open the file [search_om_example.js](https://github.com/redislabs-training/ru204/blob/main/src/nodejs/redis_om_search_example/search_om_example.js) to follow along.
 
 Repositories in Redis OM Node have a search function. We use this to write queries, and it returns an array of matching instances. Let's find books that were written by Stephen King:
-
+```
 let resultSet = await bookRepository.search()
   .where('author').equals('Stephen King')
   .return.all();
-Here, we're saying "Find all books where the author field has the value Stephen King". resultSet will contain an array of matching book instances. Redis OM Node handles translating this query to the correct FT.SEARCH command invocation, running it, and parsing the results into instances of our model.
+```
 
-When working with fields that were indexed as TEXT, we can use the matches function to perform a full-text search. We can also combine search clauses, here we'll look for books with "Star" in the title field that are also over 500 pages long:
+Here, we're saying "Find all books where the author field has the value Stephen King". resultSet will contain an array of matching book instances. Redis OM Node handles translating this query to the correct [FT.SEARCH](https://redis.io/commands/ft.search/) command invocation, running it, and parsing the results into instances of our model.
 
+When working with fields that were indexed as `TEXT`, we can use the matches function to perform a full-text search. We can also combine search clauses, here we'll look for books with "Star" in the title field that are also over 500 pages long:
+```
 resultSet = await bookRepository.search()
   .where('title').matches('Star')
   .and('pages').is.greaterThan(500)
   .sortAscending('pages')
   .return.all();
+```
+
 Note that as well as combining search clauses, we're asking Redis OM to sort the results by the number of pages in ascending order. If we wanted a descending sort, we'd use sortDescending:
-
+```
 .sortDescending('pages')
-When querying numeric fields, we can use the greaterThan and lessThan functions. Let's find books published between 1959 and 1973 inclusive:
+```
 
+When querying numeric fields, we can use the greaterThan and lessThan functions. Let's find books published between 1959 and 1973 inclusive:
+```
 resultSet = await bookRepository.search()
   .where('yearPublished').is.greaterThan(1958)
   .and('yearPublished').is.lessThan(1974)
   .return.all();
-To learn more about Redis OM for Node's query syntax, please refer to the documentation.
+```
+
+To learn more about Redis OM for Node's query syntax, please [refer to the documentation](https://github.com/redis/redis-om-node#-using-redisearch).
 
 ##### 2. Optional: Redis OM Node.js Workshop
 
