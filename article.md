@@ -99,7 +99,9 @@ I'm furiously obstinate to separate storage and access because very bit of resou
 
 #### Section 4
 
-Mature RDBMS such as Oracle implements comprehensive memory and disk management. The [minimum system requirement](https://alekciss.com/oracle-database-19c-installation/#google_vignette) for Oracle 19c includes: 
+Mature RDBMS such as Oracle implements sophisticated memory and disk management. 
+
+The [minimum system requirement](https://alekciss.com/oracle-database-19c-installation/#google_vignette) for Oracle 19c includes: 
 
 - Processor: AMD64 or Intel EM64T;
 - Physical RAM: 2 GB minimum;
