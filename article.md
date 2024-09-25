@@ -81,14 +81,20 @@ INSERT INTO Orders (CustomerID, Amount) VALUES
 
 On the upper part, you can see field type, size and encoding; on the lower part, you can see two [BTREE](https://en.wikipedia.org/wiki/B-tree) indexes, one for primary key access and the other for uniqueness email checking. 
 
-Technically speaking, you can create table without index and is completely valid. Typical log, history and file for archiving purpose are supposed to be processed sequentially and thus no need index for random access on their own. In addition, indexes occupy disk space and CPU time to maintain. As Data size grow, indexes also grow... 
+Technically speaking, you can create table without index and is completely valid. Typical log, history and file for archiving purpose are supposed to be processed sequentially and thus no need index for random access on their own. 
+
+In addition, indexes occupy disk space and CPU time to maintain. As Data size grow, indexes also grow... 
 
 ![alt Customers Figure 2](img/Customers_2.JPG)
 
 
 #### Section 3 
 
-Access Model includes all static and dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. 
+Access Model includes all static/dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. RDBMS is resp;onsible for maintaining these data and everyone takes it for granted... 
+
+Under RDBMS, this cost is invisible but perceptible. A INSERT/UPDATE/DELETE runs significantly slower than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes. As far as i can test, around 3 times slower... 
+
+I'm furiously obstinate to separate storage and access model because very bit of resource should count on modern application system. 
 
 
 ### EOF (2024/09/27)
