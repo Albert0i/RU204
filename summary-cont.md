@@ -146,55 +146,68 @@ Best of luck!
 
 #### V. Advanced Topics
 
-Welcome to Section 5 where we'll discuss advanced topics that will assist you in integrating RedisSearch and RedisJSON into your application. The commands and topics covered in this section may not be necessary for every application. However, it is important to know that such actions do exist should certain scenarios arise. RedisSearch and RedisJSON are constantly evolving with new features and capabilities. So this section will expand as newer versions are released. As always, we encourage you to jump into the discussion on Discord as we are always interested in what our students would like to see covered. This will be a light section with one collective hands-on activity at the end. Well then proceed to the final exam where you can earn a certificate of completion if you reach a grade of 65% or higher. Good luck and happy learning.
+Welcome to Section 5 where we'll discuss advanced topics that will assist you in integrating RedisSearch and RedisJSON into your application. The commands and topics covered in this section may not be necessary for every application. However, it is important to know that such actions do exist should certain scenarios arise. 
+
+RedisSearch and RedisJSON are constantly evolving with new features and capabilities. So this section will expand as newer versions are released. As always, we encourage you to jump into the discussion on Discord as we are always interested in what our students would like to see covered. 
+
+This will be a light section with one collective hands-on activity at the end. Well then proceed to the final exam where you can earn a certificate of completion if you reach a grade of 65% or higher. Good luck and happy learning.
 
 ##### 1. RediSearch and RedisJSON Utilities
 
-When creating a new index for your JSON documents, there may be a need to look "into" the indexing process to ensure that your documents are being indexed as intended. This module introduces commands used to ensure that your RediSearch indexing and application development runs smoothly and efficiently. This is not an exhaustive list of commands and methods, but will provide you with the most used commands. For more information, check out the command list for Redisearch here.
+When creating a new index for your JSON documents, there may be a need to look "into" the indexing process to ensure that your documents are being indexed as intended. This module introduces commands used to ensure that your RediSearch indexing and application development runs smoothly and efficiently. This is not an exhaustive list of commands and methods, but will provide you with the most used commands. For more information, check out the command list for Redisearch [here](https://redis.io/commands/?group=search).
 
-MONITOR
-MONITOR is a debugging command that streams back every command processed by the Redis server. It can help in understanding what is happening to the database. The ability to see all the requests processed by the server is useful in order to spot bugs in an application using client libraries.
+**MONITOR**
 
-RedisInsight has the built-in Profiler tool which performs the same function as MONITOR.
+[MONITOR](https://redis.io/commands/monitor/) is a debugging command that streams back every command processed by the Redis server. It can help in understanding what is happening to the database. The ability to see all the requests processed by the server is useful in order to spot bugs in an application using client libraries.
 
-FT._LIST
-The FT._LIST command lists all indexes created by Redisearch. This allows you to check what indexes are available.
+RedisInsight has the built-in [Profiler](https://docs.redis.com/latest/ri/using-redisinsight/profiler/) tool which performs the same function as MONITOR.
+
+**FT._LIST**
+
+The [FT._LIST](https://redis.io/commands/ft._list/) command lists all indexes created by Redisearch. This allows you to check what indexes are available.
 
 Here is an example call to FT._LIST that returns multiple indexes:
-
+```
 FT._LIST
 1) "index:bookdemo"
 2) "index:users:profiles"
 3) "index:products
 4) "inventory-index"
 5) "search:locations"  
-FT.INFO
-FT.INFO returns a list of key value pairs with information about a specified index. This is especially useful to track whether or not your new index is scanning the correct documents and indexing them as intended.
+```
+
+**FT.INFO**
+
+[FT.INFO](https://redis.io/commands/ft.info/) returns a list of key value pairs with information about a specified index. This is especially useful to track whether or not your new index is scanning the correct documents and indexing them as intended.
 
 Returned values include:
 
-index_definition: reflection of FT.CREATE command parameters. This includes what data type the index is over (JSON or Hash), the prefix used for scanning, and the default score given to all documents when indexed.
-attributes: index schema - field names, types, and attributes.
-Number of documents.
-Number of distinct terms.
-Average bytes per record.
-Size and capacity of the index buffers.
-Indexing state and percentage as well as failures:
-indexing: whether or not the index is being scanned in the background.
-percent_indexed: progress of background indexing (1 if complete).
-hash_indexing_failures: number of failures due to document formats not compatible with a supplied index schema.
+- `index_definition`: reflection of [FT.CREATE](https://redis.io/commands/ft.create/) command parameters. This includes what data type the index is over (JSON or Hash), the prefix used for scanning, and the default score given to all documents when indexed.
+- `attributes`: index schema - field names, types, and attributes.
+- Number of documents.
+- Number of distinct terms.
+- Average bytes per record.
+- Size and capacity of the index buffers.
+- Indexing state and percentage as well as failures:
+1. `indexing`: whether or not the index is being scanned in the background.
+2. `percent_indexed`: progress of background indexing (1 if complete).
+2. `hash_indexing_failures`: number of failures due to document formats not compatible with a supplied index schema.
+
 Optional statistics include:
 
-Garbage collection information.
-Cursors if a cursor exists for the index.
-Stopword lists if a custom stopword list is used. Stop words are words that are usually so common that they do not add much information to search, but take up a lot of space and CPU time in the index. When indexing, stop-words are discarded and not indexed. When searching, they are also ignored and treated as if they were not sent to the query processor.
-The attributes list outlines all of the search field attributes given to the index . The num_docs key tells us how many documents have been indexed.
+- Garbage collection information.
+- Cursors if a cursor exists for the index.
+- Stopword lists if a custom stopword list is used. [Stop words](https://redis.io/docs/stack/search/reference/stopwords/#:~:text=RediSearch%20has%20a%20pre%2Ddefined,are%20discarded%20and%20not%20indexed) are words that are usually so common that they do not add much information to search, but take up a lot of space and CPU time in the index. When indexing, stop-words are discarded and not indexed. When searching, they are also ignored and treated as if they were not sent to the query processor.
 
-Here we see FT.INFO called on one of our book indexes used in this course:
+The `attributes` list outlines all of the search field attributes given to the index . The `num_docs` key tells us how many documents have been indexed.
 
+Here we see `FT.INFO` called on one of our book indexes used in this course:
+```
 FT.INFO index:bookdemo
-Redis returns information about the specific index:
+```
 
+Redis returns information about the specific index:
+```
   1) "index_name"
   2) "index:bookdemo"
   3) "index_options"
@@ -320,14 +333,18 @@ Redis returns information about the specific index:
      6) "128"
      7) "index_total"
      8) "0"  
-FT.EXPLAIN / FT.EXPLAINCLI
-The FT.EXPLAIN command returns a description of the provided query as understood by RediSearch. This helps identify the search intersections, unions, optional, and not clauses.
+```
 
-The FT.EXPLAINCLI command returns the description in a way that is easy to read when using a command line interface.
+**FT.EXPLAIN / FT.EXPLAINCLI**
+
+The [FT.EXPLAIN](https://redis.io/commands/ft.explain/) command returns a description of the provided query as understood by RediSearch. This helps identify the search intersections, unions, optional, and not clauses.
+
+The [FT.EXPLAINCLI](https://redis.io/commands/ft.explaincli/) command returns the description in a way that is easy to read when using a command line interface.
 
 Let's have RediSearch explain our search query for books by Stephen King that are 500 pages or less:
-
+```
 FT.EXPLAINCLI index:bookdemo "@author:Stephen King @pages:[-inf 500]"
+
 1) "INTERSECT {"
 2) "  @author:INTERSECT {"
 3) "    @author:UNION {"
@@ -342,12 +359,16 @@ FT.EXPLAINCLI index:bookdemo "@author:Stephen King @pages:[-inf 500]"
 12) "  NUMERIC {-inf <= @pages <= 500.000000}"
 13) "}"
 14) ""  
-FT.PROFILE
-The FT.PROFILE command accepts an index and query or aggregation as parameters and returns the results as well as an array of statistics on performance. Performance statistics include total runtime of the query as well as the time required to parse the parameters and iterate through the query clauses (Intersection, Union, etc). This is useful for optimizing query performance by analyzing runtimes.
+```
+
+**FT.PROFILE**
+
+The [FT.PROFILE](https://redis.io/commands/ft.profile/) command accepts an index and query or aggregation as parameters and returns the results as well as an array of statistics on performance. Performance statistics include total runtime of the query as well as the time required to parse the parameters and iterate through the query clauses (Intersection, Union, etc). This is useful for optimizing query performance by analyzing runtimes.
 
 Let's profile our query for Stephen King books with 500 pages or less:
-
+```
 FT.PROFILE index:bookdemo SEARCH QUERY "@author:Stephen King @pages:[-inf 500]"
+
 1) 1) "3"
       2) 
 2) 1) 1) "Total profile time"
@@ -457,12 +478,16 @@ FT.PROFILE index:bookdemo SEARCH QUERY "@author:Stephen King @pages:[-inf 500]"
           5) "Counter"
           6) "3"
       3) 1) "Type  
-FT.CONFIG GET/SET
+```
+
+**FT.CONFIG GET/SET**
+
 Note: These commands are not available for Redis Cloud instances.
 
-The FT.CONFIG GET and FT.CONFIG SET commands retrieve and update the settings of the RediSearch module. To retrieve all of the settings with their current values, use the wildcard (*) modifier after FT.CONFIG GET:
-
+The [FT.CONFIG GET](https://redis.io/commands/ft.config-get/) and [FT.CONFIG SET](https://redis.io/commands/ft.config-set/) commands retrieve and update the settings of the RediSearch module. To retrieve all of the settings with their current values, use the wildcard (*) modifier after FT.CONFIG GET:
+```
 FT.CONFIG GET *
+
 1) 1) "EXTLOAD"
     2) "null"
 2) 1) "SAFEMODE"
@@ -537,76 +562,94 @@ FT.CONFIG GET *
     2) "1"
 37) 1) "VSS_MAX_RESIZE"
     2) "0"  
-Similar to CONFIG GET / SET for Redis Core, all settings can be updated with the FT.CONFIG SET command.
+```
 
-For a full list of descriptions for every RediSearch configuration option, refer to the documentation.
+Similar to CONFIG GET / SET for Redis Core, all settings can be updated with the [FT.CONFIG SET](https://redis.io/commands/ft.config-set/) command.
 
-TIMEOUT and ON_TIMEOUT may be of particular interest, as these dictate how long a query is allowed to run before ending automatically, and with either a RETURN or FAIL result.
+For a full list of descriptions for every RediSearch configuration option, [refer to the documentation](https://redis.io/docs/stack/search/configuring/).
 
-FT.DROPINDEX
-The FT.DROPINDEX command deletes an index. With the optional DD clause, all of the documents that are indexed will also be deleted from Redis.
+`TIMEOUT` and `ON_TIMEOUT` may be of particular interest, as these dictate how long a query is allowed to run before ending automatically, and with either a `RETURN` or `FAIL` result.
+
+**FT.DROPINDEX**
+
+The [FT.DROPINDEX](https://redis.io/commands/ft.dropindex/) command deletes an index. With the optional `DD` clause, all of the documents that are indexed will also be deleted from Redis.
 
 Here is an example of deleting just the index and retaining the documents:
-
+```
 FT.DROPINDEX index:bookdemo
-Here is an example of deleting the index and all of the documents that were indexed:
+```
 
+Here is an example of deleting the index and all of the documents that were indexed:
+```
 FT.DROPINDEX index:bookdemo DD
+```
+
 In the next module, we'll cover advanced options for creating indexes.
 
 ##### 2. Advanced Index Administration
 
-The FT.CREATE command has numerous optional clauses that allow the indexing function to be customized and optimized for various use cases. This section will outline some clauses that may be useful for your indexing needs.
+The [FT.CREATE](https://redis.io/commands/ft.create/) command has numerous optional clauses that allow the indexing function to be customized and optimized for various use cases. This section will outline some clauses that may be useful for your indexing needs.
 
-FILTER
-The filter clause may be used to apply indexing to documents that pass a given criteria based on the RediSearch aggregation expression language. An example of this would be whether a book has been published within the last ten years or if the book has received an award or has a high enough rating score.
+**FILTER**
+
+The filter clause may be used to apply indexing to documents that pass a given criteria based on the [RediSearch aggregation expression language](https://redis.io/docs/stack/search/reference/aggregations/). An example of this would be whether a book has been published within the last ten years or if the book has received an award or has a high enough rating score.
 
 This allows for one or more indexes that would search among a more refined collection of documents.
 
 Let's create a new index that would filter for only books published since 2015:
-
+```
 FT.CREATE index:bookdemo:2015+
   ON JSON 
   PREFIX 1 "ru204:book:"
   FILTER '@year_published > 2014'
 SCHEMA 
   $.year_published AS year_published NUMERIC SORTABLE
+```
+
 This will scan every document with the ru204:book prefix but will NOT index the document if the year_published value does not satisfy the filter expression (@year_published > 2014).
 
-TEMPORARY
-The Temporary clause essentially adds a TTL (Time-To-Live) to an index with a specified number of seconds to exist unless it is accessed. If the index is accessed before the seconds have elapsed, then the timer will reset to the original time set. Here's an example with a simple timestamp to illustrate the behavior of TEMPORARY:
+**TEMPORARY**
+
+The Temporary clause essentially adds a TTL (Time-To-Live) to an index with a specified number of seconds to exist unless it is accessed. If the index is accessed before the seconds have elapsed, then the timer will reset to the original time set. Here's an example with a simple timestamp to illustrate the behavior of `TEMPORARY`:
 
 Time: 00:00
-
+```
 FT.CREATE index:bookdemo:temporary
     ON JSON 
     PREFIX 1 "ru204:book:"
     TEMPORARY 30
 SCHEMA 
     $.year_published AS year_published NUMERIC SORTABLE
+```
+
 The index is created and has a TEMPORARY clause of 30 seconds.
 
 Time: 00:15
-
+```
 FT.SEARCH index:bookdemo:temporary * nocontent
 <result>
+```
+
 The index is accessed within the 30 second countdown, therefore the timer will restart at 30 seconds.
 
 Time: 01:00
-
+```
 FT.SEARCH index:bookdemo:temporary * nocontent
 "index:bookdemo:temporary: no such index"
+```
+
 After the 30 second timer on the index elapses, the index is deleted.
 
 This allows for many indexes to be created and destroyed without degrading performance.
 
-SCORE and SCORE_FIELD
-The SCORE attribute within the FT.CREATE command allows for the addition of a custom score for each document added. The default value is 1.0, giving all documents the same score. This means that there is no preference for any document to appear higher or lower than any other document in a search result.
+**SCORE and SCORE_FIELD**
 
-The SCORE_FIELD attribute allows for a specific score to be added to individual documents to raise or lower the individual score compared to the default score.
+The `SCORE` attribute within the [FT.CREATE](https://redis.io/commands/ft.create/) command allows for the addition of a custom score for each document added. The default value is 1.0, giving all documents the same score. This means that there is no preference for any document to appear higher or lower than any other document in a search result.
 
-Here is an example of the SCORE and SCORE_FIELD used in an FT.CREATE command:
+The `SCORE_FIELD` attribute allows for a specific score to be added to individual documents to raise or lower the individual score compared to the default score.
 
+Here is an example of the SCORE and `SCORE_FIELD` used in an [FT.CREATE](https://redis.io/commands/ft.create/) command:
+```
 FT.CREATE index:bookdemo:scored
     ON JSON 
     PREFIX 1 "ru204:book:"
@@ -616,18 +659,23 @@ SCHEMA
     $.author AS author TEXT
     $.title AS title TEXT
 ...
+```
+
 Now, when documents are created, they will have a default score of 0.5. To set a specific score for a document, set the attribute book_score to a value between 0 and 1.
 
-STOPWORDS
-Stop-words are commonly occurring words that are ignored by Redisearch, as they usually aren't relevant to search queries. Stop-words are ignored to prevent Redis from spending CPU time on results that would offer little relevance to the actual search. These words are not indexed at creation and are parsed out of queries before execution.
+**STOPWORDS**
+
+[Stop-words](https://redis.io/docs/stack/search/reference/stopwords/) are commonly occurring words that are ignored by Redisearch, as they usually aren't relevant to search queries. Stop-words are ignored to prevent Redis from spending CPU time on results that would offer little relevance to the actual search. These words are not indexed at creation and are parsed out of queries before execution.
 
 Here is a list of predefined stop-words that RediSearch ignores by default:
-
+```
 a,    is,    the,   an,   and,  are, as,  at,   be,   but,  by,   for,
 if,   in,    into,  it,   no,   not, of,  on,   or,   such, that, their,
 then, there, these, they, this, to,  was, will, with 
-When creating an index, stop-words can be overwritten or disabled completely by using the STOPWORDS clause. This should be inserted before the SCHEMA is declared. Here is an example of setting the words "science", "fiction", and "reality" as the stop-words in an index:
+```
 
+When creating an index, stop-words can be overwritten or disabled completely by using the `STOPWORDS` clause. This should be inserted before the `SCHEMA` is declared. Here is an example of setting the words "science", "fiction", and "reality" as the stop-words in an index:
+```
 FT.CREATE index:bookdemo:stopwords
     ON JSON 
     PREFIX 1 "ru204:book:"
@@ -636,10 +684,12 @@ SCHEMA (
     $.author AS author TEXT
     $.title AS title TEXT
 ...
-Note that the number 3 directly after STOPWORDS is the number of stop-words that follow.
+```
+
+Note that the number 3 directly after `STOPWORDS` is the number of stop-words that follow.
 
 To completely disable stop-words in the index, use STOPWORDS 0 (empty stop-words list). Here is an example of creating an index with stop-words disabled:
-
+```
 FT.CREATE index:bookdemo:no-stopwords
   ON JSON 
   PREFIX 1 "ru204:book:"
@@ -648,32 +698,38 @@ SCHEMA
   $.author AS author TEXT
   $.title AS title TEXT
 ...
-FT.ALTER
-The FT.ALTER command is used to add additional attributes to an existing index. This triggers a reindexing of all documents with the new attribute. This is ideal for adding attributes to an existing index rather than dropping and rebuilding it.
+```
+
+**FT.ALTER**
+
+The [FT.ALTER](https://redis.io/commands/ft.alter/) command is used to add additional attributes to an existing index. This triggers a reindexing of all documents with the new attribute. This is ideal for adding attributes to an existing index rather than dropping and rebuilding it.
 
 Let's add a votes search field to our index:bookdemo index. We'll set it to numeric and sortable:
-
+```
 FT.ALTER index:bookdemo SCHEMA ADD $.metrics.rating_votes AS votes NUMERIC SORTABLE
-The first paramater that FT.ALTER expects is the name of the index to update. We then use the SCHEMA ADD clause followed by the attributes to insert. These are treated the same as the attributes in a FT.CREATE command; they can receive aliases with the AS clause and all standard JSONPath projections apply.
+```
 
-It should be noted that FT.ALTER does not trigger a reindex of previously indexed documents with the updated attributes.
+The first paramater that [FT.ALTER](https://redis.io/commands/ft.alter/) expects is the name of the index to update. We then use the SCHEMA ADD clause followed by the attributes to insert. These are treated the same as the attributes in a [FT.CREATE](https://redis.io/commands/ft.create/) command; they can receive aliases with the AS clause and all standard JSONPath projections apply.
+
+It should be noted that [FT.ALTER](https://redis.io/commands/ft.alter/) does not trigger a reindex of previously indexed documents with the updated attributes.
 
 ##### 3. Hands-on Exercise
 
-In this section we will explore the use of debugging commands that you may find helpful when creating indexes for RediSearch. We will also create advanced indexes that have specific features above and beyond the scope of the indexes created in the previous sections. If you have any questions about any of the commands, we are available to help on our Discord channel.
+In this section we will explore the use of debugging commands that you may find helpful when creating indexes for RediSearch. We will also create advanced indexes that have specific features above and beyond the scope of the indexes created in the previous sections. If you have any questions about any of the commands, we are available to help on our [Discord channel](https://discord.gg/46upnugY5B).
 
-1. MONITOR
-MONITOR allows for the inspection of commands sent to the Redis Server in real-time. This is particularly useful when we want to observe commands sent to the server from client libraries.
+**1. MONITOR**
 
-Let's explore this by running a Python script after we have executed the MONITOR command in a redis-cli terminal or the Profiler window in RedisInsight.
+[MONITOR](https://redis.io/commands/monitor/) allows for the inspection of commands sent to the Redis Server in real-time. This is particularly useful when we want to observe commands sent to the server from client libraries.
+
+Let's explore this by running a Python script after we have executed the [MONITOR](https://redis.io/commands/monitor/) command in a redis-cli terminal or the [Profiler](https://developer.redis.com/explore/redisinsightv2/profiler/) window in RedisInsight.
 
 If you are using redis-cli in a terminal window, enter the command MONITOR. This should return an "OK" from the server.
 
 If you are using RedisInsight, select the Profiler tab on the bottom of the window.
 
-Now let's run a Python script from a previous section that queries our index. If you prefer another programming language example, feel free to choose any previous section's code examples. Our main goal is to observe MONITOR and the Profiler recording the commands sent to the Redis Server.
+Now let's run a [Python script](https://github.com/redislabs-training/ru204/blob/main/src/python/redis_om_search_example/search_om_example.py) from a previous section that queries our index. If you prefer another programming language example, feel free to choose any previous section's code examples. Our main goal is to observe [MONITOR](https://redis.io/commands/monitor/) and the Profiler recording the commands sent to the Redis Server.
 
-After running the script, our MONITOR command reports a timestamped sequence of commands sent to Redis:
+After running the script, our [MONITOR](https://redis.io/commands/monitor/) command reports a timestamped sequence of commands sent to Redis:
 
 ![alt Running the MONITOR command in redis-cli](img/asset-v1_redislabs+RU204+2022_01+type@asset+block@5.3_image_2.png)
 
@@ -682,23 +738,26 @@ In the RedisInsight window, after the Python script is executed, we see the foll
 ![alt Running the Profiler in RedisInsight](img/asset-v1_redislabs+RU204+2022_01+type@asset+block@5.3_image_1.png)
 
 
-The MONITOR command helps to reveal the underlying commands sent to the server from the client libraries. This may help to debug your application when results you receive are not exactly what is expected or when invalid commands are sent to Redis.
+The [MONITOR](https://redis.io/commands/monitor/) command helps to reveal the underlying commands sent to the server from the client libraries. This may help to debug your application when results you receive are not exactly what is expected or when invalid commands are sent to Redis.
 
-2. FT.EXPLAINCLI
-The FT.EXPLAINCLI command allows us to see the RediSearch execution plan for a given query. This is helpful for debugging queries that return unexpected results.
+**2. FT.EXPLAINCLI**
 
-Let's explore the command with the first command from the previous section where we used MONITOR. In the Python script that was chosen, this was the first query:
+The [FT.EXPLAINCLI](https://redis.io/commands/ft.explaincli/) command allows us to see the RediSearch execution plan for a given query. This is helpful for debugging queries that return unexpected results.
 
+Let's explore the command with the first command from the previous section where we used [MONITOR](https://redis.io/commands/monitor/). In the Python script that was chosen, this was the first query:
+```
   result_set = Book.find(
       Book.author == "Stephen King"
   ).all()
-  
-The corresponding output from the MONITOR command shows this command was sent to Redis:
+```
 
+The corresponding output from the [MONITOR](https://redis.io/commands/monitor/) command shows this command was sent to Redis:
+```
   1661881352.077671 [0 172.17.0.1:60666] "ft.search" "ru204:redis-om-python:book:index" "@author:{Stephen\\ King}" "LIMIT" "0" "10"
-  
-When we execute FT.EXPLAINCLI specifying our index and query, we receive the following response from Redis:
+```
 
+When we execute [FT.EXPLAINCLI](https://redis.io/commands/ft.explaincli/) specifying our index and query, we receive the following response from Redis:
+```
   FT. FT.EXPLAINCLI  ru204:redis-om-python:book:index '@author:{Stephen\\ King}'
   1) TAG:@author {
   2)   INTERSECT {
@@ -707,18 +766,21 @@ When we execute FT.EXPLAINCLI specifying our index and query, we receive the fol
   5)   }
   6) }
   7)   
-  
+```
+
 We can see that RediSearch is interpreting our query as the intersection of all books that contain the tag words "stephen" and "king". Notice that the query has changed the words to lowercase. This is the execution plan we should expect for this sort of query.
 
-3. FT.INFO
-The FT.INFO command displays information about an index, for example which attributes are available to us, what data types those attributes are, how many documents have been indexed, and how many indexing errors there may have been.
+**3. FT.INFO**
+
+The [FT.INFO](https://redis.io/commands/ft.info/) command displays information about an index, for example which attributes are available to us, what data types those attributes are, how many documents have been indexed, and how many indexing errors there may have been.
 
 Let's retrieve information about the index index:bookdemo:
-
+```
   FT.INFO index:bookdemo
-  
-The command returns information about this specific index. Here are some especially useful parts of the response:
+```
 
+The command returns information about this specific index. Here are some especially useful parts of the response:
+```
   ...
   5) "index_definition"
   6) 1) "key_type"
@@ -726,9 +788,10 @@ The command returns information about this specific index. Here are some especia
      3) "prefixes"
      4) 1) "ru204:book:"
   ...
-  
-Here we see this index covers JSON documents that all begin with the prefix "ru204:book:":
+```
 
+Here we see this index covers JSON documents that all begin with the prefix "ru204:book:":
+```
   ...
   7) 1) "identifier"
       2) "$.genres[*]"
@@ -739,66 +802,81 @@ Here we see this index covers JSON documents that all begin with the prefix "ru2
       7) "SEPARATOR"
       8) ""
   ...
-  
+```
+
 This shows that the genres attribute is an array of all elements within a genres array of the JSON document.
 
 And this tells us how many documents were scanned and indexed since the creation of the index:
-
+```
   ...
   9) "num_docs"
   10) "1486"
   ...  
-  
+```
+
 This is helpful if you have an expected quantity of indexed documents to compare with the actual number of indexed documents.
 
-4. FT.DROPINDEX
+**4. FT.DROPINDEX**
+
 There may be times when it is necessary to delete an existing index, such as during development or when indexes are dynamically created by your application. When deleting indexes, there are two options; retain the original documents or delete them as well.
 
-Let's first call FT.DROPINDEX without destroying the original documents that have been indexed:
-
+Let's first call [FT.DROPINDEX](https://redis.io/commands/ft.dropindex/) without destroying the original documents that have been indexed:
+```
   FT.DROPINDEX index:bookdemo
-  
-Redis returns "OK" and we can observe that the index no longer exists by calling the FT._LIST command to show all indexes:
+```
 
+Redis returns "OK" and we can observe that the index no longer exists by calling the [FT._LIST](https://redis.io/commands/ft._list/) command to show all indexes:
+```
   FT._LIST
   1) "ru204:redis-om-python:book:index"  
-  
-If we want to delete an index and all of the indexed documents, we would call FT.DROPINDEX with the optional DD clause.
+```
+
+If we want to delete an index and all of the indexed documents, we would call [FT.DROPINDEX](https://redis.io/commands/ft.dropindex/) with the optional DD clause.
 
 Let's delete another index and all of the associated documents. Careful, this is permanent!
-
+```
   FT.DROPINDEX ru204:redis-om-python:book:index DD
-  
+```
+
 Redis returns "OK" again and if we check for documents that were previously indexed by ru204:redis-om-python:book:index or the index of your choosing, you should see that they have been deleted as well.
 
-5. Advanced Index Creation
+**5. Advanced Index Creation**
+
 When creating indexes, there are many options available to optimize for speed, size, and document specificity. The following commands will demonstrate various indexing options by creating small indexes with specific purposes.
 
-5.1 FILTER
+**5.1 FILTER**
+
 Let's create an index of books that consists of only books that are 400 pages or less:
-
+```
   FT.CREATE index:bookdemo:400-pages-or-less ON JSON PREFIX 1 "ru204:book:" FILTER '@pages <= 400' SCHEMA $.pages AS pages NUMERIC SORTABLE
-  
-By running FT.INFO on the index index:bookdemo:400-pages-or-less, we'll see that there are fewer books in this index than our standard index:bookdemo, meaning the filter only allowed books with pages values less than or equal to 400.
+```
 
-5.2 TEMPORARY
+By running [FT.INFO](https://redis.io/commands/ft.info/) on the index index:bookdemo:400-pages-or-less, we'll see that there are fewer books in this index than our standard index:bookdemo, meaning the filter only allowed books with pages values less than or equal to 400.
+
+**5.2 TEMPORARY**
+
 Let's create an index that will be removed if it isn't accessed within a minute (60 seconds). If the index is accessed before the 60 second timer elapses, the timer will be reset to 60 seconds.
-
+```
   FT.CREATE index:bookdemo:temporary ON JSON PREFIX 1 "ru204:book:" TEMPORARY 60 SCHEMA $.title AS title TEXT
-  
+```
+
 Try accessing the index after a minute has elapsed. You'll find that the index has been removed!
 
-5.3 SCORE and SCORE FIELD
-Let's create an index that reduces the default score for all documents to 0.5 and sets the SCORE_FIELD attribute to "book_score":
+**5.3 SCORE and SCORE FIELD**
 
+Let's create an index that reduces the default score for all documents to 0.5 and sets the `SCORE_FIELD` attribute to "book_score":
+```
   FT.CREATE index:bookdemo:scored ON JSON PREFIX 1 "ru204:book:" SCORE 0.5 SCORE_FIELD "book_score" SCHEMA $.author AS author TEXT $.title AS title TEXT
-  
+```
+
 Now, every document has a default score of 0.5. If new documents are added with a higher book_score value, they will appear higher in the search results. If documents have a lower book_score than 0.5, they will appear lower in the search results. Existing documents may also be updated with a new book_score value.
 
-5.4 FT.ALTER
-The FT.ALTER command allows for the addition of attributes to an existing index. Let's add a title and author attribute to our filtered index from exercise 5.1:
+**5.4 FT.ALTER**
 
+The [FT.ALTER](https://redis.io/commands/ft.alter/) command allows for the addition of attributes to an existing index. Let's add a title and author attribute to our filtered index from exercise 5.1:
+```
   FT.ALTER index:bookdemo:400-pages-or-less SCHEMA ADD $.title AS title TEXT $.author AS author TEXT
+```
   
 Now, subsequent document additions will have the title and author fields indexed.
 
