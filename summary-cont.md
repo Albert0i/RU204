@@ -122,13 +122,15 @@ Now that you've seen how the Redis OM clients make querying JSON documents in Re
 
 If you're not a coder, don't worry - this is an ungraded exercise!
 
-Setup
+**Setup**
+
 First, pick a Redis OM client for your preferred programming language, and follow the instructions in the README file to load the sample data into Redis and run the queries provided:
 
-Python - start here.
-Node.js - start here.
-.NET (C#) - start here.
-Java (Spring) - start here.
+- Python - [start here](https://github.com/redislabs-training/ru204/tree/main/src/python/redis_om_search_example).
+- Node.js - [start here](https://github.com/redislabs-training/ru204/tree/main/src/nodejs/redis_om_search_example).
+- .NET (C#) - [start here](https://github.com/redislabs-training/ru204/tree/main/src/dotnet/redis_om_search_example).
+- Java (Spring) - [start here](https://github.com/redislabs-training/ru204/tree/main/src/java/redis_om_search_example).
+
 Note: if you choose to repeat this exercise in more than one of the supported languages, you must flush the Redis database and reload the data for each new language that you try, using the instructions provided at the links above.
 
 Verify the Data Set
