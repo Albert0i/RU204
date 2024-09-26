@@ -1,6 +1,10 @@
 ### Article
 
 
+### Prologue
+
+
+
 #### Section 1 
 Table, being the unique data structure in RDBMS, is composed of rows of cells of rigid type and size. Table, per se, is compact and efficient way to store structured data, provided that shape and topology doesn't subjected to constant change. 
 
