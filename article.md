@@ -148,7 +148,7 @@ But not with:
 EXPLAIN SELECT * FROM Users WHERE Age > 30; 
 ```
 
-Indexes when used discreetly and conscientiously boost up your performance. I'm furiously obstinate to separate storage and access because very bit of resource should count on modern application system. 
+Indexes when used discreetly and conscientiously can boost up your performance. I'm furiously obstinate to separate storage and access because very bit of resource should count on modern application system. 
 
 
 #### Section 4
