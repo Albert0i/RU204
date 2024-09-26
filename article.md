@@ -176,7 +176,7 @@ EXPLAIN SELECT * FROM Users WHERE Age > 30;
 
 Large e-commerce website would provide comprehensive search options to facilitate search of items. It is impractical or impossible to create huge number of index combination. [Faceted search](https://en.wikipedia.org/wiki/Faceted_search) is widely used solve this issue. 
 
-As of partial index, those un-indexed rows should be archived to consolidate table to achieve a more compact storage. For example, all fulfilled purchase should be move to history. all uncompleted purchase should be some place etc. 
+As of partial index, those un-indexed rows should be archived and by consolidating table to achieve a more compact storage. For example, all fulfilled purchase should be move to history. all uncompleted purchase should be some place etc. 
 
 Index is mainly for random access, other than this you second thought the necessity to conserve speed and space. 
 
