@@ -1,7 +1,7 @@
 ### Article
 
 
-### Prologue
+#### Prologue
 
 
 
@@ -185,7 +185,7 @@ As of partial index, those un-indexed rows should be archived and by consolidati
 Index is mainly for random access, other than this you second thought the necessity to conserve speed and space. 
 
 
-### Epilogue 
+#### Epilogue 
 **Ode to the RDBMS Index**
 
 In the realm of data, vast and wide,  
