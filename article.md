@@ -176,9 +176,5 @@ EXPLAIN SELECT * FROM Users WHERE Age > 30;
 
 
 
-### EOF (2024/09/27)
 
-[Multiple-Column Indexes](https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html)
-[Partial index](https://medium.com/nazar-io/partial-index-186e42c4207f)
-[]()
-[]()
+### EOF (2024/09/27)
