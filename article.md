@@ -133,22 +133,43 @@ EXPLAIN SELECT * FROM Users WHERE LastName='Smith' AND FirstName='Alice';
 EXPLAIN SELECT * FROM Users WHERE FirstName='Alice' AND LastName='Smith'; 
 ```
 
+![alt Users Figure 1](img/Users_1.JPG)
+
 But not with: 
 ```
 EXPLAIN SELECT * FROM Users WHERE FirstName='Alice'; 
 ```
+
+![alt Users Figure 2](img/Users_2.JPG)
 
 Partial index idx_over_30 works with this pattern:
 ```
 EXPLAIN SELECT * FROM Users WHERE Over30 = TRUE;
 ```
 
+![alt Users Figure 3](img/Users_3.JPG)
+
 But not with:
 ```
 EXPLAIN SELECT * FROM Users WHERE Age > 30; 
 ```
 
-Indexes when used discreetly and conscientiously can boost up your performance. I'm furiously obstinate to separate storage and access because very bit of resource should count on modern application system. 
+![alt Users Figure 4](img/Users_4.JPG)
+
+**Explanation of Columns**
+
+- **id**: The identifier of the select. If there are multiple queries, this helps to identify them.
+- **select_type**: The type of SELECT query (e.g., SIMPLE, PRIMARY, UNION).
+- **table**: The table being accessed.
+- **type**: The join type:
+  - `ALL`: Full table scan (not efficient).
+  - `ref`: Non-unique index lookup (more efficient).
+- **possible_keys**: The indexes that could be used for this query.
+- **key**: The actual index used by MySQL to execute the query.
+- **key_len**: The length of the key used.
+- **ref**: Shows which columns or constants are compared to the index.
+- **rows**: An estimate of the number of rows MySQL believes it must examine to execute the query.
+- **Extra**: Additional information about the query execution (e.g., "Using where" indicates a filter is applied).
 
 
 #### Section 4
