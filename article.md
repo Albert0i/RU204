@@ -92,21 +92,72 @@ In addition, indexes occupy disk space and CPU time to maintain. As Data size gr
 
 Access Model includes all static/dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. RDBMS is responsible for maintaining these data and we already take it for granted... 
 
-Under RDBMS, this cost is invisible but perceptible. A INSERT/UPDATE/DELETE runs significantly slower than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
+Under RDBMS, this cost is invisible but perceptible and palpable. A INSERT/UPDATE/DELETE runs significantly slower (around 3 times) than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
 
-I'm furiously obstinate to separate storage and access because very bit of resource should count on modern application system. 
+Creating [multiple-column index](https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html) and [Partial index](https://medium.com/nazar-io/partial-index-186e42c4207f) can significantly enhance query performance, especially for complex queries and reduce disk consumption: 
+
+```
+-- Create the Users table
+CREATE TABLE Users (
+    UserID INT AUTO_INCREMENT PRIMARY KEY,
+    FirstName VARCHAR(50),
+    LastName VARCHAR(50),
+    Email VARCHAR(100),
+    Age INT
+);
+
+-- Insert sample data
+INSERT INTO Users (FirstName, LastName, Email, Age) VALUES
+('Alice', 'Smith', 'alice@example.com', 28),
+('Bob', 'Johnson', 'bob@example.com', 35),
+('Charlie', 'Brown', 'charlie@example.com', 40),
+('David', 'Wilson', 'david@example.com', 22),
+('Eve', 'Davis', 'eve@example.com', 31);
+
+-- Create a multi-column index on LastName and FirstName
+CREATE INDEX idx_name ON Users (LastName, FirstName);
+
+-- Create a partial index 
+ALTER TABLE Users ADD COLUMN Over30 BOOLEAN AS (CASE WHEN Age > 30 THEN TRUE ELSE FALSE END);
+
+CREATE INDEX idx_over_30 ON Users (Over30);
+
+-- Verify the indexes
+SHOW INDEX FROM Users;
+```
+
+Multi-column index idx_name works with this pattern: 
+```
+EXPLAIN SELECT * FROM Users WHERE LastName='Smith'; 
+EXPLAIN SELECT * FROM Users WHERE LastName='Smith' AND FirstName='Alice'; 
+EXPLAIN SELECT * FROM Users WHERE FirstName='Alice' AND LastName='Smith'; 
+```
+
+But not with: 
+```
+EXPLAIN SELECT * FROM Users WHERE FirstName='Alice'; 
+```
+
+Partial index idx_over_30 works with this pattern:
+```
+EXPLAIN SELECT * FROM Users WHERE Over30 = TRUE;
+```
+
+But not with:
+```
+EXPLAIN SELECT * FROM Users WHERE Age > 30; 
+```
+
+Indexes when used discreetly and conscientiously boost up your performance. I'm furiously obstinate to separate storage and access because very bit of resource should count on modern application system. 
 
 
 #### Section 4
 
-Mature RDBMS such as Oracle implements sophisticated memory and disk management. 
-
-The [minimum system requirement](https://alekciss.com/oracle-database-19c-installation/#google_vignette) for Oracle 19c includes: 
-
-- Processor: AMD64 or Intel EM64T;
-- Physical RAM: 2 GB minimum;
-- Swap (virtual memory): at least the same size as the physical memory (2 GB minimum);
-- Available disk space: 12 GB (OS excluded);
 
 
 ### EOF (2024/09/27)
+
+[Multiple-Column Indexes](https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html)
+[Partial index](https://medium.com/nazar-io/partial-index-186e42c4207f)
+[]()
+[]()
