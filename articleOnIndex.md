@@ -97,7 +97,7 @@ In addition, indexes occupy disk space and CPU time to maintain. As Data size gr
 
 Access Model includes all static/dynamic resource on disk or memory in order to enable certain kind of random access on storage model, ie. user data. This covers index, view, temporary file etc. RDBMS is responsible for maintaining these meta data and we already take it for granted... 
 
-Under RDBMS, this cost is invisible but perceptible and palpable. A INSERT/UPDATE/DELETE runs significantly slower (around 3 times) than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
+The cost is invisible but perceptible and palpable. A INSERT/UPDATE/DELETE runs significantly slower (around 3 times) than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
 
 
 ### III. Multiple-column index and Partial index 
