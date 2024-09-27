@@ -356,7 +356,7 @@ async function fetchOrder(customerId) {
 
 
 ### Epilogue 
-**Ode to the RDBMS Index**
+**Ode to RDBMS Index**
 
 In the realm of data, vast and wide,  
 Where tables hold secrets, side by side,  
