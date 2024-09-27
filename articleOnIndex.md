@@ -3,9 +3,9 @@
 
 ### Prologue
 
-RDBMS can not do without index. Simply put, we create table with primary key and forget soon... Only when RDBMS yields poor performance do we remember the index. This article discusses some aspects on index and also makes in depth exploration on multi-column index, partial index, fulltext index and data partitioning using [MySQL8](https://dev.mysql.com/downloads/mysql/8.0.html). 
+RDBMS can not do without index. Simply put, we create table with primary key and forget thereupon... Only when our app yields poor performance do we remember the index. This article discusses some interesting aspects on index and also makes in depth exploration on [multi-column index](https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html), [partial index](https://medium.com/nazar-io/partial-index-186e42c4207f), [fulltext index](https://dev.mysql.com/doc/refman/8.4/en/fulltext-search.html) and [data partitioning](https://dev.mysql.com/doc/refman/8.4/en/partitioning.html) using [MySQL8](https://dev.mysql.com/downloads/mysql/8.0.html). 
 
-All sample codes are credited to ChatGPT, an AI language model developed by OpenAI.
+All sample codes are credited to [ChatGPT](https://openai.com/chatgpt/), an AI language model developed by [OpenAI](https://openai.com/).
 
 
 ### I. RDBMS predicament
