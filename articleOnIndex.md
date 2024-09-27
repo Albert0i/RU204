@@ -3,7 +3,7 @@
 
 ### Prologue
 
-
+RDBMS can not do without index. Simply put, we create table with primary key and forget soon... Only when RDBMS yields bad performance do we remember the index. This article discuss interesting aspects of index and in depth exploration on multi-column index, partial index, fulltext index. 
 
 ### I. RDBMS predicament
 
