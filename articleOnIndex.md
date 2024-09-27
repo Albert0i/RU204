@@ -303,6 +303,54 @@ SHOW CREATE TABLE Orders;
 
 This command will display the `CREATE TABLE` statement for the `Orders` table, including any partitioning definitions.
 
+In MySQL, partitioning a table across different hosts (or servers) is typically achieved through a technique called **sharding**. Sharding involves distributing data across multiple database instances or servers to improve performance and manageability. While MySQL does not support cross-server partitioning natively, you can use a combination of techniques to achieve similar results. Here’s an overview and example of how to implement sharding with MySQL.
+
+To demonstrate how to access data from a sharded Orders table across four different hosts using Node.js, we'll create a simple application. 
+
+```
+const mysql = require('mysql2/promise');
+
+// Define your shard configurations
+const shards = [
+    { host: 'shard1.example.com', user: 'user1', password: 'password1', database: 'SampleDB' },
+    { host: 'shard2.example.com', user: 'user2', password: 'password2', database: 'SampleDB' },
+    { host: 'shard3.example.com', user: 'user3', password: 'password3', database: 'SampleDB' },
+    { host: 'shard4.example.com', user: 'user4', password: 'password4', database: 'SampleDB' },
+];
+
+// Function to determine which shard to use based on CustomerID
+function getShard(customerId) {
+    return shards[customerId % shards.length];
+}
+
+// Function to fetch order details
+async function fetchOrder(customerId) {
+    const shard = getShard(customerId);
+    const connection = await mysql.createConnection(shard);
+    
+    try {
+        const [rows] = await connection.execute('SELECT * FROM Orders WHERE CustomerID = ?', [customerId]);
+        return rows;
+    } catch (error) {
+        console.error(`Error fetching order for CustomerID ${customerId} from shard ${shard.host}:`, error);
+    } finally {
+        await connection.end();
+    }
+}
+
+// Example usage
+(async () => {
+    const customerId = 3;  // Change this to test different customers
+    const orders = await fetchOrder(customerId);
+    
+    if (orders.length) {
+        console.log(`Orders for CustomerID ${customerId}:`, orders);
+    } else {
+        console.log(`No orders found for CustomerID ${customerId}`);
+    }
+})();
+```
+
 
 #### Epilogue 
 **Ode to the RDBMS Index**
