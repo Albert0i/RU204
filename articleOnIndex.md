@@ -10,9 +10,9 @@ All sample codes are credited to [ChatGPT](https://openai.com/chatgpt/), an AI l
 
 ### I. RDBMS predicament
 
-Table, being the unique data structure in RDBMS, is composed of rows of cells of rigid type and size. Table, per se, is compact and efficient way to store structured data, provided that shape and topology doesn't subjected to constant change. 
+Table, being the unique data structure in RDBMS, is composed of rows of cells of rigid type and size. Table, per se, is compact and efficient way to store structured data, provided that *shape* and *topology* doesn't subjected to constant change. 
 
-Rows can be retrofitted by adding, removing and type-changing cells not without much effort. This is because all rows share the same table definition, aka *schema*. It is believed that smaller table facilitates schema migration, however highly *normalized* table also means highly fragmented table. Moreover, care should be taken to prevent data lost during schema migration, especially when foreign key constraints are involved. 
+Rows can be retrofitted by means of adding, removing and type-changing cells not without much effort. This is because all rows share the same table definition, aka *schema*. It is believed that smaller table facilitates schema migration, however highly *normalized* table also means highly fragmented table. Moreover, care should be taken to prevent data lost during schema migration, especially when foreign key constraints are involved. 
 
 RDBMS is well known for it's unparalleled search and aggregation capability but is awkwardly imbecilic in handling unstructured data although JSON and XML support, full-text search capabilities are bestowed of late. Typically speaking: 
 
