@@ -179,18 +179,18 @@ EXPLAIN SELECT * FROM Users WHERE Age > 30;
 - **rows**: An estimate of the number of rows MySQL believes it must examine to execute the query.
 - **Extra**: Additional information about the query execution (e.g., "Using where" indicates a filter is applied).
 
-Large e-commerce website would provide comprehensive search options to facilitate search of items. It is impractical or impossible to create huge number of index combination. [Faceted search](https://en.wikipedia.org/wiki/Faceted_search) is widely used solve this issue. 
+Large e-commerce website would provide comprehensive search options to facilitate searching of items. It is impractical and even impossible to create huge number of multi-column indexes. [Faceted search](https://en.wikipedia.org/wiki/Faceted_search) is the technique widely used solve this issue. 
 
-As of partial index, those un-indexed rows should be archived and by consolidating table to achieve a more compact storage. For example, all fulfilled purchase should be move to history. all uncompleted purchase should be some place etc. 
+As of partial index, those un-indexed rows should be archived and move to elsewhere, consolidating table to achieve a more compact storage do good for performance. For example, all fulfilled and uncompleted purchase should be move to history table so that further analysing is done on purchasing patterns. 
 
-Index is mainly for random access, other than this you second thought the necessity to conserve speed and space. 
+Lastly, index is mainly for random access, other than this, you second thought the necessity to conserve speed and space. 
 
 
 ### IV. Fulltext index 
 
-Fulltext index enable search on text-based columns which is particularly useful on searching large amounts of text data efficiently. 
+Fulltext index enables search on text-based columns which is particularly useful on searching large amounts of text data efficiently. 
 
-```sql
+```
 -- Create the Articles Table
 CREATE TABLE Articles (
     ArticleID INT AUTO_INCREMENT PRIMARY KEY,
@@ -229,26 +229,24 @@ WHERE MATCH (Body) AGAINST ('MySQL');
 
 ![alt Articles Figure 2](img/Articles_2.JPG)
 
-You can also use Boolean mode for more advanced searches. This allows you to use operators like `+`, `-`, `*`, and others. To find articles that must contain the word "MySQL" but can exclude "Data":
+You can also use *Boolean mode* for more advanced searches. This allows you to use operators like `+`, `-`, `*`, and others. To find articles that must contain the word "MySQL" but can exclude "Data":
 ```
 EXPLAIN SELECT * FROM Articles
 WHERE MATCH (Title, Body) AGAINST ('+MySQL -Data' IN BOOLEAN MODE);
 ```
 
-You can also perform a natural language search without Boolean operators:
+You can also perform a *natural language* search without Boolean operators:
 ```
 EXPLAIN SELECT * FROM Articles
 WHERE MATCH (Title, Body) AGAINST ('SQL techniques');
 ```
 
-FULLTEXT search in MySQL 8 is powerful for querying text data efficiently. By creating FULLTEXT indexes and utilizing the `MATCH()` function with `AGAINST()`, you can effectively perform complex searches across text columns. 
-
 
 ### V. Data Partitioning
 
-Data partitioning allows you to split large tables into smaller, more manageable pieces called partitions. This can improve performance, especially for large datasets, by making queries more efficient and easier to manage. 
+Data partitioning allows you to split large tables into smaller, more manageable pieces called **partitions**. This can improve performance, especially for large datasets, by making queries more efficient and easier to manage. 
 
-Note: 
+caveat: 
 - Foreign keys are not yet supported in conjunction with partitioning; 
 - A PRIMARY KEY must include all columns in the table's partitioning function.
 ```
@@ -306,7 +304,7 @@ SHOW CREATE TABLE Orders;
 
 This command will display the `CREATE TABLE` statement for the `Orders` table, including any partitioning definitions.
 
-In MySQL, partitioning a table across different hosts (or servers) is typically achieved through a technique called **sharding**. Sharding involves distributing data across multiple database instances or servers to improve performance and manageability. While MySQL does not support cross-server partitioning natively, you can use a combination of techniques to achieve similar results. Here’s an overview and example of how to implement sharding with MySQL.
+In MySQL, partitioning a table across different hosts (or servers) is typically achieved through a technique called **sharding**. Sharding involves distributing data across multiple database instances or servers to improve performance and manageability. *While MySQL does not support cross-server partitioning natively, you can use a combination of techniques to achieve similar results*. Here’s an overview and example of how to implement sharding with MySQL.
 
 To demonstrate how to access data from a sharded Orders table across four different hosts using Node.js, we'll create a simple application. 
 
