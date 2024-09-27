@@ -1,11 +1,12 @@
-### Article
+### Index 二三事 
 
 
-#### Prologue
+### Prologue
 
 
 
-#### Section 1 
+### I. RDBMS predicament
+
 Table, being the unique data structure in RDBMS, is composed of rows of cells of rigid type and size. Table, per se, is compact and efficient way to store structured data, provided that shape and topology doesn't subjected to constant change. 
 
 Rows can be retrofitted by adding, removing and type-changing cells not without much effort. This is because all rows share the same table definition (aka schema in terms of RDBMS). It is believed that small table facilitate schema migration, however highly normalized table also means highly fragmented table. Care should be taken to prevent data lost during schema migration, especially when foreign key constraints are involved. 
@@ -39,7 +40,7 @@ RDBMS is well known for it's unparalleled search and aggregation capability but 
 This type of data does not fall into traditional realm of business data processing and not even exists when RDBMS was invented on late 70's of last century. It is the new application scenarios which bring about new forms of data... 
 
 
-#### Section 2 
+### II. Storage Model and Access Model
 
 Storage Model, in a restricted and confined sense, focuses on storage of user data stripping off all unrelated meta data. Storage Model directly maps to table space, segment, extend and blocks on disk. Storage strictly means disk storage and disk space not regarding any accompanying overhead on specific reading or writing operations. 
 
@@ -91,12 +92,12 @@ In addition, indexes occupy disk space and CPU time to maintain. As Data size gr
 
 ![alt Customers Figure 2](img/Customers_2.JPG)
 
-
-#### Section 3 
-
 Access Model includes all static/dynamic overhead on disk or memory in order to enable certain kind of access method on storage model, ie. user data. This covers index, view, temporary file etc. RDBMS is responsible for maintaining these data and we already take it for granted... 
 
 Under RDBMS, this cost is invisible but perceptible and palpable. A INSERT/UPDATE/DELETE runs significantly slower (around 3 times) than a SELECT statement. Because write operation is slower than read operation on disk. Because it's necessary update indexes, which are on disk also. 
+
+
+### III. Multiple-column index and Partial index 
 
 Creating [multiple-column index](https://dev.mysql.com/doc/refman/8.4/en/multiple-column-indexes.html) and [Partial index](https://medium.com/nazar-io/partial-index-186e42c4207f) can significantly enhance query performance, especially for complex queries and reduce disk consumption: 
 
@@ -175,9 +176,6 @@ EXPLAIN SELECT * FROM Users WHERE Age > 30;
 - **rows**: An estimate of the number of rows MySQL believes it must examine to execute the query.
 - **Extra**: Additional information about the query execution (e.g., "Using where" indicates a filter is applied).
 
-
-#### Section 4
-
 Large e-commerce website would provide comprehensive search options to facilitate search of items. It is impractical or impossible to create huge number of index combination. [Faceted search](https://en.wikipedia.org/wiki/Faceted_search) is widely used solve this issue. 
 
 As of partial index, those un-indexed rows should be archived and by consolidating table to achieve a more compact storage. For example, all fulfilled purchase should be move to history. all uncompleted purchase should be some place etc. 
@@ -185,19 +183,11 @@ As of partial index, those un-indexed rows should be archived and by consolidati
 Index is mainly for random access, other than this you second thought the necessity to conserve speed and space. 
 
 
-#### Section 5
+### IV. Fulltext index 
 
-In MySQL 8, you can use **FULLTEXT indexes** to perform full-text searches on text-based columns. FULLTEXT search is particularly useful for searching large amounts of text data efficiently. Here’s a step-by-step guide on how to create and use FULLTEXT indexes in MySQL 8, along with concrete examples.
-
-**Step 1: Create a Sample Database and Table**
-
-First, let’s create a sample database and a table that will hold some text data.
+Fulltext index enable search on text-based columns which is particularly useful on searching large amounts of text data efficiently. 
 
 ```sql
--- Create the Sample Database
-CREATE DATABASE SampleDB;
-USE SampleDB;
-
 -- Create the Articles Table
 CREATE TABLE Articles (
     ArticleID INT AUTO_INCREMENT PRIMARY KEY,
@@ -205,13 +195,7 @@ CREATE TABLE Articles (
     Body TEXT,
     FULLTEXT (Title, Body)  -- Create a FULLTEXT index on Title and Body
 );
-```
 
-**Step 2: Insert Sample Data**
-
-Next, insert some sample data into the `Articles` table.
-
-```sql
 INSERT INTO Articles (Title, Body) VALUES
 ('MySQL Full-Text Search', 'This article explains how to use FULLTEXT search in MySQL.'),
 ('Understanding Indexes', 'Indexes are important for optimizing query performance.'),
@@ -219,44 +203,106 @@ INSERT INTO Articles (Title, Body) VALUES
 ('Using MySQL for Data Analysis', 'MySQL can be used for efficient data analysis with proper indexing.');
 ```
 
-**Step 3: Performing a FULLTEXT Search**
+Perform a FULLTEXT search using the `MATCH()` function combined with `AGAINST()`.To search for articles that contain the word "MySQL" with this pattern:
 
-Now that we have our data set up, you can perform a FULLTEXT search using the `MATCH()` function combined with `AGAINST()`.
-
-**Basic FULLTEXT Search**
-
-To search for articles that contain the word "MySQL":
-
-```sql
-SELECT * FROM Articles
+```
+EXPLAIN SELECT * FROM Articles
 WHERE MATCH (Title, Body) AGAINST ('MySQL');
+
+EXPLAIN SELECT * FROM Articles
+WHERE MATCH (Body, Title) AGAINST ('MySQL');
 ```
 
-**Step 4: Using Boolean Mode**
+![alt Articles Figure 1](img/Articles_1.JPG)
 
-You can also use Boolean mode for more advanced searches. This allows you to use operators like `+`, `-`, `*`, and others.
+But not with:
+```
+EXPLAIN SELECT * FROM Articles
+WHERE MATCH (Title) AGAINST ('MySQL');
 
-**Example: Searching with Boolean Mode**
+EXPLAIN SELECT * FROM Articles
+WHERE MATCH (Body) AGAINST ('MySQL');
+```
 
-To find articles that must contain the word "MySQL" but can exclude "Data":
+![alt Articles Figure 2](img/Articles_2.JPG)
 
-```sql
-SELECT * FROM Articles
+You can also use Boolean mode for more advanced searches. This allows you to use operators like `+`, `-`, `*`, and others. To find articles that must contain the word "MySQL" but can exclude "Data":
+```
+EXPLAIN SELECT * FROM Articles
 WHERE MATCH (Title, Body) AGAINST ('+MySQL -Data' IN BOOLEAN MODE);
 ```
 
-**Step 5: Full-Text Search with Natural Language Mode**
-
 You can also perform a natural language search without Boolean operators:
-
-```sql
-SELECT * FROM Articles
+```
+EXPLAIN SELECT * FROM Articles
 WHERE MATCH (Title, Body) AGAINST ('SQL techniques');
 ```
 
-**Conclusion**
+FULLTEXT search in MySQL 8 is powerful for querying text data efficiently. By creating FULLTEXT indexes and utilizing the `MATCH()` function with `AGAINST()`, you can effectively perform complex searches across text columns. 
 
-FULLTEXT search in MySQL 8 is powerful for querying text data efficiently. By creating FULLTEXT indexes and utilizing the `MATCH()` function with `AGAINST()`, you can effectively perform complex searches across text columns. If you have any further questions or need additional examples, feel free to ask!
+
+### V. Data Partitioning
+
+Data partitioning allows you to split large tables into smaller, more manageable pieces called partitions. This can improve performance, especially for large datasets, by making queries more efficient and easier to manage. 
+
+Note: 
+- Foreign keys are not yet supported in conjunction with partitioning; 
+- A PRIMARY KEY must include all columns in the table's partitioning function.
+```
+CREATE TABLE Orders (
+    OrderID INT AUTO_INCREMENT,
+    OrderDate DATE,
+    CustomerID INT,    
+    Amount DECIMAL(10, 2) NOT NULL,
+    PRIMARY KEY (OrderID, OrderDate)  -- Include partitioning column in the primary key
+) PARTITION BY RANGE (YEAR(OrderDate)) (
+    PARTITION p2020 VALUES LESS THAN (2021),
+    PARTITION p2021 VALUES LESS THAN (2022),
+    PARTITION p2022 VALUES LESS THAN (2023),
+    PARTITION pFuture VALUES LESS THAN MAXVALUE
+);
+
+INSERT INTO Orders (CustomerID, OrderDate, Amount) VALUES
+(1, '2020-05-15', 100.00),
+(2, '2021-06-20', 200.50),
+(3, '2022-07-25', 150.75),
+(4, '2023-08-30', 300.00);
+```
+
+You can query the table using standard SQL:
+```
+SELECT * FROM Orders WHERE OrderDate BETWEEN '2021-01-01' AND '2021-12-31';
+```
+
+To check if a table is partitioned, you can query the `information_schema` database, specifically the `PARTITIONS` table. This table contains information about all partitions for each partitioned table in your databases.
+```
+SELECT *
+FROM information_schema.PARTITIONS
+WHERE TABLE_SCHEMA = 'SampleDB'
+  AND TABLE_NAME = 'Orders';
+```
+
+![alt Orders Figure 4](img/Orders_4.JPG)
+
+If the table is partitioned, the query will return rows containing details about the partitions, including:
+
+- **PARTITION_NAME**: The name of each partition.
+- **PARTITION_ORDINAL_POSITION**: The position of the partition.
+- **PARTITION_METHOD**: The method used for partitioning (e.g., RANGE, LIST, HASH).
+- **SUBPARTITION_METHOD**: If applicable, the method used for subpartitioning.
+- **TABLE_ROWS**: The number of rows in each partition.
+
+If the query returns no results, the table is not partitioned.
+
+You can also check the structure of the table to see if it includes any partitioning metadata:
+```
+SHOW CREATE TABLE Orders;
+```
+
+![alt Orders Figure 5](img/Orders_5.JPG)
+
+This command will display the `CREATE TABLE` statement for the `Orders` table, including any partitioning definitions.
+
 
 #### Epilogue 
 **Ode to the RDBMS Index**
