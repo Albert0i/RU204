@@ -353,7 +353,7 @@ async function fetchOrder(customerId) {
 ```
 
 
-### Bibliography 
+### VI. Bibliography 
 
 1. [10.3 Optimization and Indexes](https://dev.mysql.com/doc/refman/8.4/en/optimization-indexes.html)
 2. [17.6.2.1 Clustered and Secondary Indexes](https://dev.mysql.com/doc/refman/8.4/en/innodb-index-types.html)
