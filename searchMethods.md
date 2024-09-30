@@ -1,4 +1,4 @@
-### Search Mothods in MySQL8 and Redis 
+### Search Mothods in MySQL 8 and Redis 
 
 The underlying data structures and search methods used by MySQL and Redis fundamentally influence their performance characteristics and suitability for different types of queries. Here’s a deeper dive into how these differences manifest, particularly focusing on B-Trees in MySQL and the various data structures in Redis, including hashes.
 
