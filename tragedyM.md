@@ -16,7 +16,7 @@ Obviously, we should ask consultant agency for help at that time:
 - What is the migration strategy? 
     1. Big Bang Migration: All data is migrated at once during a scheduled downtime.
     2. Trickle Migration: Data is migrated in phases to minimize downtime and risk.
-- What are tools and Utilities employed? 
+- What are tools and utilities employed? 
 - How to implement the migration plan? 
 - How long does it takes and manpower involved? 
 
