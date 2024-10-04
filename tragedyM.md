@@ -25,7 +25,7 @@ And post-migration monitoring after cutover:
 - Functional Testing: Test the applications that rely on the database to ensure they function correctly with Oracle.
 - Performance Testing: Assess the performance of queries and transactions in the new environment.
 
-But no consultancy was made...
+But no consultancy was made, not surprisingly...
 
 
 ### II. Out of focus
