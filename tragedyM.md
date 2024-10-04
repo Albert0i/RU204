@@ -33,7 +33,7 @@ Regarding to the migration, one should focus on applications, *not* the database
 
 More time and money should be spent on studying the structural dependency between legacy systems, whether it was necessary to consolidate/retrofit into a consistent central data access layer or by dint of an API Gateway. Or else everybody did in one's own way. 
 
-Terminal programs were intrinsically easy to be converted to new web pages. Legacy Web Applications, typically written in era of [ASP.NET](https://en.wikipedia.org/wiki/ASP.NET) 2.0, exclusively and extensively use [Data Control](https://learn.microsoft.com/en-us/previous-versions/aspnet/ms228214(v=vs.100)) which capture both front-end and back-end logic. Access to database is scattered along the way through ASPX pages. 
+Terminal programs were intrinsically easy to be converted to new web pages. Legacy Web Applications, typically written in era of [ASP.NET](https://en.wikipedia.org/wiki/ASP.NET) 2.0, exclusively and extensively use [Data Control](https://learn.microsoft.com/en-us/previous-versions/aspnet/ms228214(v=vs.100)) which capture both front-end and back-end logic. Access to database is scattered along the way throughout ASPX pages. 
 
 In addition, ASPX pages run on IIS which instead run on Windows only. Besides licensing fee, the server was not fit for horizontal scaling, making too many web pages hosting on the same server, endangering stability and performance. However, prohibiting the use of Data Control involves significant code rewrite which involves more [regression testing](https://en.wikipedia.org/wiki/Regression_testing) and longer time span. 
 
