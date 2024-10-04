@@ -5,7 +5,7 @@ It won't be *possible* if there is no two-way synchronization mechanism for a st
 
 ### Trilemma
 - No practical and feasible planning was done beforehand, especially on inter-project entanglements; 
-- Under estimated project difficulties, especially on diversity of database access methods, no central data access layer exists and let alone API gateway; 
+- Under estimated project difficulties, especially on diversity of database access methods, no central data access layer exists and let alone API Gateway; 
 - No prior experience, suitable utilities and whatsoever; 
 
 Should ask consultant agency for help on:
@@ -22,6 +22,10 @@ Post-Migration Monitoring after cutover:
 
 ### Out of focus
 It started as a migration from DB2/400 to Oracle 12c. The very weigh should focus on Web Applications not on database itself. Moving data from one base to another without unworkable applications is meaningless and valueless. Data ,per se, is valuable, it is the applications visualize and utilize them and renders computer systems. 
+
+More time and money should be spent on studying the structure of legacy Web Applications. Whether to retrofit and consolidate a consistent central data access layer or through API Gateway is more appropriate or both. 
+
+Legacy Web Applications, typically written in era of [ASP.NET](https://en.wikipedia.org/wiki/ASP.NET) 2.0, exclusively and extensively use [Data Control](https://learn.microsoft.com/en-us/previous-versions/aspnet/ms228214(v=vs.100)) which capture both front-end and back-end logics. Access to database is scattered along the way through ASPX pages. 
 
 ### Temptation
 
