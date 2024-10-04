@@ -20,7 +20,7 @@ Obviously, we should ask consultant agency for help at that time:
 - How to implement the migration plan? 
 - How long does it takes and manpower involved? 
 
-And post-migration monitoring after cutover: 
+And post-migration monitoring before cutover: 
 - Data Validation: Verify that the migrated data matches the source data in terms of accuracy and completeness.
 - Functional Testing: Test the applications that rely on the database to ensure they function correctly with Oracle.
 - Performance Testing: Assess the performance of queries and transactions in the new environment.
