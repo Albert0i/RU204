@@ -45,7 +45,7 @@ On crafting any new systems, it is more desirous to do on Oracle. As one might e
 
 In this case, Web Service or API Gateway will be created to facilitate this awkward situation lest dual write incurred. It's not good a practice to tread on files of other system even residing on the same database. An API Gateway slows project development at the beginning but will catch up soon. 
 
-Applications call API Gateway and don't need to know which by which database used. In addition, API Gateway can opt database to read from or write to or perform a dual update. 
+Applications call API Gateway and don't need to know which by which database used. In addition, API Gateway can opt database to read from or write to or perform a dual write. 
 
 
 ### IV. Tragedy
