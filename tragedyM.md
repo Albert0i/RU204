@@ -43,9 +43,9 @@ Years and years of attending various Oracle courses only had minimal help on mig
 ### III. Temptation
 On crafting any new systems, it is more desirous to do on Oracle. As one might expect there's no point to do it on DB2/400 which is doomed to dead. It's true but there is a catch, provided that new systems do not write to files on legacy systems, read operations are enabled by one direction data sychronizing utility, ie. [OGG](https://www.oracle.com/uk/integration/goldengate/). 
 
-In this case, a Web Service or API Gateway is setup to facilitate the situation lest dual update incurred. Even on the same platform, it's not good practice to tread on properties of other projects. An API Gateway slows down project development at the beginning but will catch up at last. 
+In this case, Web Service or API Gateway will be created to facilitate this awkward situation lest dual write incurred. It's not good a practice to tread on files of other system even residing on the same database. An API Gateway slows project development at the beginning but will catch up soon. 
 
-Applications call on API Gateway don't need to know which by which database. In addition, API Gateway can opt which database to CRUD and perform dual update for a limited time. 
+Applications call API Gateway and don't need to know which by which database used. In addition, API Gateway can opt database to read from or write to or perform a dual update. 
 
 
 ### IV. Tragedy
