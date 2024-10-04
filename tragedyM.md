@@ -2,7 +2,7 @@
 
 
 ### Prologue
-Hark! Without a two-way data flowing facility, it is not *possible* to do a step by step database migration on production system. 
+Hark! Without a two-way data flowing facility, it is *not* possible to do a step by step database migration on production system. 
 
 
 ### I. Trilemma
