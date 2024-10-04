@@ -1,7 +1,7 @@
 ### Tragedy M ─── A story on heterogeneous movements
 
 ### Prologue
-It is not *possible*, if there is no two-way synchronization mechanism, to do step by step database migration on production system. 
+Hark, it is not *possible*, if there is no two-way data flowing mechanism, to do step by step database migration on production system with minimal downtime. 
 
 ### Trilemma
 - No practical and feasible planning was done beforehand, especially on inter-project entanglements; 
