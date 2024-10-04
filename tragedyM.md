@@ -21,7 +21,7 @@ Post-Migration Monitoring after cutover:
 - Performance Testing: Assess the performance of queries and transactions in the new environment.
 
 ### Out of focus
-It started as a migration from DB2/400 to Oracle 12c. The very weigh should focus on Web Applications not on database itself. Moving data from one base to another without unworkable applications is meaningless and valueless. Data ,per se,is valuable, it is the applications visualize and utilize the data and renders computer systems.
+It started as a migration from DB2/400 to Oracle 12c. The very weigh should focus on Web Applications not on database itself. Moving data from one base to another without unworkable applications is meaningless and valueless. Data ,per se, is valuable, it is the applications visualize and utilize them and renders computer systems. 
 
 ### Temptation
 
