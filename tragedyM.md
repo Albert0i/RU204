@@ -41,7 +41,7 @@ Years and years of attending various Oracle courses only had minimal help on mig
 
 
 ### III. Temptation
-On crafting new programs, it is highly desirous to perform read/write directly on Oracle. As one might think better and there's no point to do it on DB2/400 which is doomed to be obsoleted. It's true but there is a catch, provided that new program do not make any write operations on DB2/400, read operations is profitted by one direction data sychronizing utility, ie. OGG. 
+On crafting any new systems, it is more desirous to do on Oracle. As one might expect there's no point to do it on DB2/400 which is doomed to dead. It's true but there is a catch, provided that new systems do not write to files on legacy systems, read operations are enabled by one direction data sychronizing utility, ie. [OGG](https://www.oracle.com/uk/integration/goldengate/). 
 
 In this case, a Web Service or API Gateway is setup to facilitate the situation lest dual update incurred. Even on the same platform, it's not good practice to tread on properties of other projects. An API Gateway slows down project development at the beginning but will catch up at last. 
 
