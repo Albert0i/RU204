@@ -28,7 +28,11 @@ More time and money should be spent on studying the structure of legacy Web Appl
 Legacy Web Applications, typically written in era of [ASP.NET](https://en.wikipedia.org/wiki/ASP.NET) 2.0, exclusively and extensively use [Data Control](https://learn.microsoft.com/en-us/previous-versions/aspnet/ms228214(v=vs.100)) which capture both front-end and back-end logics. Access to database is scattered along the way through ASPX pages. 
 
 ### Temptation
+On crafting new programs, it is highly desirous to perform read/write directly on Oracle. As one might think better and there's no point to do it on DB2/400 which is doomed to be obsoleted. It's true but there is a catch, provided that new program do not make any write operations on DB2/400, read operations is profitted by one direction data sychronizing utility, ie. OGG. 
 
+In this case, a Web Service or API Gateway is setup to facilitate the situation lest dual update incurred. Even on the same platform, it's not good practice to tread on properties of other projects. An API Gateway slows down project development at the beginning but will catch up at last. 
+
+Applications call on API Gateway don't need to know which by which database. In addition, API Gateway can opt which database to CRUD and perform dual update for a limited time. 
 
 ### Tragedy
 
