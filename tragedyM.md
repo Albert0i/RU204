@@ -6,7 +6,7 @@ Hark! Without a two-way data flowing facility, it is not *possible* to do a step
 
 
 ### I. Trilemma
-In the year of two thousands and seventeen, we were requested to move our database back end from DB2/400, on which we had used for more than two decades and had several hundreds of terminal programs and web pages, to Oracle 12c. Everybody was dumbfounded and had not the least idea how to cope with. 
+In the year of two thousands and seventeen, we were requested to move our database back end from DB2/400, on which we had used for more than two decades and had several hundreds of terminal programs and web pages, to Oracle 12c. Everybody was dumbfounded and had not the least idea how to cope with. As times go by, we found out that: 
 
 - No practical and feasible planning was done beforehand, especially on inter-project entanglements; 
 - Under estimated project difficulties, especially on diversity of database access methods, no central data access layer exists and let alone API Gateway; 
