@@ -1,10 +1,12 @@
 ### Tragedy M ─── A story on heterogeneous movements
 
+
 ### Prologue
-Hark, it is not *possible*, if there is no two-way data flowing mechanism, to do step by step database migration on production system with minimal downtime. 
+Hark! Without a two-way data flowing facility, it is not *possible* to do a step by step database migration on production system. 
+
 
 ### I. Trilemma
-In the year of two thousands and seventeen, 
+In the year of two thousands and seventeen, we were requested to move our database back end from DB2/400, on which we had used for more than two decades and had several hundreds of terminal programs and web pages, to Oracle 12c. Everybody was dumbfounded and had not the least idea how to cope with. 
 
 - No practical and feasible planning was done beforehand, especially on inter-project entanglements; 
 - Under estimated project difficulties, especially on diversity of database access methods, no central data access layer exists and let alone API Gateway; 
