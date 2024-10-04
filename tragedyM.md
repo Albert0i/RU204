@@ -31,7 +31,7 @@ But no consultancy was made, *not* surprisingly...
 ### II. Out of focus
 Regarding to the migration, one should focus on applications, *not* the databases themselves. Moving back end database, even heterogeneous ones, can be done with tools or manually. Moving the back in online system is quite another thing. 
 
-More time and money should be spent on studying the structure of legacy systems, whether it was necessary to consolidate/retrofit into a consistent central data access layer or by dint of an API Gateway. Or else everybody did in one's own way. 
+More time and money should be spent on studying the structural dependency between legacy systems, whether it was necessary to consolidate/retrofit into a consistent central data access layer or by dint of an API Gateway. Or else everybody did in one's own way. 
 
 Terminal programs were intrinsically easy to be converted to new web pages. Legacy Web Applications, typically written in era of [ASP.NET](https://en.wikipedia.org/wiki/ASP.NET) 2.0, exclusively and extensively use [Data Control](https://learn.microsoft.com/en-us/previous-versions/aspnet/ms228214(v=vs.100)) which capture both front-end and back-end logic. Access to database is scattered along the way through ASPX pages. 
 
