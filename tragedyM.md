@@ -6,26 +6,32 @@ Hark! Without a two-way data flowing facility, it is not *possible* to do a step
 
 
 ### I. Trilemma
-In the year of two thousands and seventeen, we were requested to move our database back end from DB2/400, on which we had used for more than two decades and had several hundreds of terminal programs and web pages, to Oracle 12c. Everybody was dumbfounded and had not the least idea how to cope with. As times go by, we found out that: 
+In the year of two thousands and seventeen, we were requested to move our database back end from DB2/400, on which we had used for more than two decades and had several hundreds of terminal programs and web pages, to Oracle 12c. Everybody was dumbfounded and had not the least idea how to cope with. After all, we found out that: 
 
 - No practical and feasible planning was done beforehand, especially on inter-project entanglements; 
-- Under estimated project difficulties, especially on diversity of database access methods, no central data access layer exists and let alone API Gateway; 
+- Under estimated difficulties, especially on diversity of database access methods, no central data access layer exists and let alone API Gateway; 
 - No prior experience, suitable utilities and whatsoever; 
 
-Should ask consultant agency for help on:
+Obviously, we should ask consultant agency for help at that time:
 - What is the migration strategy? 
     1. Big Bang Migration: All data is migrated at once during a scheduled downtime.
     2. Trickle Migration: Data is migrated in phases to minimize downtime and risk.
 - What are tools and Utilities employed? 
+- How to implement the migration plan? 
 - How long does it takes and manpower involved? 
 
-Post-Migration Monitoring after cutover: 
+And post-migration monitoring after cutover: 
 - Data Validation: Verify that the migrated data matches the source data in terms of accuracy and completeness.
 - Functional Testing: Test the applications that rely on the database to ensure they function correctly with Oracle.
 - Performance Testing: Assess the performance of queries and transactions in the new environment.
 
+But no consultancy was made...
+
+
 ### II. Out of focus
-It started as a migration from DB2/400 to Oracle 12c. The very weigh should focus on Web Applications not on database itself. Moving data from one base to another without unworkable applications is meaningless and valueless. Data ,per se, is valuable, it is the applications visualize and utilize them and renders computer systems. 
+Regarding to the migration, one should focus on applications on it, not the databases themselves. Moving back end database, even for heterogeneous ones, can be done with tools or manually. Moving back end on a live system is quite another thing. 
+
+The very weigh should focus on Web Applications not on database itself. Moving data from one base to another without unworkable applications is meaningless and valueless. Data ,per se, is valuable, it is the applications visualize and utilize them and renders computer systems. 
 
 More time and money should be spent on studying the structure of legacy Web Applications. Whether to retrofit and consolidate a consistent central data access layer or through API Gateway is more appropriate or both. 
 
