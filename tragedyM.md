@@ -35,7 +35,7 @@ In this case, a Web Service or API Gateway is setup to facilitate the situation 
 Applications call on API Gateway don't need to know which by which database. In addition, API Gateway can opt which database to CRUD and perform dual update for a limited time. 
 
 ### Tragedy
-Talking about what has happened now has no use at all... 
+Writing a tirade of my thought which deviateed from reality has no use. 
 
 ### Epilogue
 
